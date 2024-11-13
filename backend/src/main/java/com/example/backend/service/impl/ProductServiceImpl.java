@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     public Product updateById(Long id, Product product) {
 
         Product managedProduct = this.findById(id);
-        managedProduct.setTitle(product.getTitle());
+        managedProduct.setName(product.getName());
         managedProduct.setQuantity(product.getQuantity());
         managedProduct.setPrice(product.getPrice());
 
