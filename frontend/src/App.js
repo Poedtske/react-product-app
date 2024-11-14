@@ -9,6 +9,10 @@ import Dirigent from './pages/fanfare/dirigent/Dirigent';
 import Geschiedenis from './pages/fanfare/geschiedenis/Geschiedenis';
 import Instrumenten from './pages/fanfare/instrumenten/Instrumenten';
 import Jeugd from './pages/jeugd/Jeugd';
+import Documenten from './pages/info/documenten/Documenten';
+import Privacy from './pages/info/privacy/Privacy';
+import Kalender from './pages/kalender/Kalender';
+import Sponsors from './pages/sponsors/Sponsors';
 import Test from './pages/Test';
 import ProductList from "./components/ProductList";
 import Products from "./components/Products";
@@ -30,10 +34,10 @@ function App() {
         <Route path="/fanfare/geschiedenis" element={<Geschiedenis />} />
         <Route path="/fanfare/instrumenten" element={<Instrumenten />} />
         <Route path="/jeugd" element={<Jeugd />} />
-        {/* <Route path="/info/documenten" element={<Documenten />} />
+        <Route path="/info/documenten" element={<Documenten />} />
         <Route path="/info/privacy" element={<Privacy />} /> 
         <Route path="/kalender" element={<Kalender />} />
-        <Route path="/sponsors" element={<Sponsors />} />*/}
+        <Route path="/sponsors" element={<Sponsors />} />
       </Routes>
       <Footer/>
     </>
