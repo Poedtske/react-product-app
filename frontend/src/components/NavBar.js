@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+// import NavBarCSS from './NavBar.module.css';
 
 export default function NavBar() {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
@@ -20,7 +21,7 @@ export default function NavBar() {
       </button>
       
       <a href="#" className="logo">
-        <img src="/images/logos/logosFanfare/logoFanfare.png" alt="Fanfare Logo" />
+        <img src="/images/logoFanfare.png" alt="Fanfare Logo" />
       </a>
       
       <nav id="main-nav" aria-expanded={isNavExpanded}>
