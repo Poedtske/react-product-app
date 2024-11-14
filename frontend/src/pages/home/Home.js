@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // For routing
-import styles from '../css/home.module.css' // You can import the CSS file specific to this page
+import styles from '../home/home.module.css' // You can import the CSS file specific to this page
 
 const Home = () => {
   const [events, setEvents] = useState([]); // Store events data

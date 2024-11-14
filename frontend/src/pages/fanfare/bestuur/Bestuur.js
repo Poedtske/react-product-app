@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../css/bestuur.module.css'; // Assuming you have a CSS file for styling
+import styles from '../bestuur/bestuur.module.css'; // Assuming you have a CSS file for styling
 
 const bestuurMembers = [
   { name: 'Ruben Fransen', image: 'icoonManBestuur.png' },
