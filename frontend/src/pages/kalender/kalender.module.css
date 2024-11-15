@@ -2,7 +2,8 @@
   display: grid;
   justify-items: center;
   gap: 2rem;
-  /* padding-block: 2.5rem; */
+  padding-top: 7.5rem;
+  padding-bottom: 2.5rem;
 }
 
 .main section {
@@ -52,4 +53,73 @@ td {
 
 .poster {
   transition: 0.3s;
+}
+
+.eventList {
+  width: 80%;
+  max-width: 1200px;
+  margin: 20px auto;
+  list-style-type: none;
+  padding: 0;
+}
+
+.eventContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.event {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #000000;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.event:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dateContainer {
+  width: 10%;
+  min-width: 40px;
+  height: 70px;
+  background-color: #333;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10%;
+  margin-right: 20px;
+}
+
+.dateDay {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.dateMonth {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.eventTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.eventDate {
+  font-size: 18px;
+  color: #555;
+  margin-top: 5px;
 }

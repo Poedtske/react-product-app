@@ -67,6 +67,11 @@ public class EventAPIController {
         return "Spond event has been updated";
     }
 
+    @GetMapping("/{id}")
+    public Event GetEvent(@PathVariable Long id){
+        return myEventDao.findDistinctById(id);
+    }
+
     @GetMapping("/spond")
     public Iterable<SpondEventDto> getAllSpondEvents() {
         Iterable<Event> allEvents = myEventDao.findAll();

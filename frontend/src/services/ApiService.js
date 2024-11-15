@@ -58,3 +58,21 @@ export const getEvents = async () => {
     throw error;
   }
 }
+
+export const getEventById = async (id) => {
+  try {
+    const response = await axios.get(`${apiUrlEvent}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const deleteEventById = async (id) => {
+  try {
+    const response = await axios.delete(`${apiUrlEvent}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

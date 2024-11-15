@@ -18,6 +18,9 @@ public class Event {
     private String spondId;
 
     @Nullable
+    private String poster;
+
+    @Nullable
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd:MM:yyyy")
     private Date startDate;
@@ -110,6 +113,14 @@ public class Event {
 
     public void setSpondId(String spondId) {
         this.spondId = spondId;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
     public Date getStartDate() {

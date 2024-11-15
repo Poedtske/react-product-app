@@ -1,53 +1,66 @@
-import styles from './kalender.module.css';
-import { getEvents } from "../../services/ApiService";
-import React, {useContext, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import styles from './kalender.module.css'; // Import CSS module
+import { getEvents } from '../../services/ApiService';
 
-export default function ProductList() {
+const Kalender = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // const { products, updateProducts } = useContext(ProductContext);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const events = await getEvents(); // Fetch events
+        setEvents(events);
+        setLoading(false);
+      } catch (error) {
+        setError('Error fetching events');
+        setLoading(false);
+        console.error('Error fetching events:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const products = await getEvents();
-  //       updateProducts(products);
-  //     } catch (error) {
-  //       console.error('Error fetching products:', error);
-  //     }
-  //   }
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en', { month: 'short' }).toUpperCase();
+    return { day, month };
+  };
 
-  //   fetchData();
-  // }, []);
+  return (
+    <main className={styles.main}>
+      <div className={styles.eventList}>
+        <div className={styles.eventContainer}>
+          {events.map((event) => {
+            const { day, month } = formatDate(event.startTime);
 
-  return(
-    // <div>
-    //   <nav aria-label="breadcrumb">
-    //     <ol className="breadcrumb">
-    //       <li className="breadcrumb-item">
-    //         <NavLink to="/">Products</NavLink>
-    //       </li>
-    //     </ol>
-    //   </nav>
-    //   <table className="table table-striped">
-    //     <thead>
-    //     <tr>
-    //       <th scope="col">#</th>
-    //       <th scope="col">Title</th>
-    //       <th scope="col">Price</th>
-    //       <th scope="col">Quantity</th>
-    //       <th scope="col">Actions</th>
-    //     </tr>
-    //     </thead>
-    //     <tbody>
-    //     {products.map(product => <ProductTableRow key={product.id} {...product} />)}
-    //     </tbody>
-    //   </table>
-    //   <div>
-    //     <NavLink className="btn btn-primary" to="/new">Add</NavLink>
-    //   </div>
-    // </div>
-    <p>test</p>
-
+            return (
+              <Link
+                to={{
+                  pathname: `/events/${event.id}`,
+                  state: { event }, // Pass event data as state
+                }}
+                key={event.id}
+                className={styles.event}
+              >
+                <div className={styles.dateContainer}>
+                  <div className={styles.dateDay}>{day}</div>
+                  <div className={styles.dateMonth}>{month}</div>
+                </div>
+                <div className={styles.eventDetails}>
+                  <div className={styles.eventTitle}>{event.title}</div>
+                  <div className={styles.eventLocation}>{event.location}</div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </main>
   );
+};
 
-}
+export default Kalender;

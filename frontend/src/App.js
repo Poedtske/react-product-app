@@ -13,6 +13,7 @@ import Documenten from './pages/info/documenten/Documenten';
 import Privacy from './pages/info/privacy/Privacy';
 import Kalender from './pages/kalender/Kalender';
 import Sponsors from './pages/sponsors/Sponsors';
+import ShowEvent from './components/ShowEvent';
 import Test from './pages/Test';
 import ProductList from "./components/ProductList";
 import Products from "./components/Products";
@@ -22,24 +23,32 @@ import UpdateProductForm from './components/UpdateProductForm';
 import CreateProductForm from './components/CreateProductForm'
 import './App.css';
 
+import { EventProvider } from './context/EventContext';
+
 function App() {
   return (
 
-    <>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/fanfare/bestuur" element={<Bestuur />} />
-        <Route path="/fanfare/dirigent" element={<Dirigent />} />
-        <Route path="/fanfare/geschiedenis" element={<Geschiedenis />} />
-        <Route path="/fanfare/instrumenten" element={<Instrumenten />} />
-        <Route path="/jeugd" element={<Jeugd />} />
-        <Route path="/info/documenten" element={<Documenten />} />
-        <Route path="/info/privacy" element={<Privacy />} /> 
-        <Route path="/kalender" element={<Kalender />} />
-        <Route path="/sponsors" element={<Sponsors />} />
-      </Routes>
-      <Footer/>
+    <>      
+        <NavBar />
+        <EventProvider>
+          <Routes>
+            <Route path="/events/:id" element={<ShowEvent/>} />
+          </Routes>
+        </EventProvider>        
+        <Routes>    
+          <Route path="/" element={<Home />} />      
+          <Route path="/fanfare/bestuur" element={<Bestuur />} />
+          <Route path="/fanfare/dirigent" element={<Dirigent />} />
+          <Route path="/fanfare/geschiedenis" element={<Geschiedenis />} />
+          <Route path="/fanfare/instrumenten" element={<Instrumenten />} />
+          <Route path="/jeugd" element={<Jeugd />} />
+          <Route path="/info/documenten" element={<Documenten />} />
+          <Route path="/info/privacy" element={<Privacy />} /> 
+          <Route path="/kalender" element={<Kalender />} />
+          <Route path="/sponsors" element={<Sponsors />} />
+        </Routes>
+        <Footer/>
+      
     </>
     
   );
