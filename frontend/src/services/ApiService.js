@@ -3,6 +3,7 @@ import axios from "axios";
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const apiUrl = `${baseURL}/api/products`;
+const apiUrlEvent = `${baseURL}/api/events`;
 
 export const getProducts = async () => {
   try {
@@ -43,6 +44,15 @@ export const updateProductById = async (id, product) => {
 export const deleteProductById = async (id) => {
   try {
     const response = await axios.delete(`${apiUrl}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getEvents = async () => {
+  try {
+    const response = await axios.get(apiUrlEvent);
     return response.data;
   } catch (error) {
     throw error;

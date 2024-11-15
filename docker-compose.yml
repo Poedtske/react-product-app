@@ -29,4 +29,8 @@ services:
         dockerfile: Dockerfile
       ports:
         - "3000:80"
+  spond:
+    build:
+      context: ./backend/spond
+      dockerfile: Dockerfile
 

@@ -45,12 +45,12 @@ public class Event {
 
     @Nullable
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
     private java.util.Date startTime;
 
     @Nullable
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
     private java.util.Date endTime;
 
     @Nullable
@@ -94,6 +94,14 @@ public class Event {
         this.tickets = null;
         this.tables = null;
         this.products = null;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
     }
 
     public String getSpondId() {
@@ -206,5 +214,15 @@ public class Event {
 
     public ConcertTicket GetTicket(ConcertTicket t){
         return this.tickets.stream().filter(ticket->ticket.getId()==t.getId()).findFirst().orElse(null);
+    }
+
+    public void SpondUpdate(Event e){
+        this.startTime = e.startTime;
+        this.endTime = e.endTime;
+        this.title = e.title;
+        this.location = e.location;
+        if(e.description!=null){
+            this.description = e.description;
+        }
     }
 }
