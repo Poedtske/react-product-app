@@ -5,7 +5,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="Events")
@@ -13,6 +13,9 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Nullable
+    private String spondId;
 
     @Nullable
     @Temporal(TemporalType.DATE)
@@ -24,24 +27,35 @@ public class Event {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd:MM:yyyy")
     private Date endDate;
 
-    private String name;
+    private String title;
 
+    @Nullable
     @OneToMany(mappedBy = "event")
-    private HashSet<com.example.backend.model.Date>dates;
+    private Set<com.example.backend.model.Date>dates;
 
     private String location;
 
     @Nullable
     @OneToMany(mappedBy = "event")
-    private HashSet<ConcertTicket> tickets;
+    private Set<ConcertTicket> tickets;
 
     @Nullable
     @OneToMany(mappedBy = "event")
-    private HashSet<Tafel> tables;
+    private Set<Tafel> tables;
+
+    @Nullable
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC")
+    private java.util.Date startTime;
+
+    @Nullable
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssX", timezone = "UTC")
+    private java.util.Date endTime;
 
     @Nullable
     @ManyToMany(mappedBy = "events")
-    private HashSet<Product> products;
+    private Set<Product> products;
 
     @Nullable
     private String description;
@@ -49,16 +63,45 @@ public class Event {
     public Event() {
     }
 
-    public Event(Date startDate, Date endDate, String name, HashSet<com.example.backend.model.Date>dates, String location, HashSet<ConcertTicket> concertTickets, HashSet<Tafel> tables, HashSet<Product> products, String description) {
+    // Full constructor for initializing an Event with all fields
+    public Event(Date startDate, Date endDate, String title, Set<com.example.backend.model.Date> dates,
+                 String location, Set<ConcertTicket> tickets, Set<Tafel> tables, Set<Product> products, String description) {
+        this.spondId = null;
+        this.startTime = null;
+        this.endTime = null;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.name = name;
+        this.title = title;
         this.dates = dates;
         this.location = location;
-        this.tickets = concertTickets;
+        this.tickets = tickets;
         this.tables = tables;
         this.products = products;
         this.description = description;
+    }
+
+    // Constructor for creating an event from "Spond" data
+    public Event(String spondId, java.util.Date startTime, java.util.Date endTime, String title, String location, String description) {
+        this.spondId = spondId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.title = title;
+        this.location = location;
+        this.description = description;
+        this.startDate = null;
+        this.endDate = null;
+        this.dates = null;
+        this.tickets = null;
+        this.tables = null;
+        this.products = null;
+    }
+
+    public String getSpondId() {
+        return spondId;
+    }
+
+    public void setSpondId(String spondId) {
+        this.spondId = spondId;
     }
 
     public Date getStartDate() {
@@ -77,12 +120,12 @@ public class Event {
         this.endDate = endDate;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getLocation() {
@@ -105,19 +148,19 @@ public class Event {
         return id;
     }
 
-    public HashSet<com.example.backend.model.Date> getDates() {
+    public Set<com.example.backend.model.Date> getDates() {
         return dates;
     }
 
-    public HashSet<ConcertTicket> getTickets() {
+    public Set<ConcertTicket> getTickets() {
         return tickets;
     }
 
-    public HashSet<Tafel> getTables() {
+    public Set<Tafel> getTables() {
         return tables;
     }
 
-    public HashSet<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
