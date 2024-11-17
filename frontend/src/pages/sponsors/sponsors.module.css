@@ -61,7 +61,7 @@
   cursor: auto;
 }
 
-.main :is(a, button):hover {
+.main :is(a, button:not(.no_website)):hover {
   scale: 1.15;
 }
 
