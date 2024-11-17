@@ -22,6 +22,7 @@ services:
         SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/product
         SPRING_DATASOURCE_USERNAME: product_user
         SPRING_DATASOURCE_PASSWORD: product_user_password
+      restart: unless-stopped
 
   react-app:
       build:
@@ -33,4 +34,5 @@ services:
     build:
       context: ./backend/spond
       dockerfile: Dockerfile
+    restart: unless-stopped
 
