@@ -23,6 +23,7 @@ public class EventAPIController {
         this.myEventDao=myEventDao;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping
     public Iterable<Event> getAllEvents(){
         return myEventDao.findAll();
@@ -53,9 +54,9 @@ public class EventAPIController {
         return "All events have been added successfully";
     }
 
-    @DeleteMapping("/spond/{spondId}")
-    public String DeleteSpondEvent(@PathVariable String spondId, @RequestBody Event e){
-        myEventDao.delete(myEventDao.findDistinctBySpondId(spondId));
+    @DeleteMapping("/spond")
+    public String DeleteSpondEvent(@RequestBody Event e){
+        myEventDao.delete(myEventDao.findDistinctBySpondId(e.getSpondId()));
         return "Spond event has been deleted";
     }
 
