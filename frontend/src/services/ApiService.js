@@ -1,17 +1,14 @@
 import axios from "axios";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
-const apiKey = process.env.REACT_APP_API_KEY; // Use REACT_APP_ prefix for all environment variables
 
-const apiUrl = `${baseURL}/api/products`;
-const apiUrlEvent = `${baseURL}/api/events`;
+
+const apiUrl = `${baseURL}/api/public/products`;
+const apiUrlEvent = `${baseURL}/api/public/events`;
 
 // Centralized Axios instance with default headers
 const apiClient = axios.create({
   baseURL: baseURL,
-  headers: {
-    'x-api-key': apiKey, // Add API key to all requests
-  },
 });
 
 // Products API
@@ -68,7 +65,7 @@ export const deleteProductById = async (id) => {
 // Events API
 export const getEvents = async () => {
   try {
-    const response = await apiClient.get('/api/events');
+    const response = await apiClient.get('/api/public/events');
     return response.data;
   } catch (error) {
     console.error('Error fetching events:', error.response || error);
@@ -78,7 +75,7 @@ export const getEvents = async () => {
 
 export const getEventById = async (id) => {
   try {
-    const response = await apiClient.get(`/api/events/${id}`);
+    const response = await apiClient.get(`/api/public/events/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching event with ID ${id}:`, error.response || error);

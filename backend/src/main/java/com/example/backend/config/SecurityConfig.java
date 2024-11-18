@@ -27,12 +27,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry.requestMatchers("/**").authenticated())
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints do not require authentication
+                        .requestMatchers("/api/public/**").permitAll()
+                        // Secure endpoints require authentication
+                        .requestMatchers("/api/secure/**").authenticated()
+                        .anyRequest().authenticated() // Default rule for other endpoints
+                )
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.cors(Customizer.withDefaults()); // disable this line to reproduce the CORS 401
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Add custom filter only for secure endpoints
+                .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .cors(Customizer.withDefaults()); // Enable CORS for cross-origin requests
+
         return http.build();
     }
-
 }

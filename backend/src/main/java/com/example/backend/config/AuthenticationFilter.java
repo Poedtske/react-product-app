@@ -19,9 +19,18 @@ public class AuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        // Determine the path being accessed
+        String requestPath = httpRequest.getRequestURI();
+
         try {
-            Authentication authentication = AuthenticationService.getAuthentication((HttpServletRequest) request);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Skip authentication for public endpoints
+            if (!isPublicEndpoint(requestPath)) {
+                // Perform API key authentication for secure endpoints
+                Authentication authentication = AuthenticationService.getAuthentication(httpRequest);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         } catch (Exception exp) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -30,8 +39,21 @@ public class AuthenticationFilter extends GenericFilterBean {
             writer.print(exp.getMessage());
             writer.flush();
             writer.close();
+            return; // Exit filter chain for unauthorized requests
         }
 
+        // Continue with the filter chain for all requests
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Determine if the endpoint is public.
+     *
+     * @param requestPath The path of the incoming request.
+     * @return true if the endpoint is public, false otherwise.
+     */
+    private boolean isPublicEndpoint(String requestPath) {
+        // Define public paths. This can also be externalized to application properties or configuration files.
+        return requestPath.startsWith("/api/public/") || requestPath.equals("/api/open-info");
     }
 }

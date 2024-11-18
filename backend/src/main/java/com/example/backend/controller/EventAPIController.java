@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/api/private/events")
 public class EventAPIController {
 
     private EventDao myEventDao;
@@ -21,12 +21,6 @@ public class EventAPIController {
     @Autowired
     public EventAPIController(EventDao myEventDao){
         this.myEventDao=myEventDao;
-    }
-
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping
-    public Iterable<Event> getAllEvents(){
-        return myEventDao.findAll();
     }
 
     @PostMapping()
@@ -66,48 +60,6 @@ public class EventAPIController {
         oldEvent.SpondUpdate(e);
         myEventDao.save(oldEvent);
         return "Spond event has been updated";
-    }
-
-    @GetMapping("/{id}")
-    public Event GetEvent(@PathVariable Long id){
-        return myEventDao.findDistinctById(id);
-    }
-
-    @GetMapping("/spond")
-    public Iterable<SpondEventDto> getAllSpondEvents() {
-        Iterable<Event> allEvents = myEventDao.findAll();
-        List<SpondEventDto> eventDtos = new ArrayList<>();
-
-        for (Event event : allEvents) {
-            if (event.getSpondId() != null) {  // Only include events with a non-null spondId
-                SpondEventDto eventDto;
-
-                // Check if the description is null
-                if (event.getDescription() == null) {
-                    eventDto = new SpondEventDto(
-                            event.getSpondId(),
-                            event.getStartTime().toString(),  // Convert to String if necessary
-                            event.getEndTime().toString(),    // Convert to String if necessary
-                            event.getTitle(),
-                            event.getLocation()
-                    );
-                } else {
-                    eventDto = new SpondEventDto(
-                            event.getSpondId(),
-                            event.getStartTime().toString(),  // Convert to String if necessary
-                            event.getEndTime().toString(),    // Convert to String if necessary
-                            event.getTitle(),
-                            event.getLocation(),
-                            event.getDescription()  // Only add description if it's not null
-                    );
-                }
-
-                eventDtos.add(eventDto);  // Add the DTO to the list
-            }
-        }
-
-
-        return eventDtos;
     }
 
 
