@@ -14,6 +14,8 @@ username = os.getenv('SPOND_USERNAME')
 password = os.getenv('SPOND_PASSWORD')
 group_id = os.getenv('SPOND_GROUP_ID')
 api_base_url = os.getenv('URL')  # Fetch the base URL from the environment file
+api_spond_private="/api/secure/events"
+api_spond_public="/api/public/events/spond"
 
 # Define the headers that will be used in every API call
 headers = {
@@ -57,7 +59,7 @@ async def get_events_spond():
     return eventlist
 
 async def get_local_events():
-    url = f"{api_base_url}/api/public/events/spond"
+    url = f"{api_base_url+api_spond_public}"
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
@@ -67,7 +69,7 @@ async def get_local_events():
                 return []
 
 async def delete_event_from_local(event):
-    url = f"{api_base_url}/api/private/events/spond"
+    url = f"{api_base_url+api_spond_private}/spond"
     async with aiohttp.ClientSession() as session:
         async with session.delete(url, json=event, headers=headers) as response:
             if response.status == 200:
@@ -78,7 +80,7 @@ async def delete_event_from_local(event):
                 return False
 
 async def post_event_to_local(event):
-    url = f"{api_base_url}/api/private/events"
+    url = f"{api_base_url+api_spond_private}"
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json=event, headers=headers) as response:
             if response.status == 200:
@@ -89,7 +91,7 @@ async def post_event_to_local(event):
                 return False
 
 async def update_event_in_local(event):
-    url = f"{api_base_url}/api/events/private/spond"
+    url = f"{api_base_url+api_spond_private}/spond"
     async with aiohttp.ClientSession() as session:
         async with session.put(url, json=event, headers=headers) as response:
             if response.status == 200:

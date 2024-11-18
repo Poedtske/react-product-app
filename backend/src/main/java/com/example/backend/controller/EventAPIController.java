@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/private/events")
+@RequestMapping("/api/secure/events")
 public class EventAPIController {
 
     private EventDao myEventDao;

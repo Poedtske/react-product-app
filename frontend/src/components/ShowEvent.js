@@ -86,7 +86,7 @@ export default function ShowEvent() {
                 <p>Begin: {formatTime(event.startTime)}</p>
                 <p>Einde: {formatTime(event.endTime)}</p>
 
-                {event.spondId && (
+                {/* {event.spondId && (
                     <button style={{ border: "none", backgroundColor:'transparent' }}>
                         <a
                         href={`https://spond.com/client/sponds/${event.spondId}`}
@@ -123,7 +123,7 @@ export default function ShowEvent() {
                     </button>
                 </div>
                 </div>
-                )}
+                )} */}
 
                 <br />
             </div>
