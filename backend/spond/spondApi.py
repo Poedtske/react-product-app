@@ -57,7 +57,7 @@ async def get_events_spond():
     return eventlist
 
 async def get_local_events():
-    url = f"{api_base_url}/api/events/spond"
+    url = f"{api_base_url}/api/public/events/spond"
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
@@ -67,7 +67,7 @@ async def get_local_events():
                 return []
 
 async def delete_event_from_local(event):
-    url = f"{api_base_url}/api/events/spond"
+    url = f"{api_base_url}/api/private/events/spond"
     async with aiohttp.ClientSession() as session:
         async with session.delete(url, json=event, headers=headers) as response:
             if response.status == 200:
@@ -78,7 +78,7 @@ async def delete_event_from_local(event):
                 return False
 
 async def post_event_to_local(event):
-    url = f"{api_base_url}/api/events"
+    url = f"{api_base_url}/api/private/events"
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json=event, headers=headers) as response:
             if response.status == 200:
@@ -89,7 +89,7 @@ async def post_event_to_local(event):
                 return False
 
 async def update_event_in_local(event):
-    url = f"{api_base_url}/api/events/spond"
+    url = f"{api_base_url}/api/events/private/spond"
     async with aiohttp.ClientSession() as session:
         async with session.put(url, json=event, headers=headers) as response:
             if response.status == 200:
