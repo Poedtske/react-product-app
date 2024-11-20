@@ -72,7 +72,7 @@ const sponsors = [
     {
         id: 11,
         title: "Immo DEWAELE",
-        logo: "immoDewaele.png",
+        logo: "immoDeWaele.png",
         rank: 3,
         url: "https://www.dewaele.com/nl/cbi-immo-is-nu-dewaele"
     },
