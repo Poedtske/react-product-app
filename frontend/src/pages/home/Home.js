@@ -12,16 +12,26 @@ const Home = () => {
     let fetchData = async () => {
       try {
         const events = await getEvents(); // assuming getEvents fetches events from your backend
-        setEvents(events);
+        if (Array.isArray(events)) {
+          setEvents(events); // Only update state if events is an array
+        } else {
+          console.error('Fetched data is not an array:', events);
+        }
       } catch (error) {
         console.error('Error fetching events:', error);
       }
     };
     fetchData();
   }, []);
+  
 
   // Function to find the closest event (based on date) to today
   const getClosestEvent = (events) => {
+    // Ensure events is an array before proceeding
+    if (!Array.isArray(events) || events.length === 0) {
+      return null; // Return null if no events are available
+    }
+  
     const today = new Date();
     return events
       .filter((event) => event.start_time) // Ensure event has a start time
@@ -31,6 +41,7 @@ const Home = () => {
         return eventDate >= today && eventDate < closestDate ? event : closest;
       }, events[0]); // Start with the first event if no closer one is found
   };
+  
 
   // Helper function to format date to 'DD/MM/YYYY'
   const formatDate = (dateString) => {

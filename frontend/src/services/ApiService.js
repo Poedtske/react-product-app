@@ -7,9 +7,7 @@ const apiUrl = `${baseURL}/api/public/products`;
 const apiUrlEvent = `${baseURL}/api/public/events`;
 
 // Centralized Axios instance with default headers
-const apiClient = axios.create({
-  baseURL: baseURL,
-});
+const apiClient = axios.create();
 
 // Products API
 export const getProducts = async () => {
@@ -66,12 +64,13 @@ export const deleteProductById = async (id) => {
 export const getEvents = async () => {
   try {
     const response = await apiClient.get('/api/public/events');
-    return response.data;
+    return Array.isArray(response.data) ? response.data : []; // Return empty array if response is not an array
   } catch (error) {
-    console.error('Error fetching events:', error.response || error);
-    throw error;
+    console.error('Error fetching events:', error);
+    return []; // Return empty array on error
   }
 };
+
 
 export const getEventById = async (id) => {
   try {
