@@ -5,7 +5,7 @@ import React from "react";
 
 export default class Sponsor extends React.Component {
   render() {
-    const { naam, url, logo, rank } = this.props; // Destructure props
+    const { title, url, logo, rank } = this.props; // Destructure props
 
     let width = 200;
     if (rank === 1) width = 290;
@@ -19,7 +19,7 @@ export default class Sponsor extends React.Component {
             <a href={url} target="_blank" rel="noopener noreferrer">
             <img
               src={imagesPath+logo}
-              alt={`${naam} logo`}
+              alt={`${title} logo`}
               style={{ width, cursor: "pointer" }}
             />
           </a>
@@ -28,7 +28,7 @@ export default class Sponsor extends React.Component {
           <button className={styles.no_website}>
             <img
             src={imagesPath+logo}
-            alt={`${naam} logo`}
+            alt={`${title} logo`}
             style={{ width }}
           />
           </button>

@@ -47,11 +47,11 @@ const Instrumenten = () => {
           </div>
           <div className={styles.item}>
             <p>Mib Bas</p>
-            <img src="/images/instruments/mib bas.png" alt="Mib Bas" />
+            <img src="/images/instruments/Mib bas.png" alt="Mib Bas" />
           </div>
           <div className={styles.item}>
             <p>Sib Bas</p>
-            <img src="/images/instruments/sib bas.png" alt="Sib Bas" />
+            <img src="/images/instruments/Sib bas.png" alt="Sib Bas" />
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ const Instrumenten = () => {
           </div>
           <div className={styles.item}>
             <p>Sax Bas</p>
-            <img src="/images/instruments/saxbas.png" alt="Sax Bas" />
+            <img src="/images/instruments/SaxBas.png" alt="Sax Bas" />
           </div>
         </div>
       </div>
