@@ -66,6 +66,7 @@ export const deleteProductById = async (id) => {
 export const getEvents = async () => {
   try {
     const response = await apiClient.get('/api/public/events');
+    console.log("this is the data \n"+response.data)
     return Array.isArray(response.data) ? response.data : []; // Return empty array if response is not an array
   } catch (error) {
     console.error('Error fetching events:', error);
