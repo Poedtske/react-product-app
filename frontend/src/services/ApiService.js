@@ -7,7 +7,9 @@ const apiUrl = `${baseURL}/api/public/products`;
 const apiUrlEvent = `${baseURL}/api/public/events`;
 
 // Centralized Axios instance with default headers
-const apiClient = axios.create();
+const apiClient = axios.create({
+  baseURL: baseURL,
+});
 
 // Products API
 export const getProducts = async () => {
