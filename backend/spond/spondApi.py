@@ -63,9 +63,11 @@ async def get_local_events():
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
+                await session.close()
                 return await response.json()  # Assuming the response contains the events as JSON
             else:
                 print(f"Failed to fetch local events. Status: {response.status}")
+                await session.close()
                 return []
 
 async def delete_event_from_local(event):
@@ -74,9 +76,11 @@ async def delete_event_from_local(event):
         async with session.delete(url, json=event, headers=headers) as response:
             if response.status == 200:
                 print(f"Successfully deleted event with ID {event['id']}")
+                await session.close()
                 return True
             else:
                 print(f"Failed to delete event with ID {event['id']}. Status: {response.status}")
+                await session.close()
                 return False
 
 async def post_event_to_local(event):
@@ -85,9 +89,11 @@ async def post_event_to_local(event):
         async with session.post(url, json=event, headers=headers) as response:
             if response.status == 200:
                 print(f"Successfully added event with ID {event['spondId']}")
+                await session.close()
                 return True
             else:
                 print(f"Failed to add event with ID {event['spondId']}. Status: {response.status}")
+                await session.close()
                 return False
 
 async def update_event_in_local(event):
@@ -95,10 +101,12 @@ async def update_event_in_local(event):
     async with aiohttp.ClientSession() as session:
         async with session.put(url, json=event, headers=headers) as response:
             if response.status == 200:
-                print(f"Successfully updated event with ID {event['spondId']}")    
+                print(f"Successfully updated event with ID {event['spondId']}") 
+                await session.close()   
                 return True           
             else:
                 print(f"Failed to update event with ID {event['spondId']}. Status: {response.status}")
+                await session.close()
                 return False
 
 async def compare_and_update_events(spond_events, local_events):
