@@ -147,12 +147,17 @@ async def main():
     while True:
         try:
             if firsttime:
+                print('fetch local events')
                 local_events = await get_local_events()
+                print('fetch spond events')
                 spond_events = await get_events_spond()
+                print('compare')
                 await compare_and_update_events(spond_events, local_events)
                 firsttime = False
             else:
+                print('fetch spond events first time')
                 spond_events = await get_events_spond()
+                print('compare first time')
                 await compare_and_update_events(spond_events, local_events)
 
         except Exception as e:
