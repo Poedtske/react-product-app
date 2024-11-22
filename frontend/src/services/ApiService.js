@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = process.env.REACT_APP_API_BASE_URL;
+const baseURL = 'http://57.129.67.193:8080';
 
 
 const apiUrl = `${baseURL}/api/public/products`;
@@ -66,14 +66,14 @@ export const deleteProductById = async (id) => {
 export const getEvents = async () => {
   try {
     const response = await apiClient.get('/api/public/events');
-    console.log("this is the data \n"+response.data);
-    console.log("this is the request"+apiClient.baseURL);
-    return Array.isArray(response.data) ? response.data : []; // Return empty array if response is not an array
+    console.log(response.data);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching events:', error);
-    return []; // Return empty array on error
+    console.error('Error fetching events:', error.response || error);
+    throw error;
   }
 };
+
 
 
 export const getEventById = async (id) => {
