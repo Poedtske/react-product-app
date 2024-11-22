@@ -140,6 +140,7 @@ async def compare_and_update_events(spond_events, local_events):
                 local_event = spond_event
 
 async def main():
+    sleep(60)
     print("Fetching Spond events and comparing with local events...")
     local_events = []
     firsttime = True
