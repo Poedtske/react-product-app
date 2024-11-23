@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = 'http://57.129.67.193:8080';
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 
 const apiUrl = `${baseURL}/api/public/products`;
@@ -66,7 +66,6 @@ export const deleteProductById = async (id) => {
 export const getEvents = async () => {
   try {
     const response = await apiClient.get('/api/public/events');
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching events:', error.response || error);
