@@ -1,11 +1,11 @@
 const sponsors = [
-    {
-        id: 1,
-        title: "vishandelanemoontje",
-        logo: "'tAnemoontje.jpg",
-        rank: 2,
-        url: "http://www.vishandelanemoontje.be/"
-    },
+    // {
+    //     id: 1,
+    //     title: "vishandelanemoontje",
+    //     logo: "'tAnemoontje.jpg",
+    //     rank: 2,
+    //     url: "http://www.vishandelanemoontje.be/"
+    // },
     {
         id: 2,
         title: "Al_kopie",
@@ -20,13 +20,13 @@ const sponsors = [
         rank: 4,
         url: "http://www.autocentermertens.be/nlbe/start.aspx"
     },
-    {
-        id: 4,
-        title: "B_K Getinte Ruiten",
-        logo: "B&KGetinteRuiten.png",
-        rank: 3,
-        url: "https://www.bkgetinteruiten.be/"
-    },
+    // {
+    //     id: 4,
+    //     title: "B_K Getinte Ruiten",
+    //     logo: "B&KGetinteRuiten.png",
+    //     rank: 3,
+    //     url: "https://www.bkgetinteruiten.be/"
+    // },
     {
         id: 5,
         title: "Bakkerij TImmermans",
@@ -48,20 +48,20 @@ const sponsors = [
         rank: 3,
         url: "https://www.bikecentermertens.be/"
     },
-    {
-        id: 8,
-        title: "Ben Van Sande",
-        logo: "benVanSande.png",
-        rank: 2,
-        url: "https://www.benvansande.be/"
-    },
-    {
-        id: 9,
-        title: "Cafe Galoiske",
-        logo: "cafeGaloiske.png",
-        rank: 3,
-        url: "https://zekaa.com/galoiske-t"
-    },
+    // {
+    //     id: 8,
+    //     title: "Ben Van Sande",
+    //     logo: "benVanSande.png",
+    //     rank: 2,
+    //     url: "https://www.benvansande.be/"
+    // },
+    // {
+    //     id: 9,
+    //     title: "Cafe Galoiske",
+    //     logo: "cafeGaloiske.png",
+    //     rank: 3,
+    //     url: "https://zekaa.com/galoiske-t"
+    // },
     {
         id: 10,
         title: "Cafe in de Veldkant",
@@ -125,13 +125,13 @@ const sponsors = [
         rank: 3,
         url: "https://grimbergsehandelaars.be/drankencentrale-van-campenhout/"
     },
-    {
-        id: 19,
-        title: "Enigma",
-        logo: "enigma.png",
-        rank: 3,
-        url: "https://enigma.be/"
-    },
+    // {
+    //     id: 19,
+    //     title: "Enigma",
+    //     logo: "enigma.png",
+    //     rank: 3,
+    //     url: "https://enigma.be/"
+    // },
     {
         id: 20,
         title: "EVN Pharma",
@@ -146,13 +146,13 @@ const sponsors = [
         rank: 3,
         url: "https://fleurlouise.com/index.php/16-2/"
     },
-    {
-        id: 22,
-        title: "Forrier",
-        logo: "forrier.png",
-        rank: 3,
-        url: "https://forrier.sereni.be/nl/"
-    },
+    // {
+    //     id: 22,
+    //     title: "Forrier",
+    //     logo: "forrier.png",
+    //     rank: 3,
+    //     url: "https://forrier.sereni.be/nl/"
+    // },
     {
         id:23,
         title: "Fort verzekeringen",
@@ -181,13 +181,13 @@ const sponsors = [
         rank: 4,
         url: "https://www.hygge-vakantiewoning.be/"
     },
-    {
-        id: 27,
-        title: "JoVelo",
-        logo: "joVelo.png",
-        rank: 4,
-        url: "https://www.fietsreparateur.be/"
-    },
+    // {
+    //     id: 27,
+    //     title: "JoVelo",
+    //     logo: "joVelo.png",
+    //     rank: 4,
+    //     url: "https://www.fietsreparateur.be/"
+    // },
     {
         id: 28,
         title: "Kapsalon Ann",
@@ -252,13 +252,13 @@ const sponsors = [
         rank: 4,
         url: "https://www.orchisraes.be/"
     },
-    {
-        id: 37,
-        title: "Read All",
-        logo: "readAll.png",
-        rank: 4,
-        url: "https://www.openingsuren.vlaanderen/read-all/1800-vilvoorde/grimbergsesteenweg-90"
-    },
+    // {
+    //     id: 37,
+    //     title: "Read All",
+    //     logo: "readAll.png",
+    //     rank: 4,
+    //     url: "https://www.openingsuren.vlaanderen/read-all/1800-vilvoorde/grimbergsesteenweg-90"
+    // },
     {
         id: 38,
         title: "Spira",
@@ -294,13 +294,13 @@ const sponsors = [
         rank: 3,
         url: "https://www.fintro.be/fr/public/particuliers"
     },
-    {
-        id: 43,
-        title: "EVE dakwerken",
-        logo: "EVEDakwerken.jpg",
-        rank: 2,
-        url: null
-    },
+    // {
+    //     id: 43,
+    //     title: "EVE dakwerken",
+    //     logo: "EVEDakwerken.jpg",
+    //     rank: 2,
+    //     url: null
+    // },
     {
         id: 44,
         title: "Leen De Cock",
@@ -360,3 +360,5 @@ const sponsors = [
 ];
 
 export default sponsors
+
+9+4+6+10+3+4+1+3+2
