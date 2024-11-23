@@ -360,5 +360,3 @@ const sponsors = [
 ];
 
 export default sponsors
-
-9+4+6+10+3+4+1+3+2
