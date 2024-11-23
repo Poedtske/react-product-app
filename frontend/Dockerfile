@@ -24,11 +24,8 @@ COPY .docker/nginx.conf /etc/nginx/nginx.conf
 # Copy the built React app from the build stage to the nginx container
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Create a directory for SSL certificates
-RUN mkdir -p /etc/nginx/certs
-
-# Expose HTTP and HTTPS ports
-EXPOSE 443
+# Expose port 80
+EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
