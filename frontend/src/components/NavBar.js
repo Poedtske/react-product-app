@@ -77,21 +77,21 @@ export default function NavBar() {
         </NavLink>
         
         <div className="dropdown">
-          <button className="dropbtn">Praktische Info</button>
+          <button className="dropbtn">Info</button>
           <div className="dropdown-content">
             <NavLink 
               to="/info/documenten" 
               activeClassName="active" 
               onClick={handleToggle}
             >
-              Belangrijke Documenten
+              Documenten
             </NavLink>
             <NavLink 
               to="/info/privacy" 
               activeClassName="active" 
               onClick={handleToggle}
             >
-              Privacyverklaring
+              Privacy
             </NavLink>
           </div>
         </div>
