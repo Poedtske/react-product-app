@@ -66,12 +66,27 @@ export const deleteProductById = async (id) => {
 export const getEvents = async () => {
   try {
     const response = await apiClient.get('/api/public/events');
-    return response.data;
+    const events = response.data;
+
+    if (Array.isArray(events)) {
+      return events
+        .filter(event => event.startTime) // Ensure event has a startTime
+        .sort((a, b) => {
+          const dateA = new Date(a.startTime.replace(" ", "T")).getTime(); // Convert to ISO format
+          const dateB = new Date(b.startTime.replace(" ", "T")).getTime();
+          return dateA - dateB; // Ascending order
+        });
+    } else {
+      console.error('Fetched events are not an array:', events);
+      return [];
+    }
   } catch (error) {
     console.error('Error fetching events:', error.response || error);
     throw error;
   }
 };
+
+
 
 
 
