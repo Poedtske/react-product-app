@@ -25,3 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 
 docker-compose.yml
+frontend/z1.txt
+frontend/z.txt
+frontend/.docker/z.txt
