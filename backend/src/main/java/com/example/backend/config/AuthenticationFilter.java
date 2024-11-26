@@ -1,5 +1,5 @@
 package com.example.backend.config;
-
+/*
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -51,9 +51,10 @@ public class AuthenticationFilter extends GenericFilterBean {
      *
      * @param requestPath The path of the incoming request.
      * @return true if the endpoint is public, false otherwise.
-     */
+
     private boolean isPublicEndpoint(String requestPath) {
         // Define public paths. This can also be externalized to application properties or configuration files.
         return requestPath.startsWith("/api/public/") || requestPath.equals("/api/open-info");
     }
 }
+*/
