@@ -24,12 +24,6 @@ public class Product {
     //if it's available
     private Boolean available;
 
-    //if it has to be displayed in the webshop
-    private Boolean online;
-
-    //if it's a child's portion
-    private Boolean childPortion;
-
     private int quantity;
 
     @Nullable
@@ -48,21 +42,19 @@ public class Product {
 
     @Nullable
     @ManyToMany(mappedBy = "products")
-    private Set<Order> orders;
+    private Set<Invoice> invoices;
 
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, String img, Boolean available, Boolean online, Boolean childPortion, HashSet<Event> events, Category category, HashSet<Order> orders) {
+    public Product(String name, BigDecimal price, String img, Boolean available, HashSet<Event> events, Category category, Set<Invoice> invoices) {
         this.name = name;
         this.price = price;
         this.img = img;
         this.available = available;
-        this.online = online;
-        this.childPortion = childPortion;
         this.events = events;
         this.category = category;
-        this.orders = orders;
+        this.invoices = invoices;
     }
 
     public int getQuantity() {
@@ -105,22 +97,6 @@ public class Product {
         this.available = available;
     }
 
-    public Boolean getOnline() {
-        return online;
-    }
-
-    public void setOnline(Boolean online) {
-        this.online = online;
-    }
-
-    public Boolean getChildPortion() {
-        return childPortion;
-    }
-
-    public void setChildPortion(Boolean childPortion) {
-        this.childPortion = childPortion;
-    }
-
     public Category getCategory() {
         return category;
     }
@@ -137,8 +113,8 @@ public class Product {
         return events;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
+    public Set<Invoice> getInvoices() {
+        return invoices;
     }
 
     public Event AddEvent(Event e){

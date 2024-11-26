@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Invoices")
@@ -13,18 +14,18 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "invoice")
-    private HashSet<Order> orders;
+    @ManyToMany()
+    @JoinTable(
+            name = "Invoice_Products",
+            joinColumns =@JoinColumn(name = "invoice_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Product> products;
 
     @Nullable
     private String description;
 
     private Boolean paid;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "table_id",referencedColumnName = "id")
-    private Tafel table;
 
     /*@JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -34,11 +35,10 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(HashSet<Order> orders, String description, Boolean paid, Tafel table) {
-        this.orders = orders;
+    public Invoice(Set<Product> products, String description, Boolean paid) {
+        this.products = products;
         this.description = description;
         this.paid = paid;
-        this.table = table;
     }
 
     public String getDescription() {
@@ -57,19 +57,11 @@ public class Invoice {
         this.paid = paid;
     }
 
-    public Tafel getTable() {
-        return table;
-    }
-
-    public void setTable(Tafel table) {
-        this.table = table;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public HashSet<Order> getOrders() {
-        return orders;
+    public Set<Product> getProducts() {
+        return products;
     }
 }

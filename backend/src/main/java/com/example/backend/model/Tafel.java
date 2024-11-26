@@ -16,18 +16,6 @@ public class Tafel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*@Nullable
-    @ManyToMany
-    @JoinTable(
-            name = "Tables_Tickets",
-            joinColumns = {
-                    @JoinColumn(name = "event_id", referencedColumnName = "eventId"),
-                    @JoinColumn(name = "table_id", referencedColumnName = "tableId")
-            },
-            inverseJoinColumns = @JoinColumn(name = "ticket_id")
-    )
-    private HashSet<ConcertTicket> tickets;*/
-
     @Nullable
     @ManyToMany
     @JoinTable(
@@ -36,11 +24,6 @@ public class Tafel {
             inverseJoinColumns = @JoinColumn(name = "table_id")
     )
     private HashSet<ConcertTicket> tickets;
-
-    @Nullable
-    @OneToMany(mappedBy = "table")
-    private HashSet<Invoice> invoices;
-
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -56,9 +39,8 @@ public class Tafel {
     public Tafel() {
     }
 
-    public Tafel(Event event, HashSet<ConcertTicket> tickets, HashSet<Invoice> invoices, int seats, int availableSeats) {
+    public Tafel(Event event, HashSet<ConcertTicket> tickets, int seats, int availableSeats) {
         this.tickets = tickets;
-        this.invoices = invoices;
         this.seats = seats;
         this.availableSeats = availableSeats;
         this.event=event;
@@ -80,20 +62,12 @@ public class Tafel {
         this.availableSeats = availableSeats;
     }
 
-    /*public TableId getId() {
-        return id;
-    }*/
-
     public Long getId(){
         return id;
     }
 
     public HashSet<ConcertTicket> getTickets() {
         return tickets;
-    }
-
-    public HashSet<Invoice> getInvoices() {
-        return invoices;
     }
 
     public Event getEvent() {
@@ -112,20 +86,6 @@ public class Tafel {
 
     public ConcertTicket GetTicket(ConcertTicket t){
         return this.tickets.stream().filter(ticket->ticket.getId()==t.getId()).findFirst().orElse(null);
-    }
-
-    public Invoice AddInvoice(Invoice i) {
-        this.invoices.add(i);
-        return i;
-    }
-
-    public Invoice DeleteInvoice(Invoice i) {
-        this.invoices.remove(i);
-        return i;
-    }
-
-    public Invoice GetInvoice(Invoice i){
-        return this.invoices.stream().filter(invoice->invoice.getId()==i.getId()).findFirst().orElse(null);
     }
 
 
