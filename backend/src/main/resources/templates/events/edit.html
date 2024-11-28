@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/head :: head}">
     <title>Edit Event</title>
 </head>
 <body>
+<nav th:replace="~{fragments/navbar :: nav}"></nav>
+<!-- The form uses POST but simulates a PUT request via the hidden _method field -->
+<form method="POST" th:action="@{/events/{id}(id=${event.id})}" th:object="${event}" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT"> <!-- Simulates PUT request -->
 
-<form method="post" th:action="@{~/events}" th:object="${event}" enctype="multipart/form-data">
     <label>
         Title:
         <input th:field="*{title}" type="text">
@@ -23,8 +23,7 @@
         Type:
         <select th:field="*{type}">
             <option th:each="eventType : ${T(com.example.backend.enums.EventType).values()}"
-                    th:value="${eventType}"
-                    th:text="${eventType}"></option>
+                    th:value="${eventType}" th:text="${eventType}"></option>
         </select>
     </label>
     <br>
@@ -33,16 +32,17 @@
         <input th:field="*{description}" type="text">
     </label>
     <br>
-    <!--/*
+    <!-- Uncomment if handling file uploads -->
+    <!--
     <label>
         Poster:
         <input th:field="*{poster}" type="file" name="poster">
     </label>
-    <br>*/-->
-    <span th:if="${#fields.hasErrors()}"
-          th:text="${#fields.errors()}"></span>
-    <button type="submit">Edit</button>
+    <br>
+    -->
+    <span th:if="${#fields.hasErrors()}" th:text="${#fields.errors()}"></span>
+    <button type="submit">Save Changes</button>
 </form>
-
+<div th:replace="~{fragments/head :: div.scripts}"></div>
 </body>
 </html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/head :: head}"></head>
+
+<head>
+    <title>Dynamic Event Grid</title>
+    <style>
+        /* The grid container with 100 columns and 100 rows */
+        .event-grid {
+            display: grid;
+            gap: 10px; /* Space between grid cells */
+            background-color: white; /* Optional background color */
+            padding: 10px;
+            grid-template-columns: repeat(100, 1fr); /* 100 columns */
+            grid-template-rows: repeat(100, 1fr); /* 100 rows */
+        }
+
+        /* Each grid item will be a button */
+        .event-grid-item {
+            background-color: lightgray; /* Background color for each cell */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid black; /* Optional border for visibility */
+            flex-direction: column; /* Stack content vertically */
+            color: black;
+            padding-block: 0.5em;
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 300px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            right: -300px; /* Initially hidden */
+            background-color: #f4f4f4;
+            padding: 20px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            transition: right 0.3s ease-in-out;
+        }
+
+        .sidebar.open {
+            right: 0; /* Show sidebar */
+        }
+
+        /* Sidebar close button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Styling for the form inside the sidebar */
+        .form-field {
+            margin-bottom: 10px;
+        }
+
+        .form-field input {
+            padding: 8px;
+            width: 100%;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<nav th:replace="~{fragments/navbar :: nav}"></nav>
+<div>
+    <h3 th:text="${event.getTitle()}"></h3>
+    <h4 th:text="${event.getLocation()}"></h4>
+    <!-- Grid container with dynamic grid-template based on event's length and height -->
+    <div class="event-grid" th:style="|grid-template-columns: repeat(100, 1fr); grid-template-rows: repeat(100, 1fr);|">
+
+        <!-- Loop through tables and create a button for each table -->
+        <div th:each="table, iterStat : ${event.tables}"
+             class="event-grid-item"
+             th:style="|grid-column: span ${Math.sqrt((100 * 100 * 0.9) / ${#lists.size(event.tables)}).toFixed(0)}; grid-row: span ${Math.sqrt((100 * 100 * 0.9) / ${#lists.size(event.tables)}).toFixed(0)};|"
+             onclick="openSidebar(${iterStat.index})">
+            <!-- Display table position -->
+            <span th:text="'Nr. '+(${iterStat.index + 1})"></span>
+            <!-- Display available seats -->
+            <span style="border:solid black 2px;padding-inline:1em;" th:text="(${table.seats - #lists.size(table.tickets)})"></span>
+        </div>
+    </div>
+</div>
+
+    <!-- Grid container with dynamic grid-template based on event's length and height -->
+    <div class="event-grid" th:style="|grid-template-columns: repeat(100, 1fr); grid-template-rows: repeat(100, 1fr);|">
+
+        <!-- Create grid items dynamically for each table -->
+        <div th:class="event-grid" th:each="table, iterStat : ${event.tables}"
+             class="event-grid-item"
+             th:style="|grid-column: span 10; grid-row: span 10;|">
+            <!-- Display table position -->
+            <span th:text="'Nr. '+(${iterStat.index + 1})"></span>
+            <!-- Display available seats -->
+            <span style="border:solid black 2px;padding-inline:1em;" th:text="(${table.seats - #lists.size(table.tickets)})"></span>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:replace="~{fragments/head :: div.scripts}"></div>
+</body>
+
+</html>

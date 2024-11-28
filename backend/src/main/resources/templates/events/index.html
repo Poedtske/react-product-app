@@ -2,16 +2,28 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
+<head th:insert="~{fragments/head :: head}">
+
     <title>Events</title>
+    <style>
+        .button:hover{
+            scale:1.5;
+        }
+    </style>
 </head>
 <body>
 
+<nav th:replace="~{fragments/navbar :: nav}"></nav>
+
+<a th:href="@{/events/create}">
+    <button>Create</button>
+</a>
+
+
 <div th:each="event : ${events}">
-    <h3 th:text="${event.getTitle()}"></h3>
-    <h4 th:text="'€'+${event.getLocation()}"></h4>
+    <a class="btn btn-outline-dark" th:text="${event.getTitle()}" th:href="@{events/{id}(id=${event.id})}" role="button">Link</a>
 </div>
 
+<div th:replace="~{fragments/head :: div.scripts}"></div>
 </body>
 </html>

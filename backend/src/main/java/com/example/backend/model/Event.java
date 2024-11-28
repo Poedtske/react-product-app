@@ -41,14 +41,14 @@ public class Event {
     private Set<Ticket> tickets=new HashSet<>();
 
     @Nullable
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tafel> tables=new ArrayList<>();
     //tafelNr= positie Tafel
 
     @Nullable
-    private int length;
+    private int rijen;
     @Nullable
-    private int height;
+    private int kolommen;
     @Nullable
     private Integer seatsPerTable;
     @Nullable
@@ -101,12 +101,12 @@ public class Event {
         dates.add(startTime);
     }
 
-    public int getLength() {
-        return length;
+    public int getRijen() {
+        return rijen;
     }
 
-    public int getHeight() {
-        return height;
+    public int getKolommen() {
+        return kolommen;
     }
 
     public Date getStartTime() {
@@ -279,8 +279,8 @@ public class Event {
             return false;
         }
         try {
-            this.height = Integer.parseInt(array[0]);
-            this.length = Integer.parseInt(array[1]);
+            this.kolommen = Integer.parseInt(array[0]);
+            this.rijen = Integer.parseInt(array[1]);
             return true; // Successfully parsed
         } catch (NumberFormatException e) {
             System.out.println("Error parsing layout: " + e.getMessage());

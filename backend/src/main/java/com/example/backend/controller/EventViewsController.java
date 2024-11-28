@@ -36,6 +36,29 @@ public class EventViewsController {
         }
     }
 
+    @GetMapping("/layout/{id}")
+    public String layoutEvent(ModelMap myModelMap, @PathVariable Long id){
+        Event e= eventService.findById(id);
+        if(e==null){
+            return "redirect:/events";
+        }else{
+            myModelMap.addAttribute("event",e);
+            return "events/layout";
+        }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String seeEditEvent(@PathVariable Long id, ModelMap model) {
+        Event event = eventService.findById(id); // Fetch the event using its ID
+        if (event == null) {
+            return "redirect:/events"; // Redirect if the event doesn't exist
+        }
+        model.addAttribute("event", event); // Add the event to the model
+        model.addAttribute("tables",event.getTables());
+        return "events/edit"; // Return the edit view
+    }
+
+
     @ModelAttribute("newEvent")
     public Event newEvent(){
         return new Event();
@@ -64,10 +87,10 @@ public class EventViewsController {
         if (bindingResult.hasErrors()) {
             return "events/create"; // Or an edit-specific view like "events/edit"
         }
-
-        eventService.updateById(id,newEvent);
+        eventService.updateById(id, newEvent);
         return "redirect:/index";
     }
+
 
     @DeleteMapping("/{id}")
     public String deleteEvent(@PathVariable Long id){

@@ -45,11 +45,10 @@ public class TableServiceImpl implements TableService {
     }
 
     public void CreateTables(Event e){
-        for(int i=0;i<(e.getHeight()*e.getLength());i++){
+        for(int i = e.getTables().size(); i<(e.getKolommen()*e.getRijen()); i++){
             Tafel t=new Tafel(e,e.getSeatsPerTable());
             tableRepository.save(t);
             e.AddTable(t);
         }
     }
-
 }

@@ -31,7 +31,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
         productService.save(product2);
 
         Event event = new Event("Sample Event", "Sample Location", "Sample Description", EventType.CONCERT, "5x5", 4);
-        System.out.println("Height: " + event.getHeight() + ", Length: " + event.getLength());
+        System.out.println("Height: " + event.getKolommen() + ", Length: " + event.getRijen());
         System.out.println("Number of tables created: " + event.getTables().size());
 
 

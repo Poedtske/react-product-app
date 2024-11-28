@@ -30,10 +30,6 @@ public class EventServiceImpl implements EventService {
         Event e = this.findById(id);
         e.setTitle(updatedEvent.getTitle());
         e.setPoster(updatedEvent.getPoster());
-        if(!e.getLayout().equals(updatedEvent.getLayout())){
-            e.setLayout(updatedEvent.getLayout());
-            e.CreateLayout();
-        }
         e.setType(updatedEvent.getType());
         e.setLocation(updatedEvent.getLocation());
         e.setDescription(updatedEvent.getDescription());

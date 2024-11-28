@@ -2,19 +2,20 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
-<head th:insert="~{fragments/head :: head}">
-    <title>Create Event</title>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event</title>
 </head>
 <body>
-<nav th:replace="~{fragments/navbar :: nav}"></nav>
-<form method="post" th:action="@{~/events}" th:object="${newEvent}" enctype="multipart/form-data">
+
+<form method="post" th:action="@{~/events}" th:object="${event}" enctype="multipart/form-data">
     <label>
-        Titel:
+        Title:
         <input th:field="*{title}" type="text">
     </label>
     <br>
     <label>
-        Locatie:
+        Location:
         <input th:field="*{location}" type="text">
     </label>
     <br>
@@ -28,18 +29,8 @@
     </label>
     <br>
     <label>
-        Beschrijving:
+        Description:
         <input th:field="*{description}" type="text">
-    </label>
-    <br>
-    <label>
-        Stoelen per tafel:
-        <input th:field="*{seatsPerTable}" type="number">
-    </label>
-    <br>
-    <label>
-        Layout (kolommen x rijen) bv. 5x5:
-        <input th:field="*{layout}" type="text">
     </label>
     <br>
     <!--/*
@@ -50,8 +41,8 @@
     <br>*/-->
     <span th:if="${#fields.hasErrors()}"
           th:text="${#fields.errors()}"></span>
-    <button type="submit" class="btn btn-secondary">Toevoegen</button>
+    <button type="submit">Edit</button>
 </form>
-<div th:replace="~{fragments/head :: div.scripts}"></div>
+
 </body>
 </html>

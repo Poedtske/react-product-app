@@ -21,9 +21,10 @@ public class Tafel {
     @OneToMany(mappedBy = "table")
     private Set<Ticket> tickets;
 
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = true, updatable = false)
+    @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = true, updatable = false, nullable = false)
     private Event event;
 
     private Integer width;
@@ -38,8 +39,8 @@ public class Tafel {
     public Tafel(Event event, int seats) {
         this.seats = seats;
         this.event=event;
-        this.width=100;
-        this.height=100;
+        this.width=1;
+        this.height=1;
     }
 
     public int getSeats() {
