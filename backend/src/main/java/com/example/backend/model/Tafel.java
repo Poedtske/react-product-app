@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="Tables")
@@ -17,33 +18,28 @@ public class Tafel {
     private Long id;
 
     @Nullable
-    @ManyToMany
-    @JoinTable(
-            name = "Tickets_Tables",
-            joinColumns =@JoinColumn(name = "ticket_id"),
-            inverseJoinColumns = @JoinColumn(name = "table_id")
-    )
-    private HashSet<ConcertTicket> tickets;
+    @OneToMany(mappedBy = "table")
+    private Set<Ticket> tickets;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = true, updatable = false)
     private Event event;
+
+    private Integer width;
+    private Integer height;
 
     @Nullable
     private int seats;
 
-    @Nullable
-    private int availableSeats;
-
     public Tafel() {
     }
 
-    public Tafel(Event event, HashSet<ConcertTicket> tickets, int seats, int availableSeats) {
-        this.tickets = tickets;
+    public Tafel(Event event, int seats) {
         this.seats = seats;
-        this.availableSeats = availableSeats;
         this.event=event;
+        this.width=100;
+        this.height=100;
     }
 
     public int getSeats() {
@@ -54,19 +50,11 @@ public class Tafel {
         this.seats = seats;
     }
 
-    public int getAvailableSeats() {
-        return availableSeats;
-    }
-
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
-    }
-
     public Long getId(){
         return id;
     }
 
-    public HashSet<ConcertTicket> getTickets() {
+    public Set<Ticket> getTickets() {
         return tickets;
     }
 
@@ -74,19 +62,33 @@ public class Tafel {
         return event;
     }
 
-    public ConcertTicket AddTicket(ConcertTicket t) {
+    public Ticket AddTicket(Ticket t) {
         this.tickets.add(t);
         return t;
     }
 
-    public ConcertTicket DeleteTicket(ConcertTicket t) {
+    public Ticket DeleteTicket(Ticket t) {
         this.tickets.remove(t);
         return t;
     }
 
-    public ConcertTicket GetTicket(ConcertTicket t){
+    public Ticket GetTicket(Ticket t){
         return this.tickets.stream().filter(ticket->ticket.getId()==t.getId()).findFirst().orElse(null);
     }
 
+    public Integer getWidth() {
+        return width;
+    }
 
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
 }

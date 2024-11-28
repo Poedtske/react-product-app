@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Event;
+import com.example.backend.service.impl.EventServiceImpl;
 import jakarta.validation.Valid;
 import com.example.backend.repository.EventDao;
 import com.example.backend.dto.SpondEventDto;
@@ -16,20 +17,16 @@ import java.util.Map;
 @RequestMapping("/api/secure/events")
 public class EventAPIController {
 
-    private EventDao myEventDao;
-
     @Autowired
-    public EventAPIController(EventDao myEventDao){
-        this.myEventDao=myEventDao;
-    }
+    private EventServiceImpl service;
 
     @PostMapping()
     public String addSpondEvent(@RequestBody Event e) {
         // Check if an event with the same spondId already exists
-        if (myEventDao.findDistinctBySpondId(e.getSpondId()) != null) {
+        if (service.findById(e.getSpondId()) != null) {
             return "Event with spondId " + e.getSpondId() + " already exists";
         } else {
-            myEventDao.save(e);
+            service.save(e);
             return "Event has been added";
         }
     }
@@ -39,10 +36,10 @@ public class EventAPIController {
     @PostMapping("/batch")
     public String addMultipleEvents(@RequestBody List<Event> events) {
         for (Event event : events) {
-            if (myEventDao.findDistinctBySpondId(event.getSpondId()) != null) {
+            if (service.findById(event.getSpondId()) != null) {
                 return "Event with spondId " + event.getSpondId() + " already exists";
             } else {
-                myEventDao.save(event);
+                service.save(event);
             }
         }
         return "All events have been added successfully";
@@ -50,15 +47,15 @@ public class EventAPIController {
 
     @DeleteMapping("/spond")
     public String DeleteSpondEvent(@RequestBody Event e){
-        myEventDao.delete(myEventDao.findDistinctBySpondId(e.getSpondId()));
+        service.deleteEvent(service.findById(e.getSpondId()));
         return "Spond event has been deleted";
     }
 
     @PutMapping("/spond")
     public String UpdateSpondEvent(@RequestBody Event e){
-        Event oldEvent=myEventDao.findDistinctBySpondId(e.getSpondId());
+        Event oldEvent=service.findById(e.getSpondId());
         oldEvent.SpondUpdate(e);
-        myEventDao.save(oldEvent);
+        service.save(oldEvent);
         return "Spond event has been updated";
     }
 

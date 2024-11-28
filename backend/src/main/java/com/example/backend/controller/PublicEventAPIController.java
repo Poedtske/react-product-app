@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.SpondEventDto;
 import com.example.backend.model.Event;
 import com.example.backend.repository.EventDao;
+import com.example.backend.service.impl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,27 +14,23 @@ import java.util.List;
 @RequestMapping("/api/public/events")
 public class PublicEventAPIController {
 
-    private EventDao myEventDao;
-
     @Autowired
-    public PublicEventAPIController(EventDao myEventDao){
-        this.myEventDao=myEventDao;
-    }
+    private EventServiceImpl service;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping
     public Iterable<Event> getAllEvents(){
-        return myEventDao.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public Event GetEvent(@PathVariable Long id){
-        return myEventDao.findDistinctById(id);
+        return service.findById(id);
     }
 
     @GetMapping("/spond")
     public Iterable<SpondEventDto> getAllSpondEvents() {
-        Iterable<Event> allEvents = myEventDao.findAll();
+        Iterable<Event> allEvents = service.findAll();
         List<SpondEventDto> eventDtos = new ArrayList<>();
 
         for (Event event : allEvents) {

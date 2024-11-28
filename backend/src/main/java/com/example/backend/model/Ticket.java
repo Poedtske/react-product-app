@@ -8,15 +8,17 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "ConcertTickets")
-public class ConcertTicket {
+@Table(name = "Tickets")
+public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "tickets")
-    private HashSet<Tafel> tables;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "table_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Tafel table;
 
     private String owner;
 
@@ -29,20 +31,15 @@ public class ConcertTicket {
 
     private Boolean paid;
 
-    @Nullable
-    @OneToMany(mappedBy = "ticket")
-    private HashSet<Date> days;
-
-    public ConcertTicket() {
+    public Ticket() {
     }
 
-    public ConcertTicket(HashSet<Tafel> tables, String owner, BigDecimal price, Event event, Boolean paid, HashSet<Date> days) {
-        this.tables = tables;
+    public Ticket(Tafel table, String owner, BigDecimal price, Event event, Boolean paid) {
+        this.table = table;
         this.owner = owner;
         this.price = price;
         this.event = event;
         this.paid = paid;
-        this.days = days;
     }
 
     public String getOwner() {
@@ -81,11 +78,7 @@ public class ConcertTicket {
         return id;
     }
 
-    public HashSet<Tafel> getTables() {
-        return tables;
-    }
-
-    public HashSet<Date> getDays() {
-        return days;
+    public Tafel getTable() {
+        return table;
     }
 }

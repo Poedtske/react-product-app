@@ -1,5 +1,7 @@
 package com.example.backend;
 
+import com.example.backend.enums.EventType;
+import com.example.backend.model.Event;
 import com.example.backend.model.Product;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,11 @@ public class MyCommandLineRunner implements CommandLineRunner {
         product2.setPrice(BigDecimal.valueOf(1100D));
         product2.setQuantity(55);
         productService.save(product2);
+
+        Event event = new Event("Sample Event", "Sample Location", "Sample Description", EventType.CONCERT, "5x5", 4);
+        System.out.println("Height: " + event.getHeight() + ", Length: " + event.getLength());
+        System.out.println("Number of tables created: " + event.getTables().size());
+
+
     }
 }
