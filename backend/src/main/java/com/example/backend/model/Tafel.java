@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,6 +32,8 @@ public class Tafel {
     private Integer width;
     private Integer height;
 
+    private ArrayList<Integer> margin;
+
     @Nullable
     private int seats;
 
@@ -39,8 +43,12 @@ public class Tafel {
     public Tafel(Event event, int seats) {
         this.seats = seats;
         this.event=event;
-        this.width=1;
-        this.height=1;
+        this.width=100;
+        this.height=100;
+        margin= new ArrayList<>();
+        for(int i=0;i<4;i++){
+            margin.add(5);
+        }
     }
 
     public int getSeats() {
@@ -91,5 +99,16 @@ public class Tafel {
 
     public void setHeight(Integer height) {
         this.height = height;
+    }
+
+    public ArrayList<Integer> getMargins() {
+        return margin;
+    }
+    public Integer getMargin(int a) {
+        return margin.get(a);
+    }
+
+    public void setMargin(ArrayList<Integer> margin) {
+        this.margin = margin;
     }
 }
