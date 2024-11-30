@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,10 +26,15 @@ public class Invoice {
 
     private Boolean paid;
 
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    private Account account;
+
     /*@JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;*/
+    private Account account;*/
 
     public Invoice() {
     }

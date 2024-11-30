@@ -1,0 +1,24 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: EA_Project
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/fanfare_borcht
+    username: root
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    show-sql: true
+
+spring.mvc.hiddenmethod.filter.enabled: true

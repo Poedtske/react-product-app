@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/head :: head}">
+    <title>Create Event</title>
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: nav}"></nav>
+<form method="POST" th:action="@{~/tables}" th:object="${newTable}" enctype="multipart/form-data">
+    <label>
+        Breedte:
+        <input th:field="*{width}" type="number" required>
+    </label>
+    <br>
+    <label>
+        Hoogte:
+        <input th:field="*{height}" type="number" required>
+    </label>
+    <br>
+    <label>
+        Stoelen:
+        <input th:field="*{seats}" type="number" required>
+    </label>
+    <br>
+    <label>
+        Evenement:
+        <select th:field="*{eventId}" required>
+            <option th:each="event : ${events}"
+                    th:value="${event.id}"
+                    th:text="${event.title}"></option>
+        </select>
+    </label>
+    <br>
+    <label>
+        Aantal tafels:
+        <input th:field="*{aantalTafels}" type="number" min="1" required>
+    </label>
+    <br>
+
+    <span th:if="${#fields.hasErrors()}"
+          th:text="${#fields.errors()}"></span>
+    <button type="submit" class="btn btn-secondary">Toevoegen</button>
+</form>
+<div th:replace="~{fragments/head :: div.scripts}"></div>
+</body>
+</html>

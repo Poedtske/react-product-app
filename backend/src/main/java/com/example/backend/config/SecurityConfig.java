@@ -1,46 +1,61 @@
 package com.example.backend.config;
-/*
+
+import com.example.backend.service.impl.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
-
-
-import java.util.Collections;
-
-
-
-import java.util.Collections;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomUserDetailsService userDetailsService;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints do not require authentication
-                        .requestMatchers("/api/public/**").permitAll()
-                        // Secure endpoints require authentication
-                        .requestMatchers("/api/secure/**").authenticated()
-                        .anyRequest().authenticated() // Default rule for other endpoints
+                        .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register","/css/**","/js/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // Admin role required
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Add custom filter only for secure endpoints
-                .addFilterBefore(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .cors(Customizer.withDefaults()); // Enable CORS for cross-origin requests
+                .logout(logout -> logout.permitAll())
+                .build();
+    }
 
-        return http.build();
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomUserDetailsService userDetailsService() {
+        return userDetailsService;
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider= new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 }
-*/

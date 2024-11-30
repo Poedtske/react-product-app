@@ -50,6 +50,16 @@ public class Tafel {
             margin.add(5);
         }
     }
+    public Tafel(Event event, int seats,int width,int height) {
+        this.seats = seats;
+        this.event=event;
+        this.width=width;
+        this.height=height;
+        margin= new ArrayList<>();
+        for(int i=0;i<4;i++){
+            margin.add(5);
+        }
+    }
 
     public int getSeats() {
         return seats;

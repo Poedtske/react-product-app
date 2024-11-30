@@ -2,12 +2,12 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
-<head>
+<head th:insert="~{fragments/head :: head}">
     <meta charset="UTF-8">
     <title>Edit Event</title>
 </head>
 <body>
-
+<nav th:replace="~{fragments/navbar :: nav}"></nav>
 <form method="post" th:action="@{~/events}" th:object="${event}" enctype="multipart/form-data">
     <label>
         Title:
@@ -43,6 +43,6 @@
           th:text="${#fields.errors()}"></span>
     <button type="submit">Edit</button>
 </form>
-
+<div th:replace="~{fragments/head :: div.scripts}"></div>
 </body>
 </html>

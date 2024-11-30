@@ -2,16 +2,16 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
-<head>
+<head th:insert="~{fragments/head :: head}">
     <meta charset="UTF-8">
     <title>Event</title>
 </head>
 <body>
-
+<nav th:replace="~{fragments/navbar :: nav}"></nav>
 <div>
     <h3 th:text="'Title: '+${event.getTitle()}"></h3>
     <h4 th:text="'Location: '+${event.getLocation()}"></h4>
 </div>
-
+<div th:replace="~{fragments/head :: div.scripts}"></div>
 </body>
 </html>
