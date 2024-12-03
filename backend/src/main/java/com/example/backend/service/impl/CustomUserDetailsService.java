@@ -3,6 +3,7 @@ package com.example.backend.service.impl;
 import com.example.backend.config.UserPrincipal;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,36 +14,33 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user= userRepository.findByEmail(email);
-        if(user==null){
+        Optional<User> user= userRepository.findByEmail(email);
+        /*if(user==null){
             throw new UsernameNotFoundException("Email "+email+" not found");
 
         }else{
             return new UserPrincipal(user);
-        }
+        }*/
 
 
 
-        /*if(user.isPresent()){
+        if(user.isPresent()){
             var userObj=user.get();
             return org.springframework.security.core.userdetails.User.builder()
                     .username(userObj.getEmail())
                     .password(userObj.getPassword())
                     .build();
-            return new UserPrincipal(user);
+            //return new UserPrincipal(user);
         }else{
             throw new UsernameNotFoundException("Email "+email+" not found");
-        }*/
+        }
 
         /*User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));

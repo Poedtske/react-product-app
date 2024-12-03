@@ -13,6 +13,7 @@ import{
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {request, setAuthToken} from '../AxiosConfig';
 
 export default function Login() {
 
@@ -31,11 +32,13 @@ export default function Login() {
             password
         }
 
+
+        //axios.post('http://localhost:8080/login',loginData);
         try{
-            const response = await axios.post('http://localhost:8080/login',loginData);
-            console.log(response)
+            const response = await request("POST","/login",loginData)
             if (response.status===200){
-                navigate('loginSuccessful');
+                setAuthToken(response.data.token);
+                navigate('/loginSuccessful');
             }else{
                 const errorData=await response.json()
                 setError(errorData.message|| 'Login failed for user. Please retry!');

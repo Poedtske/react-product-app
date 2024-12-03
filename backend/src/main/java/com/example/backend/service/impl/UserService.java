@@ -1,26 +1,32 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.enums.Role;
+import com.example.backend.config.PasswordEncoderConfig;
+import com.example.backend.dto.CredentialsDto;
+import com.example.backend.dto.SignUpDto;
+import com.example.backend.dto.UserDto;
+import com.example.backend.exceptions.AppException;
+import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.CharBuffer;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+
 
     /*public void registerUser(UserDto userDto) {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
@@ -35,7 +41,7 @@ public class UserService {
         user.setRoles(Set.of(Role.USER));
 
         userRepository.save(user);
-    }*/
+    }
 
     public User addUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -70,6 +76,36 @@ public class UserService {
         }
 
         return true;
+    }*/
+
+    public UserDto findByEmail(String email){
+        User user=userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        return userMapper.toUserDto(user);
+    }
+
+    public UserDto login(CredentialsDto credentialsDto){
+        User user=userRepository.findByEmail(credentialsDto.getEmail()).orElseThrow(()->new AppException("Unknown user",HttpStatus.NOT_FOUND));
+
+        if(passwordEncoder.matches(CharBuffer.wrap(credentialsDto.getPassword()), user.getPassword())){
+            return userMapper.toUserDto(user);
+        }else{
+            throw new AppException("The password is incorrect",HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public UserDto register(SignUpDto userDto){
+        Optional<User> userOptional= userRepository.findByEmail(userDto.getEmail());
+
+        if(userOptional.isPresent()){
+            throw new AppException("User with this email already exists",HttpStatus.BAD_REQUEST);
+        }
+
+        User user=userMapper.signUpToUser(userDto);
+
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
+
+        User savedUser=userRepository.save(user);
+        return userMapper.toUserDto(user);
     }
 
 }

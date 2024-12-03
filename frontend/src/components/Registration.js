@@ -13,6 +13,7 @@ import{
     Container,
     Box
 } from '@mui/material';
+import { request, setAuthToken } from "../AxiosConfig";
 
 export default function Registration(){
 
@@ -44,7 +45,7 @@ export default function Registration(){
         setError('')
 
         try{
-            const response = await axios.post('http://localhost:8080/register', formData);
+            const response = await request('POST','/register', formData);
             if (response.status === 201){
                 navigate('/registrationSuccessful')
             }else{

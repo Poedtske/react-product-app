@@ -1,4 +1,4 @@
-import axiosInstance from "../AxiosConfig";
+import {request} from "../AxiosConfig";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -6,10 +6,10 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 const apiUrl = `${baseURL}/api/public/products`;
 const apiUrlEvent = `${baseURL}/api/public/events`;
 
-// Products API
+//Products API
 export const getProducts = async () => {
   try {
-    const response = await axiosInstance.get('/api/products');
+    const response = await request('GET','/api/products',null)
     return response.data;
   } catch (error) {
     console.error('Error fetching products:', error.response || error);
@@ -19,7 +19,7 @@ export const getProducts = async () => {
 
 export const createProduct = async (product) => {
   try {
-    const response = await axiosInstance.post('/api/products', product);
+    const response = await request('POST','/api/products',product)
     return response.data;
   } catch (error) {
     console.error('Error creating product:', error.response || error);
@@ -29,7 +29,7 @@ export const createProduct = async (product) => {
 
 export const getProductById = async (id) => {
   try {
-    const response = await axiosInstance.get(`/api/products/${id}`);
+    const response = await request('GET',`/api/products/${id}`,null)
     return response.data;
   } catch (error) {
     console.error(`Error fetching product with ID ${id}:`, error.response || error);
@@ -39,7 +39,7 @@ export const getProductById = async (id) => {
 
 export const updateProductById = async (id, product) => {
   try {
-    const response = await axiosInstance.put(`/api/products/${id}`, product);
+    const response = await request('PUT',`/api/products/${id}`,product)
     return response.data;
   } catch (error) {
     console.error(`Error updating product with ID ${id}:`, error.response || error);
@@ -49,7 +49,7 @@ export const updateProductById = async (id, product) => {
 
 export const deleteProductById = async (id) => {
   try {
-    const response = await axiosInstance.delete(`/api/products/${id}`);
+    const response = await request('DELETE',`/api/products/${id}`,null);
     return response.data;
   } catch (error) {
     console.error(`Error deleting product with ID ${id}:`, error.response || error);
@@ -60,7 +60,8 @@ export const deleteProductById = async (id) => {
 // Events API
 export const getEvents = async () => {
   try {
-    const response = await axiosInstance.get('/api/public/events');
+    
+    const response = await request('GET','/api/public/events',null)
     const events = response.data;
 
     if (Array.isArray(events)) {
@@ -87,7 +88,7 @@ export const getEvents = async () => {
 
 export const getEventById = async (id) => {
   try {
-    const response = await axiosInstance.get(`/api/public/events/${id}`);
+    const response = await request('GET',`/api/public/events/${id}`,null)
     return response.data;
   } catch (error) {
     console.error(`Error fetching event with ID ${id}:`, error.response || error);
@@ -97,7 +98,7 @@ export const getEventById = async (id) => {
 
 export const deleteEventById = async (id) => {
   try {
-    const response = await axiosInstance.delete(`/api/events/${id}`);
+    const response = await request('DELETE',`/api/events/${id}`,null);
     return response.data;
   } catch (error) {
     console.error(`Error deleting event with ID ${id}:`, error.response || error);

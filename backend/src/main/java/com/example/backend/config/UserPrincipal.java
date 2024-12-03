@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public class UserPrincipal implements UserDetails {
 
-    private User user;
+    private Optional<User> user;
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(Optional<User> user) {
         this.user = user;
     }
 
@@ -24,12 +24,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return "";
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return "user.getEmail()";
     }
 
     @Override
