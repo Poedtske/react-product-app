@@ -29,12 +29,12 @@ public class Invoice {
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private Account account;
+    private User user;
 
     /*@JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private Account account;*/
+    private User user;*/
 
     public Invoice() {
     }

@@ -111,6 +111,14 @@ export default function NavBar() {
         >
           Kalender
         </NavLink>
+
+        <NavLink 
+          to="/registration" 
+          activeClassName="active" 
+          onClick={handleToggle}
+        >
+          Registreren
+        </NavLink>
         
         {/* Authenticated Links */}
         { /* Mocking an authenticated state; replace with actual auth logic */ }

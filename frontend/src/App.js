@@ -24,6 +24,10 @@ import CreateProductForm from './components/CreateProductForm'
 import './App.css';
 
 import { EventProvider } from './context/EventContext';
+import Registration from './components/Registration';
+import RegistrationSuccess from './components/RegistrationSuccess';
+import Login from './components/Login';
+import LoginSuccessful from './components/LoginSuccessful';
 
 function App() {
   return (
@@ -46,6 +50,10 @@ function App() {
           <Route path="/info/privacy" element={<Privacy />} /> 
           <Route path="/kalender" element={<Kalender />} />
           <Route path="/sponsors" element={<Sponsors />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/registrationSuccessful" element={<RegistrationSuccess />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/loginSuccessful" element={<LoginSuccessful />} />
         </Routes>
         <Footer/>
       

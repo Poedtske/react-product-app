@@ -12,7 +12,7 @@
 <nav th:replace="~{fragments/navbar :: nav}"></nav>
 <h1>Register</h1>
 <div>
-    <form th:action="@{/register}" method="post" th:object="${account}">
+    <form th:action="@{/register}" method="post" th:object="${user}">
         <div>
             <label for="firstName">First Name:</label>
             <input type="text" id="firstName" th:field="*{firstName}" required>
@@ -34,7 +34,7 @@
         </div>
     </form>
     <div>
-        <a th:href="@{/login}">Already have an account? Login here</a>
+        <a th:href="@{/login}">Already have an user? Login here</a>
     </div>
     <div th:if="${error}">
         <p th:text="${error}" style="color: red;"></p>

@@ -3,6 +3,7 @@ import datetime
 import json
 from time import sleep
 import sys
+import base64
 from dotenv import load_dotenv
 import os
 import aiohttp  # Import aiohttp for async HTTP requests
@@ -17,9 +18,15 @@ api_base_url = os.getenv('URL')  # Fetch the base URL from the environment file
 api_spond_private="/api/secure/events"
 api_spond_public="/api/public/events/spond"
 
+usernameSpring="John.Doe@email.com"
+passwordSpring="2424"
+cred=f"{usernameSpring}:{passwordSpring}"
+encoded_credentials = base64.b64encode(cred.encode("utf-8")).decode("utf-8")
+
 # Define the headers that will be used in every API call
 headers = {
-    "Content-Type": "application/json"  # Replace with your actual API key
+    "Content-Type": "application/json",  # Replace with your actual API key
+    "Authorization":f"Basic {encoded_credentials}",
 }
 
 def add_two_hours_to_timestamp(timestamp):
@@ -62,7 +69,7 @@ async def get_local_events():
     url = f"{api_base_url+api_spond_public}"
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as response:
-            session.close()
+            
             if response.status == 200:
                 return await response.json()  # Assuming the response contains the events as JSON
             else:
@@ -73,7 +80,7 @@ async def delete_event_from_local(event):
     url = f"{api_base_url+api_spond_private}/spond"
     async with aiohttp.ClientSession() as session:
         async with session.delete(url, json=event, headers=headers) as response:
-            session.close()
+            
             if response.status == 200:
                 print(f"Successfully deleted event with ID {event['id']}")
                 return True
@@ -85,7 +92,7 @@ async def post_event_to_local(event):
     url = f"{api_base_url+api_spond_private}"
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json=event, headers=headers) as response:
-            session.close()
+            
             if response.status == 200:
                 print(f"Successfully added event with ID {event['spondId']}")
                 return True
@@ -97,7 +104,7 @@ async def update_event_in_local(event):
     url = f"{api_base_url+api_spond_private}/spond"
     async with aiohttp.ClientSession() as session:
         async with session.put(url, json=event, headers=headers) as response:
-            session.close()
+            
             if response.status == 200:
                 print(f"Successfully updated event with ID {event['spondId']}")    
                 return True           

@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -26,15 +31,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register","/css/**","/js/**").permitAll()
+                        .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register","/css/**","/js/**","/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Admin role required
                         .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .logout(logout -> logout.permitAll())
@@ -57,5 +58,17 @@ public class SecurityConfig {
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConf=new CorsConfiguration();
+        corsConf.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConf.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
+        corsConf.setAllowCredentials(true);
+        corsConf.addAllowedHeader("*");
+        UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",corsConf);
+        return source;
     }
 }

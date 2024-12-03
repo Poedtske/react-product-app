@@ -1,8 +1,8 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.model.Account;
+import com.example.backend.config.UserPrincipal;
+import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,21 +23,31 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Account> user= userRepository.findByEmail(email);
-        if(user.isPresent()){
+        User user= userRepository.findByEmail(email);
+        if(user==null){
+            throw new UsernameNotFoundException("Email "+email+" not found");
+
+        }else{
+            return new UserPrincipal(user);
+        }
+
+
+
+        /*if(user.isPresent()){
             var userObj=user.get();
-            return User.builder()
+            return org.springframework.security.core.userdetails.User.builder()
                     .username(userObj.getEmail())
                     .password(userObj.getPassword())
                     .build();
+            return new UserPrincipal(user);
         }else{
             throw new UsernameNotFoundException("Email "+email+" not found");
-        }
+        }*/
 
-        /*Account user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Account not found with email: " + email));
+        /*User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        return new org.springframework.security.core.userdetails.Account(
+        return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
                 user.getRoles().stream()
