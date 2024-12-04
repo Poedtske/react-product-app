@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel ="spring")
 public interface UserMapper {
 
+    @Mapping(target = "role", source = "role")  // Ensure role is mapped explicitly if needed
     UserDto toUserDto(User user);
 
     @Mapping(target="password", ignore = true)

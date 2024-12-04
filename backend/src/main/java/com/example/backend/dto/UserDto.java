@@ -1,5 +1,6 @@
 package com.example.backend.dto;
 
+import com.example.backend.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class UserDto {
     private String email;
     private String password;
     private String token;
+    private Role role;
 
 }
 

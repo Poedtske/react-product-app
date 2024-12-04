@@ -28,33 +28,50 @@ import Registration from './components/Registration';
 import RegistrationSuccess from './components/RegistrationSuccess';
 import Login from './components/Login';
 import LoginSuccessful from './components/LoginSuccessful';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
+
+  const adminRoutes = [
+    { path: '/admin/events', element: <Kalender /> },
+    { path: '/admin/products', element: <Products /> },
+    // Add other protected admin routes here
+  ];
   return (
 
     <>      
-        <NavBar />
-        <EventProvider>
-          <Routes>
-            <Route path="/events/:id" element={<ShowEvent/>} />
+        
+        
+        <AuthProvider>
+          <NavBar />
+          <EventProvider>
+            <Routes>
+            <Route path="/" element={<Home />} /> 
+              <Route path="/events/:id" element={<ShowEvent/>} />
+            </Routes>
+          </EventProvider>  
+          <Routes>         
+            <Route path="/fanfare/bestuur" element={<Bestuur />} />
+            <Route path="/fanfare/dirigent" element={<Dirigent />} />
+            <Route path="/fanfare/geschiedenis" element={<Geschiedenis />} />
+            <Route path="/fanfare/instrumenten" element={<Instrumenten />} />
+            <Route path="/jeugd" element={<Jeugd />} />
+            <Route path="/info/documenten" element={<Documenten />} />
+            <Route path="/info/privacy" element={<Privacy />} /> 
+            <Route path="/kalender" element={<Kalender />} />
+            <Route path="/sponsors" element={<Sponsors />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="/registrationSuccessful" element={<RegistrationSuccess />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/loginSuccessful" element={<LoginSuccessful />} />
+            
+            <Route path="/admin/events" element={<ProtectedRoute requiredRole={"ADMIN"}>
+              <Kalender></Kalender>
+            </ProtectedRoute>} />
           </Routes>
-        </EventProvider>        
-        <Routes>    
-          <Route path="/" element={<Home />} />      
-          <Route path="/fanfare/bestuur" element={<Bestuur />} />
-          <Route path="/fanfare/dirigent" element={<Dirigent />} />
-          <Route path="/fanfare/geschiedenis" element={<Geschiedenis />} />
-          <Route path="/fanfare/instrumenten" element={<Instrumenten />} />
-          <Route path="/jeugd" element={<Jeugd />} />
-          <Route path="/info/documenten" element={<Documenten />} />
-          <Route path="/info/privacy" element={<Privacy />} /> 
-          <Route path="/kalender" element={<Kalender />} />
-          <Route path="/sponsors" element={<Sponsors />} />
-          <Route path="/registration" element={<Registration />} />
-          <Route path="/registrationSuccessful" element={<RegistrationSuccess />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/loginSuccessful" element={<LoginSuccessful />} />
-        </Routes>
+        </AuthProvider>      
+        
         <Footer/>
       
     </>

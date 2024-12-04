@@ -14,6 +14,7 @@ import{
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {request, setAuthToken} from '../AxiosConfig';
+import {useAuth} from './AuthContext'
 
 export default function Login() {
 
@@ -21,6 +22,7 @@ export default function Login() {
     const [password, setPassword]=useState('');
     const [error, setError]=useState('');
     const navigate=useNavigate();
+    const {login}=useAuth();
 
     const handleLogin = async(e)=>{
         e.preventDefault()
@@ -38,6 +40,7 @@ export default function Login() {
             const response = await request("POST","/login",loginData)
             if (response.status===200){
                 setAuthToken(response.data.token);
+                login();
                 navigate('/loginSuccessful');
             }else{
                 const errorData=await response.json()

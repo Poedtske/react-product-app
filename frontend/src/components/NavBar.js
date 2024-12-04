@@ -1,12 +1,21 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import {useAuth} from './AuthContext';
+import { useNavigate } from 'react-router-dom';
 // import NavBarCSS from './NavBar.module.css';
 
 export default function NavBar() {
   const [isNavExpanded, setIsNavExpanded] = useState(false);
+  const { logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsNavExpanded(!isNavExpanded);
+  };
+
+  const logoutUser = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -111,14 +120,15 @@ export default function NavBar() {
         >
           Kalender
         </NavLink>
-
-        <NavLink 
-          to="/registration" 
-          activeClassName="active" 
-          onClick={handleToggle}
-        >
-          Registreren
+        {isAuthenticated ? (
+          <NavLink to="/" onClick={logoutUser}>
+          Logout
         </NavLink>
+        ) : (
+          <NavLink to="/login" onClick={handleToggle}>
+            Login
+          </NavLink>
+        )}
         
         {/* Authenticated Links */}
         { /* Mocking an authenticated state; replace with actual auth logic */ }

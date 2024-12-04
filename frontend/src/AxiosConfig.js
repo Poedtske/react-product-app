@@ -43,10 +43,17 @@ export const setAuthToken=(token)=>{
     window.localStorage.setItem("auth_token", token);
 }
 
-export const request=(method,url,data)=>{
+export const removeAuthToken = () => {
+    window.localStorage.removeItem("auth_token");
+  };
+
+export const request=(method,url,data,headersEnabled)=>{
     let headers= {};
-    if(getAuthToken()!=null && getAuthToken()!=="null"){
-        headers={"Authorization":`Bearer ${getAuthToken()}`};
+    
+    if(headersEnabled){
+        if(getAuthToken()!=null && getAuthToken()!=="null"){
+            headers={"Authorization":`Bearer ${getAuthToken()}`};
+        }
     }
     
     return axios({
