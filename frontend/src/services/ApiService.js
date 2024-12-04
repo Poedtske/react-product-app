@@ -1,5 +1,7 @@
 import {request} from "../AxiosConfig";
 
+
+
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 
@@ -49,7 +51,7 @@ export const updateProductById = async (id, product) => {
 
 export const deleteProductById = async (id) => {
   try {
-    const response = await request('DELETE',`/api/products/${id}`,true);
+    const response = await request('DELETE',`/api/products/${id}`,null,true);
     return response.data;
   } catch (error) {
     console.error(`Error deleting product with ID ${id}:`, error.response || error);
@@ -58,6 +60,17 @@ export const deleteProductById = async (id) => {
 };
 
 // Events API
+
+export const createEvent = async (event) => {
+  try {
+    const response = await request('POST','/api/admin/events',event,true)
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error.response || error);
+    throw error;
+  }
+};
+
 export const getEvents = async () => {
   try {
     
@@ -83,7 +96,15 @@ export const getEvents = async () => {
 };
 
 
-
+export const updateEventById = async (id, event) => {
+  try {
+    const response = await request('PUT',`/api/admin/events/${id}`,event,true)
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating event with ID ${id}:`, error.response || error);
+    throw error;
+  }
+};
 
 
 export const getEventById = async (id) => {
@@ -98,7 +119,7 @@ export const getEventById = async (id) => {
 
 export const deleteEventById = async (id) => {
   try {
-    const response = await request('DELETE',`/api/events/${id}`,true);
+    const response = await request('DELETE',`/api/admin/events/${id}`,true);
     return response.data;
   } catch (error) {
     console.error(`Error deleting event with ID ${id}:`, error.response || error);

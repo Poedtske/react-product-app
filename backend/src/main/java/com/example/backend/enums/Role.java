@@ -1,7 +1,7 @@
 package com.example.backend.enums;
 
 public enum Role {
-    ADMIN("ADMIN"), USER("USER");
+    ADMIN("ROLE_ADMIN"), USER("ROLE_USER");
 
     private final String value;
 

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import {useAuth} from '../context/AuthContext';
+import {useAuth} from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 // import NavBarCSS from './NavBar.module.css';
 
@@ -19,7 +19,7 @@ export default function NavBar() {
   };
 
   return (
-    <header>
+    <header style="background-color:red;">
       <button
         className="hamburger"
         aria-expanded={isNavExpanded}

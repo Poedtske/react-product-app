@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.enums.Role;
 import com.example.backend.service.impl.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthFilter(userAuthProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register", "/css/**", "/js/**", "/login").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**","/api/admin/**").hasAuthority(Role.ADMIN.getValue())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.disable()) // Disable basic authentication if not required

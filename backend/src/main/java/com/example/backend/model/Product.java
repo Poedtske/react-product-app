@@ -1,11 +1,14 @@
 package com.example.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.backend.enums.Category;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,39 +25,33 @@ public class Product {
     private String img;
 
     //if it's available
-    private Boolean available;
+    private Boolean available=true;
 
     private int quantity;
 
-    @Nullable
-    @ManyToMany()
-    @JoinTable(
-            name = "Events_Products",
-            joinColumns =@JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private Set<Event> events;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
 
     @Nullable
     @ManyToMany(mappedBy = "products")
-    private Set<Invoice> invoices;
+    private Set<Invoice> invoices =new HashSet<>();
+
+    @Nullable
+    @ManyToMany(mappedBy = "products")
+    private List<User> users= new ArrayList<>();
 
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, String img, Boolean available, HashSet<Event> events, Category category, Set<Invoice> invoices) {
+    public Product(String name, BigDecimal price, String img, Boolean available, Category category, Set<Invoice> invoices) {
         this.name = name;
         this.price = price;
         this.img = img;
         this.available = available;
-        this.events = events;
         this.category = category;
         this.invoices = invoices;
+        this.category=category;
     }
 
     public int getQuantity() {
@@ -109,25 +106,15 @@ public class Product {
         return id;
     }
 
-    public Set<Event> getEvents() {
-        return events;
-    }
-
     public Set<Invoice> getInvoices() {
         return invoices;
     }
 
-    public Event AddEvent(Event e){
-        this.events.add(e);
-        return e;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public Event RemoveEvent(Event e){
-        this.events.remove(e);
-        return e;
-    }
-
-    public Event GetEvent(Event e){
-        return this.events.stream().filter(event -> event.getId()==e.getId()).findFirst().orElse(null);
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

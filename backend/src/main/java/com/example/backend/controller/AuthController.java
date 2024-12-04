@@ -66,7 +66,6 @@ public class AuthController {
         UserDto user=userService.login(credentialsDto);
 
         user.setToken(userAuthProvider.createToken(user));
-        user.setPassword("Classified");
         return ResponseEntity.ok(user);
     }
 

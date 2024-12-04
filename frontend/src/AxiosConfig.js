@@ -51,8 +51,10 @@ export const request=(method,url,data,headersEnabled)=>{
     let headers= {};
     
     if(headersEnabled){
-        if(getAuthToken()!=null && getAuthToken()!=="null"){
+        
+        if(getAuthToken()!=null && getAuthToken()!=="null"){            
             headers={"Authorization":`Bearer ${getAuthToken()}`};
+            console.log(headers["Authorization"]);
         }
     }
     

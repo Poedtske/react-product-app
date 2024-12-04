@@ -7,8 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -35,6 +34,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false) // Ensure a role is always set
     private Role role = Role.USER; // Default role
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_products",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ticket> tickets = new HashSet<>();
 
     // Getters and setters
     public Long getId() {
@@ -79,5 +89,34 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
+
+    public Iterable getProducts(){
+        return products;
+    }
+
+    // Add a ticket to the set
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+        ticket.setOwner(this);  // Set the owner of the ticket
+    }
+
+    // Remove a ticket from the set
+    public void removeTicket(Ticket ticket) {
+        tickets.remove(ticket);
+        ticket.setOwner(null);  // Set the owner to null (or let it be managed by the cascade)
+    }
+
+    // Get all tickets for the user
+    public Iterable<Ticket> getTickets() {
+        return tickets;
     }
 }

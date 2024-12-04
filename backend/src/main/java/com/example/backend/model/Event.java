@@ -65,10 +65,6 @@ public class Event {
     private java.util.Date endTime;
 
     @Nullable
-    @ManyToMany(mappedBy = "events")
-    private Set<Product> products=new HashSet<>();
-
-    @Nullable
     private String description;
 
     public Event() {
@@ -187,25 +183,6 @@ public class Event {
 
     public List<Tafel> getTables() {
         return tables;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public Product AddProduct(Product p){
-        this.products.add(p);
-        return p;
-    }
-
-    public Product RemoveProduct(Product p){
-        this.products.remove(p);
-        return p;
-    }
-
-    public Product GetProduct(Product p){
-        this.products.add(p);
-        return products.stream().filter(product -> product.getId()== product.getId()).findFirst().orElse(null);
     }
 
     public Tafel AddTable(Tafel t){

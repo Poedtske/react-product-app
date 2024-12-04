@@ -11,7 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/admin/events")
+@RequestMapping("/api/admin/events")
 public class EventViewsController {
     @Autowired
     private EventServiceImpl eventService;
@@ -69,16 +69,7 @@ public class EventViewsController {
         return "events/create";
     }
 
-    @PostMapping()
-    public String addEvent(@ModelAttribute("newEvent") @Valid Event newEvent, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return "events/create";
-        }
-        eventService.save(newEvent);
-        tableService.CreateTables(newEvent);
 
-        return "redirect:/events";
-    }
 
     @PutMapping("/{id}")
     public String editEvent(@PathVariable Long id,

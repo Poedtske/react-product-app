@@ -29,7 +29,11 @@ import RegistrationSuccess from './components/RegistrationSuccess';
 import Login from './components/Login';
 import LoginSuccessful from './components/LoginSuccessful';
 import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './components/AuthContext';
+import { AuthProvider,useAuth } from './context/AuthContext';
+import EventsList from './components/Admin/EventsList';
+import CreateEvent from './components/Admin/CreateEvent';
+import EventDetails from './components/Admin/EventDetails';
+import EditEvent from './components/Admin/EditEvent';
 
 function App() {
 
@@ -47,8 +51,17 @@ function App() {
           <NavBar />
           <EventProvider>
             <Routes>
-            <Route path="/" element={<Home />} /> 
+              <Route path="/" element={<Home />} /> 
               <Route path="/events/:id" element={<ShowEvent/>} />
+              <Route path="/admin/events/create" element={<ProtectedRoute requiredRole={"ROLE_ADMIN"}>
+              <CreateEvent/>
+            </ProtectedRoute>} />
+            <Route path="/admin/events/:id" element={<ProtectedRoute requiredRole={"ROLE_ADMIN"}>
+              <EventDetails/>
+            </ProtectedRoute>} />
+            <Route path="/admin/events/edit/:id" element={<ProtectedRoute requiredRole={"ROLE_ADMIN"}>
+              <EditEvent/>
+            </ProtectedRoute>} />
             </Routes>
           </EventProvider>  
           <Routes>         
@@ -66,8 +79,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/loginSuccessful" element={<LoginSuccessful />} />
             
-            <Route path="/admin/events" element={<ProtectedRoute requiredRole={"ADMIN"}>
-              <Kalender></Kalender>
+            <Route path="/admin/events" element={<ProtectedRoute requiredRole={"ROLE_ADMIN"}>
+              <EventsList/>
             </ProtectedRoute>} />
           </Routes>
         </AuthProvider>      

@@ -1,11 +1,11 @@
 package com.example.backend.model;
 
+import com.example.backend.enums.Category;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 
 @Entity
 @Table(name = "Tickets")
@@ -17,10 +17,13 @@ public class Ticket {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "table_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "table_id", referencedColumnName = "id", insertable = true, updatable = true)
     private Tafel table;
 
-    private String owner;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = true, updatable = false, nullable = false)
+    private User owner;
 
     private BigDecimal price;
 
@@ -29,12 +32,12 @@ public class Ticket {
     @JoinColumn(name = "event_id",referencedColumnName = "id")
     private Event event;
 
-    private Boolean paid;
+        private Boolean paid;
 
     public Ticket() {
     }
 
-    public Ticket(Tafel table, String owner, BigDecimal price, Event event, Boolean paid) {
+    public Ticket(Tafel table, User owner, BigDecimal price, Event event, Boolean paid) {
         this.table = table;
         this.owner = owner;
         this.price = price;
@@ -42,11 +45,15 @@ public class Ticket {
         this.paid = paid;
     }
 
-    public String getOwner() {
+    public void setTable(Tafel table) {
+        this.table = table;
+    }
+
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
@@ -76,6 +83,11 @@ public class Ticket {
 
     public Long getId() {
         return id;
+    }
+
+
+    public String getName() {
+        return "Ticket "+getId()+" from event: "+getEvent().getTitle();
     }
 
     public Tafel getTable() {

@@ -14,7 +14,7 @@ import{
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {request, setAuthToken} from '../AxiosConfig';
-import {useAuth} from './AuthContext'
+import {useAuth} from '../context/AuthContext'
 
 export default function Login() {
 
