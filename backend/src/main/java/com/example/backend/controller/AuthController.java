@@ -6,6 +6,7 @@ import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.model.LoginRequest;
 import com.example.backend.model.User;
+import com.example.backend.service.AuthService;
 import com.example.backend.service.impl.UserService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpSession;
@@ -26,12 +27,7 @@ public class AuthController {
 
     private final UserService userService;
     private final UserAuthProvider userAuthProvider;
-
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+    private final AuthService service;
 
     /*@GetMapping("/register")
     public String register(Model model) {
@@ -62,19 +58,14 @@ public class AuthController {
     }*/
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto){
-        UserDto user=userService.login(credentialsDto);
-
-        user.setToken(userAuthProvider.createToken(user));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody CredentialsDto credentialsDto){
+        return ResponseEntity.ok(service.login(credentialsDto));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register (@RequestBody SignUpDto signUpDto){
-        UserDto user= userService.register(signUpDto);
-        user.setToken(userAuthProvider.createToken(user));
-        return ResponseEntity.created(URI.create("/users/"+user.getId()))
-                .body(user);
+    public ResponseEntity<AuthenticationResponse> register (@RequestBody SignUpDto signUpDto){
+
+        return ResponseEntity.ok(service.register(signUpDto));
     }
 
     /*@GetMapping("/users")

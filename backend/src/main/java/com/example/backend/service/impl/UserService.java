@@ -1,6 +1,5 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.config.PasswordEncoderConfig;
 import com.example.backend.dto.CredentialsDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
@@ -10,12 +9,10 @@ import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
-import java.util.List;
 import java.util.Optional;
 
 @Service
