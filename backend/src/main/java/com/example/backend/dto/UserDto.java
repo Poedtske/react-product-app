@@ -19,5 +19,10 @@ public class UserDto {
     private String token;
     private Role role;
 
+    public UserDto(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 }
 
