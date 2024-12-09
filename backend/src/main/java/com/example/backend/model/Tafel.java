@@ -32,8 +32,6 @@ public class Tafel {
     private Integer width;
     private Integer height;
 
-    private ArrayList<Integer> margin;
-
     @Nullable
     private int seats;
 
@@ -45,20 +43,12 @@ public class Tafel {
         this.event=event;
         this.width=100;
         this.height=100;
-        margin= new ArrayList<>();
-        for(int i=0;i<4;i++){
-            margin.add(5);
-        }
     }
     public Tafel(Event event, int seats,int width,int height) {
         this.seats = seats;
         this.event=event;
         this.width=width;
         this.height=height;
-        margin= new ArrayList<>();
-        for(int i=0;i<4;i++){
-            margin.add(5);
-        }
     }
 
     public int getSeats() {
@@ -109,16 +99,5 @@ public class Tafel {
 
     public void setHeight(Integer height) {
         this.height = height;
-    }
-
-    public ArrayList<Integer> getMargins() {
-        return margin;
-    }
-    public Integer getMargin(int a) {
-        return margin.get(a);
-    }
-
-    public void setMargin(ArrayList<Integer> margin) {
-        this.margin = margin;
     }
 }

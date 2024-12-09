@@ -1,13 +1,20 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.EventDto;
+import com.example.backend.dto.SignUpDto;
+import com.example.backend.enums.EventType;
 import com.example.backend.model.Event;
 import com.example.backend.service.impl.EventServiceImpl;
 import com.example.backend.service.impl.TableServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -18,7 +25,6 @@ public class EventAPIController {
     private final EventServiceImpl eventService;
     private final TableServiceImpl tableService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/public/events")
     public Iterable<Event> getAllEvents(){
         return eventService.findAll();
@@ -30,14 +36,15 @@ public class EventAPIController {
     }
 
     @PostMapping("/admin/events")
-    public Event addEvent(@ModelAttribute("newEvent") @Valid Event newEvent, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return null;
-        }
-        eventService.save(newEvent);
-        tableService.CreateTables(newEvent);
+    public ResponseEntity<EventDto> addEvent(@RequestBody EventDto eventDto ){
+        return eventService.createEvent(eventDto);
+    }
 
-        return eventService.findById(newEvent.getId());
+    @GetMapping("/public/eventTypes")
+    public List<String> getEventTypes() {
+        return Arrays.stream(EventType.values())
+                .map(Enum::name)
+                .toList();
     }
 
 

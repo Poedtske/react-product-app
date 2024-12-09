@@ -1,16 +1,22 @@
 package com.example.backend.model;
 
+import com.example.backend.dto.EventDateDto;
 import com.example.backend.enums.EventType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.*;
 import java.util.Date;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name="Events")
 public class Event {
     @Id
@@ -27,8 +33,9 @@ public class Event {
     private String title;
 
     @Nullable
+    @OneToMany(mappedBy = "event")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
-    private Set<Date> dates=new HashSet<>();
+    private List<EventDate> dates=new ArrayList<>();
 
     @NotBlank
     private String location;
@@ -72,29 +79,34 @@ public class Event {
 
     // Full constructor for initializing an Event with all fields
     public Event(String title,
-                 String location, String description, EventType type, String layout, int seatsPerTable) {
+                 String location,
+                 String description,
+                 EventType type,
+                 String layout,
+                 int seatsPerTable) {
         this.spondId = null;
         this.startTime = null;
         this.endTime = null;
         this.title = title;
-        this.dates = new HashSet<>();
+        this.dates = new ArrayList<>();
         this.location = location;
         this.description = description;
         this.type = type;
         this.seatsPerTable = seatsPerTable;
         this.layout=layout;
+        CreateLayout();
     }
 
 
     // Constructor for creating an event from "Spond" data
-    public Event(String spondId, java.util.Date startTime, java.util.Date endTime, String title, String location, String description) {
+    public Event(String spondId, Date startTime, Date endTime, String title, String location, String description) {
         this.spondId = spondId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.title = title;
         this.location = location;
         this.description = description;
-        dates.add(startTime);
+        this.dates=new ArrayList<>();
     }
 
     public int getRijen() {
@@ -173,12 +185,16 @@ public class Event {
         this.layout = layout;
     }
 
-    public Set<Date> getDates() {
+    public List<EventDate> getDates() {
         return dates;
     }
 
     public Set<Ticket> getTickets() {
         return tickets;
+    }
+
+    public void setDates(List<EventDate> dates) {
+        this.dates = dates;
     }
 
     public List<Tafel> getTables() {

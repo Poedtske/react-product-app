@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import {useAuth} from '../AuthContext';
+import {useAuth} from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 // import NavBarCSS from './NavBar.module.css';
 
@@ -19,7 +19,7 @@ export default function NavBar() {
   };
 
   return (
-    <header style="background-color:red;">
+    <header>
       <button
         className="hamburger"
         aria-expanded={isNavExpanded}
@@ -43,83 +43,15 @@ export default function NavBar() {
           Home
         </NavLink>
         
-        <div className="dropdown" aria-expanded="false">
-          <button className="btn2 dropbtn">Fanfare</button>
-          <div className="dropdown-content">
-            <NavLink 
-              to="/fanfare/instrumenten" 
-              activeClassName="active" 
-              onClick={handleToggle}
-            >
-              Instrumenten
-            </NavLink>
-            <NavLink 
-              to="/fanfare/geschiedenis" 
-              activeClassName="active" 
-              onClick={handleToggle}
-            >
-              Geschiedenis
-            </NavLink>
-            <NavLink 
-              to="/fanfare/bestuur" 
-              activeClassName="active" 
-              onClick={handleToggle}
-            >
-              Bestuur
-            </NavLink>
-            <NavLink 
-              to="/fanfare/dirigent" 
-              activeClassName="active" 
-              onClick={handleToggle}
-            >
-              Dirigent
-            </NavLink>
-          </div>
-        </div>
-        
         <NavLink 
-          to="/jeugd" 
+          to="/admin/events" 
           activeClassName="active" 
           onClick={handleToggle}
         >
-          Jeugd
+          Evenementen
         </NavLink>
         
-        <div className="dropdown">
-          <button className="dropbtn">Info</button>
-          <div className="dropdown-content">
-            <NavLink 
-              to="/info/documenten" 
-              activeClassName="active" 
-              onClick={handleToggle}
-            >
-              Documenten
-            </NavLink>
-            <NavLink 
-              to="/info/privacy" 
-              activeClassName="active" 
-              onClick={handleToggle}
-            >
-              Privacy
-            </NavLink>
-          </div>
-        </div>
         
-        <NavLink 
-          to="/sponsors" 
-          activeClassName="active" 
-          onClick={handleToggle}
-        >
-          Sponsors
-        </NavLink>
-        
-        <NavLink 
-          to="/kalender" 
-          activeClassName="active" 
-          onClick={handleToggle}
-        >
-          Kalender
-        </NavLink>
         {isAuthenticated ? (
           <NavLink to="/" onClick={logoutUser}>
           Logout

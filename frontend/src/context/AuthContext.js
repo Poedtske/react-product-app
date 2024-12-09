@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       const user = getUserFromToken();
       if (user && user.exp * 1000 > Date.now()) { // Check token expiration
         setIsAuthenticated(true);
-        setUserRole(user.role);
+        setUserRole(user.role[0].authority); //get the userRole
       } else {
         removeAuthToken();
         setIsAuthenticated(false);
@@ -51,8 +51,12 @@ export const AuthProvider = ({ children }) => {
     return <div>Loading...</div>;
   }
 
+  const getRole=()=>{
+    return userRole;
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userRole, loading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userRole, loading, login, logout, getRole }}>
       {children}
     </AuthContext.Provider>
   );

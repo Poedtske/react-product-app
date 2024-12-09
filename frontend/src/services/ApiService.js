@@ -95,6 +95,24 @@ export const getEvents = async () => {
   }
 };
 
+export const getEventTypes = async () => {
+  try {
+    
+    const response = await request('GET','/api/public/eventTypes',false)
+    const types = response.data;
+
+    if (Array.isArray(types)) {
+      return types
+    } else {
+      console.error('Fetched events are not an array:', types);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching events:', error.response || error);
+    throw error;
+  }
+};
+
 
 export const updateEventById = async (id, event) => {
   try {

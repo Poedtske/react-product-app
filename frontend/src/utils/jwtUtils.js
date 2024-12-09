@@ -25,6 +25,11 @@ export const getUserFromToken = () => {
   return null;
 };
 
+export const getUserRole =()=>{
+  const user= getUserFromToken();
+  return user.role[0].authority;
+}
+
 // Check if the user has a specific role
 export const hasRole = (role) => {
   const user = getUserFromToken();
