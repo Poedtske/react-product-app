@@ -83,12 +83,5 @@ public class EventViewsController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable Long id){
-        eventService.deleteById(id);
-        return "redirect:/events";
-    }
-
-
 
 }

@@ -47,5 +47,15 @@ public class EventAPIController {
                 .toList();
     }
 
+    @DeleteMapping("/admin/events/{id}")
+    public ResponseEntity deleteEvent(@PathVariable Long id){
+        try{
+            eventService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e);
+        }
+
+    }
 
 }

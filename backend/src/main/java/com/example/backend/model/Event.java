@@ -33,7 +33,7 @@ public class Event {
     private String title;
 
     @Nullable
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
     private List<EventDate> dates=new ArrayList<>();
 

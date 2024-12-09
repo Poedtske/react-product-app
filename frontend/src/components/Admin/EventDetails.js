@@ -1,57 +1,78 @@
-import React, { useState, useEffect, useContext } from "react";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
-import { deleteEventById, getEventById } from '../../services/ApiService';
-import { EventContext } from "../../context/EventContext";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getEventById, deleteEventById } from "../../services/ApiService"; // Import API functions
 import styles from "../../css/entity.module.css";
 
-export default function ShowEvent() {
-  const { id } = useParams();
-  const { event, updateEvent, removeEventById } = useContext(EventContext);
+const ShowEvent = () => {
+  const { id } = useParams(); // Get event ID from route params
   const navigate = useNavigate();
 
+  const [event, setEvent] = useState(null); // State to hold event details
+  const [loading, setLoading] = useState(true); // State to track loading
+  const [error, setError] = useState(null); // State to track errors
+
   useEffect(() => {
-    async function fetchData() {
+    const fetchEvent = async () => {
       try {
-        const fetchedEvent = await getEventById(id);
-        updateEvent(fetchedEvent);
-      } catch (error) {
-        console.error("Error fetching event:", error);
+        const fetchedEvent = await getEventById(id); // Fetch event details from API
+        setEvent(fetchedEvent); // Store the event in state
+        setLoading(false); // Stop loading once data is fetched
+      } catch (err) {
+        console.error("Error fetching event:", err);
+        setError("Failed to fetch event details. Please try again later.");
+        setLoading(false); // Stop loading even if there's an error
       }
-    }
+    };
 
-    fetchData();
-  }, [id, updateEvent]);
+    fetchEvent();
+  }, [id]);
 
-  async function deleteEvent() {
+  const deleteEvent = async () => {
     try {
-      await deleteEventById(id);
-      //removeEventById(id);
-      navigate("/");
-    } catch (error) {
-      console.error("Error deleting event:", error);
+      await deleteEventById(id); // Call API to delete the event
+      navigate("/admin/events"); // Navigate back after successful deletion
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      setError("Failed to delete the event. Please try again.");
     }
-  }
+  };
 
-  // Early return if event is not available yet
-  if (!event) {
-    return <p>Loading event details...</p>;
-  }
-
-  // Helper function to format time
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+  const formatTime = (date) => {
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${hours}:${minutes}`;
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString); // Convert to Date object
-    const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  const renderDatesList = (dates) => {
+    return (
+      <ul>
+        {dates.map((entry, index) => {
+          const startDateTime = new Date(`${entry.date}T${entry.startTime}`);
+          const endDateTime = new Date(`${entry.date}T${entry.endTime}`);
+          return (
+            <p>
+              {formatDate(startDateTime)} - {formatTime(startDateTime)} to {formatTime(endDateTime)}
+            </p>
+          );
+        })}
+      </ul>
+    );
+  };
+
+  if (loading) {
+    return <p>Loading event details...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <main>
@@ -74,13 +95,21 @@ export default function ShowEvent() {
             </>
           )}
 
-          <h2>Datum</h2>
-          <p>{formatDate(event.startTime)}</p>
-
-          <h2>Locatie en Tijd</h2>
-          <p>Locatie: {event.location}</p>
-          <p>Begin: {formatTime(event.startTime)}</p>
-          <p>Einde: {formatTime(event.endTime)}</p>
+          <h2>Locatie</h2>
+          <p>{event.location}</p>
+          <h2>Datum & Tijd</h2> 
+          {event.startTime && event.endTime ? (
+            <>
+                           
+              <p>Begin: {formatTime(new Date(event.startTime))}</p>
+              <p>Einde: {formatTime(new Date(event.endTime))}</p>
+            </>
+            
+          ) : event.dates && event.dates.length > 0 ? (
+            renderDatesList(event.dates)
+          ) : (
+            <p>Geen tijd & datum beschikbaar</p>
+          )}
 
           {event.spondId && (
             <button style={{ border: "none", backgroundColor: "transparent" }}>
@@ -98,27 +127,30 @@ export default function ShowEvent() {
             </button>
           )}
 
-          {event.spondId && (
-            <div className="row">
-              <button className={styles.updateBtn}>
-                <NavLink to={`/admin/events/edit/${id}`}>Aanpassen</NavLink>
+          <div className="row">
+            <button
+              className={styles.updateBtn}
+              onClick={() => navigate(`/admin/events/edit/${id}`)}
+            >
+              Aanpassen
+            </button>
+            <div className="col-6 text-end">
+              <button
+                onClick={() => {
+                  if (window.confirm("Ben je zeker dat je dit evenement wilt verwijderen?")) {
+                    deleteEvent();
+                  }
+                }}
+                className={styles.deleteBtn}
+              >
+                Verwijderen
               </button>
-              <div className="col-6 text-end">
-                <button
-                  onClick={() => {
-                    if (window.confirm("Ben je zeker dat je dit evenement wilt verwijderen?")) {
-                      deleteEvent();
-                    }
-                  }}
-                  className={styles.deleteBtn}
-                >
-                  Verwijderen
-                </button>
-              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </main>
   );
-}
+};
+
+export default ShowEvent;

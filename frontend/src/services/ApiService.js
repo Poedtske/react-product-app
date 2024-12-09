@@ -137,7 +137,7 @@ export const getEventById = async (id) => {
 
 export const deleteEventById = async (id) => {
   try {
-    const response = await request('DELETE',`/api/admin/events/${id}`,true);
+    const response = await request('DELETE',`/api/admin/events/${id}`,null,true);
     return response.data;
   } catch (error) {
     console.error(`Error deleting event with ID ${id}:`, error.response || error);

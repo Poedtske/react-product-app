@@ -145,6 +145,8 @@ public class EventServiceImpl implements EventService {
             // Set the list of EventDates in the Event object
             event.setDates(eventDates);
 
+            tableService.CreateTables(event);
+
             // Save the event object along with its EventDates
             eventRepository.save(event);
 

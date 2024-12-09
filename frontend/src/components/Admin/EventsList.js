@@ -15,27 +15,42 @@ const Kalender = () => {
         setEvents(events);
         setLoading(false);
       } catch (error) {
-        setError('Error fetching events');
+        setError("Error fetching events");
         setLoading(false);
-        console.error('Error fetching events:', error);
+        console.error("Error fetching events:", error);
       }
     };
     fetchData();
   }, []);
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString, fallbackDates) => {
+    // If dateString is null or empty, use the first date's startTime from fallbackDates
+    if (!dateString && fallbackDates?.length > 0) {
+      dateString = fallbackDates[0]?.startTime;
+    }
+
+    if (!dateString) return { day: "--", month: "N/A" }; // Handle edge case
+
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = date.toLocaleString('en', { month: 'short' }).toUpperCase();
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = date.toLocaleString("en", { month: "short" }).toUpperCase();
     return { day, month };
   };
+
+  if (loading) {
+    return <p>Loading events...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <main className={styles.main}>
       <div className={styles.eventList}>
         <div className={styles.eventContainer}>
           {events.map((event) => {
-            const { day, month } = formatDate(event.startTime);
+            const { day, month } = formatDate(event.startTime, event.dates);
 
             return (
               <Link
