@@ -1,5 +1,6 @@
 package com.example.backend.service.impl;
 
+import com.example.backend.dto.CartDto;
 import com.example.backend.dto.CredentialsDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
@@ -115,6 +116,14 @@ public class UserService {
                 user.getFirstName(),
                 user.getLastName()
         );
+    }
+
+    public CartDto getCart(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return new CartDto(user.getProducts(),user.getTickets());
+        // Map User to UserDto
+
     }
 
 }

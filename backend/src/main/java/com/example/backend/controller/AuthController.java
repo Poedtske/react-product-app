@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.config.UserAuthProvider;
+import com.example.backend.dto.CartDto;
 import com.example.backend.dto.CredentialsDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
@@ -75,6 +76,13 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the logged-in username
         return userService.getUserProfile(username); // Use the service to fetch user details
+    }
+
+    @GetMapping("/cart")
+    public CartDto getCart(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return userService.getCart(username); // Use the service to fetch user details
     }
 
     /*@GetMapping("/users")
