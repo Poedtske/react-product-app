@@ -137,7 +137,7 @@ public class User implements UserDetails {
         products.remove(product);
     }
 
-    public Iterable getProducts(){
+    public List<Product> getProducts(){
         return products;
     }
 
@@ -150,11 +150,10 @@ public class User implements UserDetails {
     // Remove a ticket from the set
     public void removeTicket(Ticket ticket) {
         tickets.remove(ticket);
-        ticket.setOwner(null);  // Set the owner to null (or let it be managed by the cascade)
     }
 
     // Get all tickets for the user
-    public Iterable<Ticket> getTickets() {
+    public Set<Ticket> getTickets() {
         return tickets;
     }
 }

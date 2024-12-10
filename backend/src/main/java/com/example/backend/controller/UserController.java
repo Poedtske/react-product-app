@@ -48,6 +48,27 @@ public class UserController {
         return userService.getCart(username); // Use the service to fetch user details
     }
 
+    @DeleteMapping("/cart")
+    public ResponseEntity clearCart(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return userService.clearCart(username); // Use the service to fetch user details
+    }
+
+    /*@DeleteMapping("/cart/tickets/{id}")
+    public CartDto removeTicketFromCart(@PathVariable Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return userService.removeTicket(username,id); // Use the service to fetch user details
+    }
+
+    @DeleteMapping("/cart/tickets/{id}")
+    public CartDto removeProductFromCart(@PathVariable Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return userService.removeProduct(username,id); // Use the service to fetch user details
+    }*/
+
 
 
     /*@GetMapping("/users")

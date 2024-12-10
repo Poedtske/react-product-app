@@ -8,15 +8,12 @@ import com.example.backend.model.Tafel;
 import com.example.backend.model.Ticket;
 import com.example.backend.model.User;
 import com.example.backend.repository.TicketRepository;
+import com.example.backend.repository.UserRepository;
 import com.example.backend.service.TicketService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Service
@@ -28,12 +25,13 @@ public class TicketServiceImpl implements TicketService {
 
     private final TableServiceImpl tableService;
     private final EventServiceImpl eventService;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
 
     @Override
-    public TicketDto save(TicketDto ticket) {
-        return null;
+    public Ticket save(Ticket ticket) {
+        ticketRepository.save(ticket);
+        return ticket;
     }
 
     @Override
@@ -80,7 +78,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public ResponseEntity createTicket(String email, TicketDto ticketDto) {
         try{
-            User user=userService.findUserByEmail(email);
+            User user= userRepository.findByEmail(email).orElseThrow();
             Event event= eventService.findById(ticketDto.getEvent());
             Tafel table= tableService.findById(ticketDto.getTable());
             if(table.checkAvailableSeats(ticketDto.getAmount())){

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface TicketService {
-    TicketDto save(TicketDto ticket);
+    Ticket save(Ticket ticket);
 
     TicketDto updateById(Long id, TicketDto ticket);
 

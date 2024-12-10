@@ -176,9 +176,9 @@ export const clearCart= async()=>{
 }
 
 
-export const removeProductFromCart= async()=>{
+export const removeProductFromCart= async(id)=>{
   try {
-    const response = await request('DELETE',`/api/secure/cart`,null,true);
+    const response = await request('DELETE',`/api/secure/cart/products/${id}`,null,true);
     return response.data;
   } catch (error) {
     console.error(`Error getting cart:`, error.response || error);
@@ -186,9 +186,9 @@ export const removeProductFromCart= async()=>{
   }
 }
 
-export const removeTicketFromCart= async()=>{
+export const removeTicketFromCart= async(id)=>{
   try {
-    const response = await request('DELETE',`/api/secure/cart`,null,true);
+    const response = await request('DELETE',`/api/secure/cart/tickets/${id}`,null,true);
     return response.data;
   } catch (error) {
     console.error(`Error getting cart:`, error.response || error);

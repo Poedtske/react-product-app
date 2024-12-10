@@ -7,9 +7,11 @@ import com.example.backend.dto.UserDto;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.Product;
+import com.example.backend.model.Ticket;
 import com.example.backend.model.User;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ public class UserService {
     private final ProductServiceImpl productService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final TicketServiceImpl ticketService;
 
 
 
@@ -150,5 +156,24 @@ public class UserService {
 
     }
 
+    @Transactional
+    public ResponseEntity clearCart(String email) {
+        try{
+            User u=this.findUserByEmail(email);
+            u.getProducts().clear();
+
+            u.getTickets().clear();
+            userRepository.save(u);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    /*public CartDto removeTicket(String email, Long id) {
+    }
+
+    public CartDto removeProduct(String email, Long id) {
+    }*/
 }
 
