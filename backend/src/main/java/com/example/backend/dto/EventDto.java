@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -22,5 +23,6 @@ public class EventDto {
     private String layout;
     private List<Map<String,String>> Dates;
     private List<EventDate> eventDates;
+    private BigDecimal ticketPrice;
 
 }

@@ -129,6 +129,12 @@ export default function NavBar() {
             Login
           </NavLink>
         )}
+
+        {isAuthenticated && (
+          <NavLink to="/cart">
+            Cart
+          </NavLink>
+        )}
         
         {/* Authenticated Links */}
         { /* Mocking an authenticated state; replace with actual auth logic */ }

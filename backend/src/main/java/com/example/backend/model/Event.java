@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.Date;
 
@@ -33,7 +34,7 @@ public class Event {
     private String title;
 
     @Nullable
-    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
     private List<EventDate> dates=new ArrayList<>();
 
@@ -61,6 +62,8 @@ public class Event {
     @Nullable
     private String layout;
 
+    private BigDecimal ticketPrice;
+
     @Nullable
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
@@ -83,7 +86,8 @@ public class Event {
                  String description,
                  EventType type,
                  String layout,
-                 int seatsPerTable) {
+                 int seatsPerTable,
+                 BigDecimal ticketPrice) {
         this.spondId = null;
         this.startTime = null;
         this.endTime = null;
@@ -94,6 +98,7 @@ public class Event {
         this.type = type;
         this.seatsPerTable = seatsPerTable;
         this.layout=layout;
+        this.ticketPrice=ticketPrice;
         CreateLayout();
     }
 
@@ -107,6 +112,14 @@ public class Event {
         this.location = location;
         this.description = description;
         this.dates=new ArrayList<>();
+    }
+
+    public BigDecimal getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(BigDecimal ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 
     public int getRijen() {

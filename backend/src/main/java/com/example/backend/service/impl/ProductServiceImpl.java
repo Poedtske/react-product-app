@@ -1,6 +1,7 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.model.Product;
+import com.example.backend.model.User;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public void addUserToProduct(User u, Product p){
+        p.addUser(u);
+        productRepository.save(p);
     }
 
 }

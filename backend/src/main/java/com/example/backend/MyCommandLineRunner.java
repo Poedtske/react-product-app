@@ -19,12 +19,12 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        productService.save(new Product("iPhone",BigDecimal.valueOf(1000D),null,true, Category.DRINK,null));
+        /*productService.save(new Product("iPhone",BigDecimal.valueOf(1000D),null,true, Category.DRINK,null));
         productService.save(new Product("Blackberry",BigDecimal.valueOf(1100D),null,true, Category.DRINK,null));
 
         Event event = new Event("Sample Event", "Sample Location", "Sample Description", EventType.CONCERT, "5x5", 4);
         System.out.println("Height: " + event.getKolommen() + ", Length: " + event.getRijen());
-        System.out.println("Number of tables created: " + event.getTables().size());
+        System.out.println("Number of tables created: " + event.getTables().size());*/
 
 
     }

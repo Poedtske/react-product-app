@@ -19,6 +19,7 @@ const CreateEvent = () => {
     location: "",
     type: "",
     description: "",
+    ticketPrice:"",
     seatsPerTable: "",
     layout: "",
     dates: [{ date: "", startTime: "", endTime: "" }], // Store multiple dates
@@ -192,6 +193,22 @@ const CreateEvent = () => {
           name="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          fullWidth
+          required
+          InputLabelProps={{
+            style: { color: "white" },
+          }}
+          InputProps={{
+            style: { color: "white", backgroundColor: "#333" },
+          }}
+        />
+
+<TextField
+          label="Price per Ticket"
+          name="ticketPrice"
+          type="number"
+          value={formData.ticketPrice}
+          onChange={(e) => setFormData({ ...formData, ticketPrice: e.target.value })}
           fullWidth
           required
           InputLabelProps={{

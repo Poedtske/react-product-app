@@ -121,7 +121,8 @@ public class EventServiceImpl implements EventService {
                     eventDto.getDescription(),
                     EventType.valueOf(eventDto.getType()),
                     eventDto.getLayout(),
-                    eventDto.getSeatsPerTable()
+                    eventDto.getSeatsPerTable(),
+                    eventDto.getTicketPrice()
             );
             eventRepository.save(event);
 
@@ -160,7 +161,8 @@ public class EventServiceImpl implements EventService {
                     event.getSeatsPerTable(),
                     event.getLayout(),
                     eventDto.getDates(), // Send the dates back in the response
-                    event.getDates() // Include the saved EventDates in the response
+                    event.getDates(), // Include the saved EventDates in the response
+                    event.getTicketPrice()
             );
 
             return ResponseEntity.ok(savedEventDto);

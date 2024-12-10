@@ -6,10 +6,13 @@ import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.mapper.UserMapper;
+import com.example.backend.model.Product;
 import com.example.backend.model.User;
+import com.example.backend.repository.ProductRepository;
 import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProductServiceImpl productService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
@@ -80,6 +84,26 @@ public class UserService {
         User user=userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
         return userMapper.toUserDto(user);
     }
+
+    public User findUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
+    }
+
+    public ResponseEntity addProductToUserCart(String email, Product p){
+        try{
+            User user=userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
+            user.addProduct(p);
+            productService.addUserToProduct(user,p);
+            userRepository.save(user);
+            return ResponseEntity.ok().build();
+        }catch (AppException a){
+            return ResponseEntity.badRequest().body(a.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
+
+
 
     public UserDto login(CredentialsDto credentialsDto){
         User user=userRepository.findByEmail(credentialsDto.getEmail()).orElseThrow(()->new AppException("Unknown user",HttpStatus.NOT_FOUND));

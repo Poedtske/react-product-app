@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register", "/css/**", "/js/**", "/login").permitAll()
                         .requestMatchers("/admin/**","/api/admin/**").hasAuthority(Role.ADMIN.getValue())
-                        .requestMatchers("/profile","/cart").authenticated()
+                        .requestMatchers("/profile","/cart","/api/secure/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.disable()) // Disable basic authentication if not required

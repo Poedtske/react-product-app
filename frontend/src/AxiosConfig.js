@@ -36,7 +36,12 @@ axios.defaults.baseURL="http://localhost:8080";
 axios.defaults.headers["Content-type"]='application/json';
 
 export const getAuthToken=()=>{
-    return window.localStorage.getItem("auth_token");
+    if(window.localStorage.getItem("auth_token")!=null){
+        return window.localStorage.getItem("auth_token");
+    }else{
+        return "ERROR"
+    }
+    
 }
 
 export const setAuthToken=(token)=>{

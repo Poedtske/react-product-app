@@ -100,4 +100,8 @@ public class Tafel {
     public void setHeight(Integer height) {
         this.height = height;
     }
+
+    public boolean checkAvailableSeats(int amount){
+        return (seats-(tickets.size()+amount))>=0;
+    }
 }

@@ -1,14 +1,20 @@
 package com.example.backend.model;
 
-import com.example.backend.enums.Category;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Tickets")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ticket {
 
     @Id
@@ -32,10 +38,8 @@ public class Ticket {
     @JoinColumn(name = "event_id",referencedColumnName = "id")
     private Event event;
 
-        private Boolean paid;
+    private Boolean paid;
 
-    public Ticket() {
-    }
 
     public Ticket(Tafel table, User owner, BigDecimal price, Event event, Boolean paid) {
         this.table = table;

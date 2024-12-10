@@ -2,7 +2,12 @@ import {jwtDecode} from "jwt-decode"; // Ensure proper import syntax
 
 // Get the authentication token from localStorage
 export const getAuthToken = () => {
-  return localStorage.getItem("auth_token");
+  if(localStorage.getItem("auth_token")!=null){
+    return localStorage.getItem("auth_token");
+  }else{
+      return false;;
+  }
+
 };
 
 // Remove the authentication token from localStorage
@@ -19,7 +24,7 @@ export const getUserFromToken = () => {
       return decoded; // Returns the decoded JWT payload (e.g., { role: 'USER', ... })
     } catch (error) {
       console.error("Invalid token", error);
-      return null;
+      return "InvallidToken";
     }
   }
   return null;

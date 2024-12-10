@@ -144,3 +144,13 @@ export const deleteEventById = async (id) => {
     throw error;
   }
 };
+
+export const addTicketToCart= async(ticket)=>{
+  try {
+    const response = await request('POST',`/api/secure/tickets`,ticket,true);
+    return response;
+  } catch (error) {
+    console.error(`Error creating ticket ${ticket}:`, error.response || error);
+    throw error;
+  }
+}

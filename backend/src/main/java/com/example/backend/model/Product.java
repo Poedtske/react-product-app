@@ -118,6 +118,14 @@ public class Product {
         this.users = users;
     }
 
+    public void addUser(User u){
+        this.users.add(u);
+    }
+
+    public void removeUser(User u){
+        this.users.remove(u);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

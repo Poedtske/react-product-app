@@ -26,50 +26,28 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthController {
+public class UserController {
 
     private final UserService userService;
-    private final UserAuthProvider userAuthProvider;
     private final AuthService service;
 
-    /*@GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("account", new UserDto());
-        return "register";
-    }*/
 
-    /*@PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody() User user) {
-        User newUser=userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+
+    @GetMapping("/profile")
+    public UserDto getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return userService.getUserProfile(username); // Use the service to fetch user details
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session){
-        try{
-            boolean isAuthenticated= userService.authenticate(loginRequest.getEmail(),loginRequest.getPassword());
-
-            if(isAuthenticated){
-                session.setAttribute("user",loginRequest.getEmail());
-                return ResponseEntity.ok("Login was successful");
-            }else{
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-            }
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unknown error occurred");
-        }
-    }*/
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody CredentialsDto credentialsDto){
-        return ResponseEntity.ok(service.login(credentialsDto));
+    @GetMapping("/cart")
+    public CartDto getCart(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return userService.getCart(username); // Use the service to fetch user details
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register (@RequestBody SignUpDto signUpDto){
 
-        return ResponseEntity.ok(service.register(signUpDto));
-    }
 
     /*@GetMapping("/users")
     public Iterable<User> getUsers(){

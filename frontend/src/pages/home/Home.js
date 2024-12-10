@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // For routing
 import styles from '../home/home.module.css' // You can import the CSS file specific to this page
-import {getEvents} from '../../services/ApiService';
+import {getEvents, getProducts} from '../../services/ApiService';
 
 const Home = () => {
   const [events, setEvents] = useState([]); // Store events data

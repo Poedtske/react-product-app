@@ -1,11 +1,18 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.TicketDto;
+import com.example.backend.exceptions.AppException;
 import com.example.backend.mapper.TicketMapper;
+import com.example.backend.model.Event;
+import com.example.backend.model.Tafel;
 import com.example.backend.model.Ticket;
+import com.example.backend.model.User;
 import com.example.backend.repository.TicketRepository;
 import com.example.backend.service.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -19,18 +26,15 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final TicketMapper ticketMapper;
 
+    private final TableServiceImpl tableService;
+    private final EventServiceImpl eventService;
+    private final UserService userService;
+
+
     @Override
-    public TicketDto save(TicketDto ticketDto) {
-        // Convert DTO to Entity
-        Ticket ticket = ticketMapper.toTicket(ticketDto);
-
-        // Save the Entity
-        Ticket savedTicket = ticketRepository.save(ticket);
-
-        // Convert the saved Entity back to DTO
-        return ticketMapper.toTicketDto(savedTicket);
+    public TicketDto save(TicketDto ticket) {
+        return null;
     }
-
 
     @Override
     public TicketDto updateById(Long id, TicketDto ticketDto) {
@@ -51,28 +55,57 @@ public class TicketServiceImpl implements TicketService {
         // Save and map back to DTO
         Ticket savedTicket = ticketRepository.save(existingTicket);
 
-        return ticketMapper.toTicketDto(savedTicket);
+        return new TicketDto(savedTicket.getId(),savedTicket.getTable().getId(),savedTicket.getOwner(),savedTicket.getPrice(),savedTicket.getEvent().getId(),savedTicket.getPaid());
     }
 
     @Override
     public Iterable<TicketDto> findAll() {
-        // Fetch all entities and map them to DTOs
-        return StreamSupport.stream(ticketRepository.findAll().spliterator(), false)
-                .map(ticketMapper::toTicketDto) // Map each Ticket to TicketDto
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
     public TicketDto findById(Long id) {
-        // Fetch the entity and map it to DTO
-        return ticketRepository.findById(id)
-                .map(ticketMapper::toTicketDto) // Map to TicketDto
-                .orElse(null);
+
+
+        Ticket t= ticketRepository.findById(id).orElseThrow(()->new AppException("Unknown user",HttpStatus.NOT_FOUND));
+        TicketDto newTicketDto=new TicketDto(t.getId(),t.getTable().getId(),t.getOwner(),t.getPrice(),t.getEvent().getId(),t.getPaid());
+        return newTicketDto;
     }
 
     @Override
     public void deleteById(Long id) {
         ticketRepository.deleteById(id);
+    }
+
+    @Override
+    public ResponseEntity createTicket(String email, TicketDto ticketDto) {
+        try{
+            User user=userService.findUserByEmail(email);
+            Event event= eventService.findById(ticketDto.getEvent());
+            Tafel table= tableService.findById(ticketDto.getTable());
+            if(table.checkAvailableSeats(ticketDto.getAmount())){
+                for (int i=0;i<ticketDto.getAmount();i++){
+                    Ticket t=Ticket.builder()
+                            .price(event.getTicketPrice())
+                            .table(table)
+                            .owner(user)
+                            .event(event)
+                            .paid(false)
+                            .build();
+                    ticketRepository.save(t);
+                }
+
+                //TicketDto newTicketDto=new TicketDto(t.getId(),t.getTable().getId(),t.getOwner(),t.getPrice(),t.getEvent().getId(),t.getPaid(), ticketDto.getAmount());
+                return ResponseEntity.ok().build();
+            }else{
+                throw new AppException("No more available seats",HttpStatus.BAD_REQUEST);
+            }
+
+        }catch(AppException a){
+            return ResponseEntity.badRequest().body(a);
+        }catch(Exception e){
+            return ResponseEntity.internalServerError().body(e);
+        }
     }
 
 }
