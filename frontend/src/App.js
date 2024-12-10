@@ -42,7 +42,7 @@ function App() {
   const ADMIN_ROLE = "ADMIN";
   const USER_ROLE = "USER";
   const token = getAuthToken();
-  const userRole = getUserRole();
+  const userRole = token ? getUserRole() : null;  // Only call getUserRole if token exists
 
   // Routes for authenticated users with role "USER"
   const userRoutes = (
@@ -84,7 +84,7 @@ function App() {
   );
 
   return (
-      <>
+    <>
       <AuthProvider>
         <EventProvider>
           {token ? (
@@ -114,7 +114,7 @@ function App() {
         </EventProvider>
       </AuthProvider>
       <Footer />
-      </>
+    </>
   );
 }
 
