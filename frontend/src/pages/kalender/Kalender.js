@@ -43,7 +43,7 @@ const Kalender = () => {
             return (
               <Link
                 to={{
-                  pathname: `/admin/events/${event.id}`,
+                  pathname: `/events/${event.id}`,
                   state: { event }, // Pass event data as state
                 }}
                 key={event.id}

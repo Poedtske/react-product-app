@@ -67,6 +67,7 @@ const EventGrid = () => {
     try {
       // Call API to add ticket
       const response = await addTicketToCart(ticketData);
+      console.log(response.status);
       if (response.status == 200) {
         const newTickets = await response.data; // Parse the JSON response
         // Update table's tickets after successful purchase
@@ -78,11 +79,15 @@ const EventGrid = () => {
         setEvent({ ...event, tables: updatedTables });
         setFormError(null); // Clear errors if any
         setSuccessMessage("Ticket created and added to your cart."); // Display success message
-      } else {
+      }
+       else {
         const errorData = await response.data; // Get error details
         setFormError(errorData.message || "Failed to purchase ticket."); // Display error message
       }
     } catch (err) {
+      if(err.response.status==403){
+        navigate("/login");
+      }
       console.error("Error submitting ticket:", err);
       setFormError("Failed to purchase ticket. Please try again.");
     }
