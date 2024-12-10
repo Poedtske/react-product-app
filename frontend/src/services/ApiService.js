@@ -154,3 +154,44 @@ export const addTicketToCart= async(ticket)=>{
     throw error;
   }
 }
+
+export const getCart= async()=>{
+  try {
+    const response = await request('GET',`/api/secure/cart`,null,true);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting cart:`, error.response || error);
+    throw error;
+  }
+}
+
+export const clearCart= async()=>{
+  try {
+    const response = await request('DELETE',`/api/secure/cart`,null,true);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting cart:`, error.response || error);
+    throw error;
+  }
+}
+
+
+export const removeProductFromCart= async()=>{
+  try {
+    const response = await request('DELETE',`/api/secure/cart`,null,true);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting cart:`, error.response || error);
+    throw error;
+  }
+}
+
+export const removeTicketFromCart= async()=>{
+  try {
+    const response = await request('DELETE',`/api/secure/cart`,null,true);
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting cart:`, error.response || error);
+    throw error;
+  }
+}
