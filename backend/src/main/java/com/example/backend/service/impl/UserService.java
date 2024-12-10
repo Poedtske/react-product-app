@@ -170,10 +170,19 @@ public class UserService {
         }
     }
 
-    /*public CartDto removeTicket(String email, Long id) {
-    }
+    public ResponseEntity removeTicket(String email, Long id) {
+        try{
+            User u=this.findUserByEmail(email);
 
-    public CartDto removeProduct(String email, Long id) {
+            u.removeTicket(ticketService.findTicketById(id));
+            userRepository.save(u);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+    /*
+    public ResponseEntity removeProduct(String email, Long id) {
     }*/
 }
 

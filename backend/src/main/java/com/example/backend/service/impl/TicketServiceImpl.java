@@ -70,6 +70,14 @@ public class TicketServiceImpl implements TicketService {
         return newTicketDto;
     }
 
+
+    public Ticket findTicketById(Long id) {
+
+
+        return ticketRepository.findById(id).orElseThrow(()->new AppException("Unknown user",HttpStatus.NOT_FOUND));
+
+    }
+
     @Override
     public void deleteById(Long id) {
         ticketRepository.deleteById(id);
