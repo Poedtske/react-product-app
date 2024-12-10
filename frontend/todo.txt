@@ -1,0 +1,36 @@
+EVENTS:
+-edit for events 
+(layout can only be edited if none of its tables has sold tickets)
+-add images for events
+-edit show and detail pages
+-layout (choose date on top page, is date that is filled in with the ticket form,
+tables have list of dates, show tickets that match certain date)
+
+
+PRODUCTS:
+-CRUD
+-all views
+
+INVOICES:
+-CRUD
+-all views
+-business logic in Spring
+
+FRONTEND:
+-cleaning code, to much chatgpt bs
+
+TICKETS:
+-add option to choose date if there are multiple
+
+----------------------------------------------------------------------
+
+EXTRA
+
+BACKEND:
+-adding API key for spond
+
+DOCKER:
+-making it work on DOCKER
+
+FRONTEND:
+-using context correctly

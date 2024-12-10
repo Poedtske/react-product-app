@@ -11,48 +11,60 @@ const Kalender = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const events = await getEvents(); // Fetch events
-        setEvents(events);
+        const formattedEvents = await getEvents(); // Fetch events (already formatted)
+        console.log("Fetched Events:", formattedEvents);
+        setEvents(formattedEvents);
         setLoading(false);
       } catch (error) {
-        setError('Error fetching events');
+        setError("Error fetching events");
         setLoading(false);
-        console.error('Error fetching events:', error);
+        console.error("Error fetching events:", error);
       }
     };
     fetchData();
   }, []);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = date.toLocaleString('en', { month: 'short' }).toUpperCase();
-    return { day, month };
-  };
+  if (loading) {
+    return <p>Loading events...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <main className={styles.main}>
       <div className={styles.eventList}>
         <div className={styles.eventContainer}>
           {events.map((event) => {
-            const { day, month } = formatDate(event.startTime);
+            const mainDate = event.mainDate || { day: "--", month: "N/A" }; // Fallback for mainDate
+            const extraDates = event.extraDates || []; // Ensure extraDates is an array
 
             return (
               <Link
                 to={{
-                  pathname: `/events/${event.id}`,
+                  pathname: `/admin/events/${event.id}`,
                   state: { event }, // Pass event data as state
                 }}
                 key={event.id}
                 className={styles.event}
               >
                 <div className={styles.dateContainer}>
-                  <div className={styles.dateDay}>{day}</div>
-                  <div className={styles.dateMonth}>{month}</div>
+                  <div className={styles.dateDay}>{mainDate.day}</div>
+                  <div className={styles.dateMonth}>{mainDate.month}</div>
                 </div>
                 <div className={styles.eventDetails}>
                   <div className={styles.eventTitle}>{event.title}</div>
                   <div className={styles.eventLocation}>{event.location}</div>
+                  {extraDates.length > 0 && (
+                    <div className={styles.extraDates}>
+                      {extraDates.map((date, index) => (
+                        <div key={index} className={styles.extraDate}>
+                          {date.day} {date.month}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </Link>
             );

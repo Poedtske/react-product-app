@@ -101,7 +101,12 @@ const ShowEvent = () => {
           ) : (
             <p>Geen tijd & datum beschikbaar</p>
           )}
-
+          <button
+              className={styles.button}
+              onClick={() => navigate(`/events/${id}/layout`)}
+            >
+              Koop Tickets
+            </button>
         </div>
       </div>
     </main>

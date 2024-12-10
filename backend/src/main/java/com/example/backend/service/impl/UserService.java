@@ -33,6 +33,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final TicketServiceImpl ticketService;
+    private final ProductRepository productRepository;
 
 
 
@@ -181,8 +182,17 @@ public class UserService {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
-    /*
+
     public ResponseEntity removeProduct(String email, Long id) {
-    }*/
+        try{
+            User u=this.findUserByEmail(email);
+
+            u.removeProduct(productRepository.findById(id).orElseThrow());
+            userRepository.save(u);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }
 
