@@ -28,8 +28,8 @@ public class Ticket {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = true, updatable = false, nullable = false)
-    private User owner;
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id", insertable = true, updatable = false, nullable = false)
+    private Invoice invoice;
 
     private BigDecimal price;
 
@@ -38,27 +38,23 @@ public class Ticket {
     @JoinColumn(name = "event_id",referencedColumnName = "id")
     private Event event;
 
-    private Boolean paid;
-
-
-    public Ticket(Tafel table, User owner, BigDecimal price, Event event, Boolean paid) {
+    public Ticket(Tafel table, Invoice invoice, BigDecimal price, Event event) {
         this.table = table;
-        this.owner = owner;
+        this.invoice = invoice;
         this.price = price;
         this.event = event;
-        this.paid = paid;
     }
 
     public void setTable(Tafel table) {
         this.table = table;
     }
 
-    public User getOwner() {
-        return owner;
+    public Invoice getInvoice() {
+        return invoice;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 
     public BigDecimal getPrice() {
@@ -75,14 +71,6 @@ public class Ticket {
 
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    public Boolean getPaid() {
-        return paid;
-    }
-
-    public void setPaid(Boolean paid) {
-        this.paid = paid;
     }
 
     public Long getId() {

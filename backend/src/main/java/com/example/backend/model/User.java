@@ -17,8 +17,7 @@ import java.util.*;
 
 @Entity
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,16 +42,23 @@ public class User implements UserDetails {
     @Column(nullable = false) // Ensure a role is always set
     private Role role = Role.USER; // Default role
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_products",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Invoice> invoices = new HashSet<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Ticket> tickets = new HashSet<>();
+    public User() {
+
+    }
+
+    public User(Long id, String firstName, String lastName, String password, String email, Role role, Set<Invoice> invoices) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+
+
+    }
 
     // Getters and setters
     public Long getId() {
@@ -129,31 +135,28 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+
+    public Set<Invoice> getInvoices() {
+        return invoices;
     }
 
-    public void removeProduct(Product product) {
-        products.remove(product);
+    public Invoice addInvoice(Invoice i){
+        this.invoices.add(i);
+        return i;
     }
 
-    public List<Product> getProducts(){
-        return products;
+    public Invoice removeInvoice(Invoice i){
+        this.invoices.remove(i);
+        return i;
     }
 
-    // Add a ticket to the set
-    public void addTicket(Ticket ticket) {
-        tickets.add(ticket);
-        ticket.setOwner(this);  // Set the owner of the ticket
+    public Invoice getActiveInvoice(){
+        return invoices.stream().filter(invoice -> invoice.getPaid()==false).findFirst().orElse(null);
     }
 
-    // Remove a ticket from the set
-    public void removeTicket(Ticket ticket) {
-        tickets.remove(ticket);
-    }
-
-    // Get all tickets for the user
-    public Set<Ticket> getTickets() {
-        return tickets;
+    public void pay(){
+        Invoice i= getActiveInvoice();
+        i.setPaid(true);
+        this.addInvoice(new Invoice());
     }
 }

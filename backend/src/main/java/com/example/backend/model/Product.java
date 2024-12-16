@@ -35,16 +35,12 @@ public class Product {
 
     @Nullable
     @ManyToMany(mappedBy = "products")
-    private Set<Invoice> invoices =new HashSet<>();
-
-    @Nullable
-    @ManyToMany(mappedBy = "products")
-    private List<User> users= new ArrayList<>();
+    private List<Invoice> invoices =new ArrayList<>();
 
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, String img, Boolean available, Category category, Set<Invoice> invoices) {
+    public Product(String name, BigDecimal price, String img, Boolean available, Category category, List<Invoice> invoices) {
         this.name = name;
         this.price = price;
         this.img = img;
@@ -106,24 +102,18 @@ public class Product {
         return id;
     }
 
-    public Set<Invoice> getInvoices() {
+    public List<Invoice> getInvoices() {
         return invoices;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public Invoice addInvoice(Invoice i){
+        this.invoices.add(i);
+        return i;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public void addUser(User u){
-        this.users.add(u);
-    }
-
-    public void removeUser(User u){
-        this.users.remove(u);
+    public Invoice removeInvoice(Invoice i){
+        this.invoices.remove(i);
+        return i;
     }
 
     @Override

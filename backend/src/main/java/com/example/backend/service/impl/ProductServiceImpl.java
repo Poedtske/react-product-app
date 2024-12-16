@@ -1,5 +1,6 @@
 package com.example.backend.service.impl;
 
+import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
 import com.example.backend.model.User;
 import com.example.backend.repository.ProductRepository;
@@ -46,8 +47,8 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    public void addUserToProduct(User u, Product p){
-        p.addUser(u);
+    public void addInvoiceToProduct(Invoice i, Product p){
+        p.addInvoice(i);
         productRepository.save(p);
     }
 

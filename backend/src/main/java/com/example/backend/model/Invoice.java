@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,12 +22,17 @@ public class Invoice {
             joinColumns =@JoinColumn(name = "invoice_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private Set<Product> products;
+    private List<Product> products=new ArrayList<>();
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ticket> tickets = new HashSet<>();
 
     @Nullable
     private String description;
 
-    private Boolean paid;
+    private Boolean paid = false;
+
+    private Boolean confirmed= false;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -39,10 +47,8 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(Set<Product> products, String description, Boolean paid) {
-        this.products = products;
-        this.description = description;
-        this.paid = paid;
+    public Invoice(User u) {
+        this.setUser(u);
     }
 
     public String getDescription() {
@@ -65,7 +71,59 @@ public class Invoice {
         return id;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
+    }
+
+    public Product addProduct(Product p){
+        this.products.add(p);
+        return p;
+    }
+
+    public Product removeProduct(Product p){
+        this.products.remove(p);
+        return p;
+    }
+
+    public Ticket addTicket(Ticket ticket) {
+        tickets.add(ticket);
+        return ticket;
+    }
+    public Ticket removeTicket(Ticket ticket) {
+        tickets.remove(ticket);
+        return ticket;
+    }
+
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invoice invoice = (Invoice) o;
+        return id != null && id.equals(invoice.id); // Compare by id if it's not null
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0; // Use id hash code, fallback to 0 if id is null
     }
 }

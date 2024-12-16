@@ -17,18 +17,16 @@ import java.math.BigDecimal;
 public class TicketDto {
     private Long id;
     private Long table;
-    private User owner;
+    private UserDto owner;
     private BigDecimal price;
     private Long event;
-    private Boolean paid;
     private int amount;
 
-    public TicketDto(Long table, User owner, BigDecimal price, Long event, Boolean paid) {
+    public TicketDto(Long table, User owner, BigDecimal price, Long event) {
         this.table = table;
-        this.owner = owner;
+        this.owner= new UserDto(owner.getFirstName(),owner.getLastName(),owner.getEmail());
         this.price = price;
         this.event = event;
-        this.paid = paid;
     }
 
     //to portray simple ticket information
@@ -46,12 +44,11 @@ public class TicketDto {
         this.amount=amount;
     }
 
-    public TicketDto(Long id, Long table, User owner, BigDecimal price, Long event, Boolean paid) {
+    public TicketDto(Long id, Long table, User owner, BigDecimal price, Long event) {
         this.id = id;
         this.table = table;
-        this.owner = owner;
+        this.owner= new UserDto(owner.getFirstName(),owner.getLastName(),owner.getEmail());
         this.price = price;
         this.event = event;
-        this.paid = paid;
     }
 }

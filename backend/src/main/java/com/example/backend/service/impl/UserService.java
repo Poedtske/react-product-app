@@ -6,9 +6,11 @@ import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.mapper.UserMapper;
+import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
 import com.example.backend.model.Ticket;
 import com.example.backend.model.User;
+import com.example.backend.repository.InvoiceRepository;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -34,6 +36,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final TicketServiceImpl ticketService;
     private final ProductRepository productRepository;
+    private final InvoiceRepository invoiceRepository;
 
 
 
@@ -99,9 +102,11 @@ public class UserService {
     public ResponseEntity addProductToUserCart(String email, Product p){
         try{
             User user=userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
-            user.addProduct(p);
-            productService.addUserToProduct(user,p);
-            userRepository.save(user);
+            Invoice i = user.getActiveInvoice();
+            i.addProduct(p);
+            productService.addInvoiceToProduct(i,p);
+
+            invoiceRepository.save(i);
             return ResponseEntity.ok().build();
         }catch (AppException a){
             return ResponseEntity.badRequest().body(a.getMessage());
@@ -152,8 +157,10 @@ public class UserService {
     public CartDto getCart(String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return new CartDto(user.getProducts(),user.getTickets());
-        // Map User to UserDto
+        Invoice i = user.getActiveInvoice();
+        invoiceRepository.save(i);
+        return new CartDto(i.getProducts(),i.getTickets());
+        // Map User to CartDto
 
     }
 
@@ -161,10 +168,11 @@ public class UserService {
     public ResponseEntity clearCart(String email) {
         try{
             User u=this.findUserByEmail(email);
-            u.getProducts().clear();
+            Invoice i =u.getActiveInvoice();
+            i.getProducts().clear();
 
-            u.getTickets().clear();
-            userRepository.save(u);
+            i.getTickets().clear();
+            invoiceRepository.save(i);
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -174,9 +182,9 @@ public class UserService {
     public ResponseEntity removeTicket(String email, Long id) {
         try{
             User u=this.findUserByEmail(email);
-
-            u.removeTicket(ticketService.findTicketById(id));
-            userRepository.save(u);
+            Invoice i = u.getActiveInvoice();
+            i.removeTicket(ticketService.findTicketById(id));
+            invoiceRepository.save(i);
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -186,9 +194,9 @@ public class UserService {
     public ResponseEntity removeProduct(String email, Long id) {
         try{
             User u=this.findUserByEmail(email);
-
-            u.removeProduct(productRepository.findById(id).orElseThrow());
-            userRepository.save(u);
+            Invoice i = u.getActiveInvoice();
+            i.removeProduct(productRepository.findById(id).orElseThrow());
+            invoiceRepository.save(i);
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());

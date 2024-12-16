@@ -2,11 +2,7 @@ package com.example.backend.service.impl;
 
 import com.example.backend.dto.TicketDto;
 import com.example.backend.exceptions.AppException;
-import com.example.backend.mapper.TicketMapper;
-import com.example.backend.model.Event;
-import com.example.backend.model.Tafel;
-import com.example.backend.model.Ticket;
-import com.example.backend.model.User;
+import com.example.backend.model.*;
 import com.example.backend.repository.TicketRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.TicketService;
@@ -21,7 +17,6 @@ import org.springframework.stereotype.Service;
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
-    private final TicketMapper ticketMapper;
 
     private final TableServiceImpl tableService;
     private final EventServiceImpl eventService;
@@ -36,24 +31,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketDto updateById(Long id, TicketDto ticketDto) {
-        // Fetch the existing Ticket entity
-        Ticket existingTicket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found with id: " + id));
-
-        // Map TicketDto to Ticket entity to update fields
-        Ticket updatedTicket = ticketMapper.toTicket(ticketDto);
-
-        // Update fields from DTO while keeping relationships intact
-        existingTicket.setPrice(updatedTicket.getPrice());
-        existingTicket.setPaid(updatedTicket.getPaid());
-        existingTicket.setTable(updatedTicket.getTable());
-        existingTicket.setOwner(updatedTicket.getOwner());
-        existingTicket.setEvent(updatedTicket.getEvent());
-
-        // Save and map back to DTO
-        Ticket savedTicket = ticketRepository.save(existingTicket);
-
-        return new TicketDto(savedTicket.getId(),savedTicket.getTable().getId(),savedTicket.getOwner(),savedTicket.getPrice(),savedTicket.getEvent().getId(),savedTicket.getPaid());
+        return null;
     }
 
     @Override
@@ -66,7 +44,7 @@ public class TicketServiceImpl implements TicketService {
 
 
         Ticket t= ticketRepository.findById(id).orElseThrow(()->new AppException("Unknown user",HttpStatus.NOT_FOUND));
-        TicketDto newTicketDto=new TicketDto(t.getId(),t.getTable().getId(),t.getOwner(),t.getPrice(),t.getEvent().getId(),t.getPaid());
+        TicketDto newTicketDto=new TicketDto(t.getId(),t.getTable().getId(),t.getInvoice().getUser(),t.getPrice(),t.getEvent().getId());
         return newTicketDto;
     }
 
@@ -87,6 +65,8 @@ public class TicketServiceImpl implements TicketService {
     public ResponseEntity createTicket(String email, TicketDto ticketDto) {
         try{
             User user= userRepository.findByEmail(email).orElseThrow();
+            Invoice invoice =user.getActiveInvoice();
+
             Event event= eventService.findById(ticketDto.getEvent());
             Tafel table= tableService.findById(ticketDto.getTable());
             if(table.checkAvailableSeats(ticketDto.getAmount())){
@@ -94,9 +74,8 @@ public class TicketServiceImpl implements TicketService {
                     Ticket t=Ticket.builder()
                             .price(event.getTicketPrice())
                             .table(table)
-                            .owner(user)
+                            .invoice(invoice)
                             .event(event)
-                            .paid(false)
                             .build();
                     ticketRepository.save(t);
                 }

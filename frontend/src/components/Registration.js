@@ -46,7 +46,7 @@ export default function Registration(){
 
         try{
             const response = await request('POST','/register', formData);
-            if (response.status === 201){
+            if (response.status === 200){
                 navigate('/registrationSuccessful')
             }else{
                 const errorText= await response.txt();

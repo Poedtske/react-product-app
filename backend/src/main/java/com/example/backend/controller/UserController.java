@@ -62,7 +62,7 @@ public class UserController {
         return userService.removeTicket(username,id); // Use the service to fetch user details
     }
 
-    @DeleteMapping("/cart/tickets/{id}")
+    @DeleteMapping("/cart/products/{id}")
     public ResponseEntity removeProductFromCart(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the logged-in username

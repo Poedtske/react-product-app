@@ -5,7 +5,9 @@ import com.example.backend.controller.AuthenticationResponse;
 import com.example.backend.dto.CredentialsDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.enums.Role;
+import com.example.backend.model.Invoice;
 import com.example.backend.model.User;
+import com.example.backend.repository.InvoiceRepository;
 import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final InvoiceRepository invoiceRepository;
 
     public AuthenticationResponse register(SignUpDto signUpDto){
         var user= User.builder()
@@ -34,6 +37,12 @@ public class AuthService {
                 .role(Role.USER)
                 .password(passwordEncoder.encode(signUpDto.getPassword()))
                 .build();
+        userRepository.save(user);
+
+        Invoice i=new Invoice(user);
+        invoiceRepository.save(i);
+
+        user.addInvoice(i);
         userRepository.save(user);
         Map<String, Object> role=new HashMap<>();
         role.put("role",user.getRole());
