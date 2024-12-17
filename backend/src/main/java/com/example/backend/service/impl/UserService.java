@@ -209,7 +209,10 @@ public class UserService {
             u.pay();
             userRepository.save(u);
             return ResponseEntity.ok().build();
-        }catch (Exception e){
+        }catch (AppException a){
+            return ResponseEntity.badRequest().body(a.getMessage());
+        }
+        catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }

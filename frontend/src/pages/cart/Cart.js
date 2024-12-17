@@ -73,13 +73,13 @@ const Cart = () => {
   const calculateTotalPrice = () => {
     let total = 0;
 
-    if(cart.products !=null&& cart.products.length!=0){
+    if (cart.products != null && cart.products.length !== 0) {
       for (let product of cart.products) {
         total += product.price;
       }
     }
 
-    if(cart.tickets !=null&& cart.tickets.length!=0){
+    if (cart.tickets != null && cart.tickets.length !== 0) {
       for (let ticket of cart.tickets) {
         total += ticket.price;
       }
@@ -89,6 +89,10 @@ const Cart = () => {
   };
 
   const totalPrice = calculateTotalPrice();
+
+  const isCartEmpty =
+    (!cart.products || cart.products.length === 0) &&
+    (!cart.tickets || cart.tickets.length === 0);
 
   if (loading) {
     return <p>Loading your cart...</p>;
@@ -101,15 +105,17 @@ const Cart = () => {
   return (
     <main>
       <div className={styles.cart_page}>
-        {/* Buttons to navigate or clear the cart */}
-        <div className={styles.cart_buttons}>
-          <button className={styles.pay_button} onClick={handleNavigateToInvoice}>
-            Betalen
-          </button>
-          <button className={styles.clear_button} onClick={handleClearCart}>
-            Clear Cart
-          </button>
-        </div>
+        {/* Conditionally display buttons only if the cart is not empty */}
+        {!isCartEmpty && (
+          <div className={styles.cart_buttons}>
+            <button className={styles.pay_button} onClick={handleNavigateToInvoice}>
+              Betalen
+            </button>
+            <button className={styles.clear_button} onClick={handleClearCart}>
+              Clear Cart
+            </button>
+          </div>
+        )}
 
         <h2>Your Cart</h2>
 
@@ -154,14 +160,14 @@ const Cart = () => {
         )}
 
         {/* If cart is empty */}
-        {cart.products && cart.products.length === 0 && cart.tickets && cart.tickets.length === 0 && (
-          <p>Your cart is empty</p>
-        )}
+        {isCartEmpty && <p>Your cart is empty</p>}
 
         {/* Display the total price */}
-        <div className={styles.total_price}>
-          <h3>Total: €{totalPrice.toFixed(2)}</h3>
-        </div>
+        {!isCartEmpty && (
+          <div className={styles.total_price}>
+            <h3>Total: €{totalPrice.toFixed(2)}</h3>
+          </div>
+        )}
       </div>
     </main>
   );

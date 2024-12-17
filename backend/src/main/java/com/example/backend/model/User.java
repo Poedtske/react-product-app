@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import com.example.backend.enums.Role;
+import com.example.backend.exceptions.AppException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -156,6 +158,9 @@ public class User implements UserDetails {
 
     public void pay(){
         Invoice i= getActiveInvoice();
+        if(i.getProducts().isEmpty()&&i.getTickets().isEmpty()){
+            throw new AppException("Cart is empty", HttpStatus.BAD_REQUEST);
+        }
         i.setPaid(true);
         this.addInvoice(new Invoice(this));
     }
