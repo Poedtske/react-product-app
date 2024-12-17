@@ -69,6 +69,13 @@ public class UserController {
         return userService.removeProduct(username,id); // Use the service to fetch user details
     }
 
+    @PutMapping("pay")
+    public ResponseEntity payCart(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in username
+        return  userService.pay(username);
+    }
+
 
 
     /*@GetMapping("/users")

@@ -157,6 +157,6 @@ public class User implements UserDetails {
     public void pay(){
         Invoice i= getActiveInvoice();
         i.setPaid(true);
-        this.addInvoice(new Invoice());
+        this.addInvoice(new Invoice(this));
     }
 }

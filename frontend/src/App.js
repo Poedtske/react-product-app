@@ -37,6 +37,7 @@ import EditEvent from './components/Admin/EditEvent';
 import { getUserRole, getAuthToken } from './utils/jwtUtils';
 import EventLayout from './pages/eventLayout/EventLayout';
 import Cart from './pages/cart/Cart';
+import Invoice from './pages/invoice/Invoice';
 
 function App() {
   const ADMIN_ROLE = "ADMIN";
@@ -48,6 +49,7 @@ function App() {
   const userRoutes = (
     <>
       <Route path="/cart" element={<ProtectedRoute requiredRole={USER_ROLE}><Cart /></ProtectedRoute>} />
+      <Route path="/invoice" element={<ProtectedRoute requiredRole={USER_ROLE}><Invoice /></ProtectedRoute>} />
     </>
   );
 

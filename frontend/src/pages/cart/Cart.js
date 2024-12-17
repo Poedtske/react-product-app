@@ -5,7 +5,6 @@ import styles from "./Cart.module.css";
 
 const Cart = () => {
   const navigate = useNavigate();
-  console.log("cartpage")
   const [cart, setCart] = useState({
     products: [], // List of products in the cart
     tickets: [],  // List of tickets in the cart
@@ -17,7 +16,6 @@ const Cart = () => {
     // Fetch cart data (products and tickets) on component mount
     const fetchCartData = async () => {
       try {
-        // You need to implement an API function to get user cart data
         const cartData = await getCart(); // Replace with actual function to fetch cart data
         setCart(cartData); // Update cart state
         setLoading(false);
@@ -71,6 +69,27 @@ const Cart = () => {
     navigate("/invoice"); // Navigate to the invoice page
   };
 
+  // Calculate the total price of all products and tickets in the cart
+  const calculateTotalPrice = () => {
+    let total = 0;
+
+    if(cart.products !=null&& cart.products.length!=0){
+      for (let product of cart.products) {
+        total += product.price;
+      }
+    }
+
+    if(cart.tickets !=null&& cart.tickets.length!=0){
+      for (let ticket of cart.tickets) {
+        total += ticket.price;
+      }
+    }
+
+    return total;
+  };
+
+  const totalPrice = calculateTotalPrice();
+
   if (loading) {
     return <p>Loading your cart...</p>;
   }
@@ -114,7 +133,6 @@ const Cart = () => {
           </div>
         )}
 
-
         {/* Display Tickets in the Cart */}
         {cart.tickets && cart.tickets.length > 0 && (
           <div className={styles.cart_section}>
@@ -139,6 +157,11 @@ const Cart = () => {
         {cart.products && cart.products.length === 0 && cart.tickets && cart.tickets.length === 0 && (
           <p>Your cart is empty</p>
         )}
+
+        {/* Display the total price */}
+        <div className={styles.total_price}>
+          <h3>Total: €{totalPrice.toFixed(2)}</h3>
+        </div>
       </div>
     </main>
   );

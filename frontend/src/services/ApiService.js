@@ -268,3 +268,13 @@ export const removeTicketFromCart= async(id)=>{
     throw error;
   }
 }
+
+export const pay= async()=>{
+  try {
+    const response = await request('PUT',`/api/secure/pay`,null,true);
+    return response.data;
+  } catch (error) {
+    console.error(`Error removing ticket:`, error.response || error);
+    throw error;
+  }
+}

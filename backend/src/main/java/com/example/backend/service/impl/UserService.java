@@ -202,5 +202,16 @@ public class UserService {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    public ResponseEntity pay(String email) {
+        try {
+            User u=this.findUserByEmail(email);
+            u.pay();
+            userRepository.save(u);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }
 
