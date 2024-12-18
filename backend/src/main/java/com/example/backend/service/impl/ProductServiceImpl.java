@@ -1,27 +1,21 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.ProductDto;
-import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
-import com.example.backend.model.User;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +23,9 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private static String IMG_DIR=System.getProperty("user.dir") + "/backend/src/main/resources/images/";
+    private static Path IMGS_PATH=Paths.get(IMG_DIR);
 
     @Autowired
     private ProductRepository productRepository;
@@ -63,8 +60,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
+    public ResponseEntity deleteById(Long id) {
+        try{
+            Product p=productRepository.findById(id).orElseThrow();
+
+            if (!Files.exists(IMGS_PATH)) {
+                return ResponseEntity.internalServerError().body(null);
+            }
+
+            Path filePath = IMGS_PATH.resolve(p.getImg());
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            Files.deleteIfExists(filePath);
+            productRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     public void addInvoiceToProduct(Invoice i, Product p){
@@ -75,13 +88,9 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity createProduct(ProductDto productDto, MultipartFile imageFile){
         try{
 
-            // Define the images directory path
-            String imagesDir = System.getProperty("user.dir") + "/backend/src/main/resources/images/";
 
-            // Ensure the directory exists
-            Path imagesPath = Paths.get(imagesDir);
-            if (!Files.exists(imagesPath)) {
-                Files.createDirectories(imagesPath);
+            if (!Files.exists(IMGS_PATH)) {
+                Files.createDirectories(IMGS_PATH);
             }
 
             // Save product initially without the image path to generate the ID
@@ -98,14 +107,14 @@ public class ProductServiceImpl implements ProductService {
             // Generate the new filename and construct the file path
             String newFilename = product.getName() + "_" + product.getId() + "." +
                     StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
-            Path newFilePath = imagesPath.resolve(newFilename);
+            Path newFilePath = IMGS_PATH.resolve(newFilename);
 
             // Write the file with the new name
             Files.write(newFilePath, imageFile.getBytes());
 
             // Update the product with the relative path to the image
-            String relativePath = "images/" + newFilename;
-            product.setImg(relativePath);
+            //String relativePath = "images/" + newFilename;
+            product.setImg(newFilename);
             productRepository.save(product); // Save updated product
 
             return new ResponseEntity<>(product, HttpStatus.CREATED);
@@ -121,13 +130,12 @@ public class ProductServiceImpl implements ProductService {
             Product p = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
             // Construct the file path
-            String imagesDir = System.getProperty("user.dir") + "/backend/src/main/resources/";
-            Path imagesPath = Paths.get(imagesDir);
-            if (!Files.exists(imagesPath)) {
+
+            if (!Files.exists(IMGS_PATH)) {
                 return ResponseEntity.internalServerError().body(null);
             }
 
-            Path filePath = imagesPath.resolve(p.getImg());
+            Path filePath = IMGS_PATH.resolve(p.getImg());
             if (!Files.exists(filePath)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }

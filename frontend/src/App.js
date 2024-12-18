@@ -19,7 +19,7 @@ import Test from './pages/Test';
 import ProductList from "./components/Admin/products/ProductList";
 import Products from "./components/Products";
 import { ProductListProvider } from "./context/ProductContext";
-import ProductDetail from "./components/ProductDetail";
+import ProductDetail from "./components/Admin/products/ProductDetails";
 import UpdateProductForm from './components/UpdateProductForm';
 import CreateProductForm from './components/CreateProductForm';
 import './App.css';
