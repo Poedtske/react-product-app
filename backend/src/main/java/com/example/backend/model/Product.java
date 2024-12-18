@@ -24,6 +24,7 @@ public class Product {
 
     private String img;
 
+
     //if it's available
     private Boolean available=true;
 
@@ -40,14 +41,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, String img, Boolean available, Category category, List<Invoice> invoices) {
+    public Product(String name, BigDecimal price, String img, Boolean available, int quantity, Category category) {
         this.name = name;
         this.price = price;
         this.img = img;
         this.available = available;
+        this.quantity = quantity;
         this.category = category;
-        this.invoices = invoices;
-        this.category=category;
     }
 
     public int getQuantity() {
@@ -81,6 +81,8 @@ public class Product {
     public void setImg(String img) {
         this.img = img;
     }
+
+
 
     public Boolean getAvailable() {
         return available;

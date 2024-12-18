@@ -12,6 +12,11 @@ const apiUrlEvent = `${baseURL}/api/public/events`;
 export const getProducts = async () => {
   try {
     const response = await request('GET','/api/products',false)
+    let products=response.data;
+    if (!Array.isArray(products)) {
+      console.error('Fetched products are not an array:', products);
+      return [];
+    }
     return response.data;
   } catch (error) {
     console.error('Error fetching products:', error.response || error);
@@ -21,7 +26,7 @@ export const getProducts = async () => {
 
 export const createProduct = async (product) => {
   try {
-    const response = await request('POST','/api/products',true)
+    const response = await request('POST','/api/admin/products',product,true,true)
     return response.data;
   } catch (error) {
     console.error('Error creating product:', error.response || error);
@@ -55,6 +60,24 @@ export const deleteProductById = async (id) => {
     return response.data;
   } catch (error) {
     console.error(`Error deleting product with ID ${id}:`, error.response || error);
+    throw error;
+  }
+};
+
+export const getCategories = async () => {
+  try {
+    
+    const response = await request('GET','/api/public/categories',false,false)
+    const types = response.data;
+
+    if (Array.isArray(types)) {
+      return types
+    } else {
+      console.error('Fetched events are not an array:', types);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching events:', error.response || error);
     throw error;
   }
 };

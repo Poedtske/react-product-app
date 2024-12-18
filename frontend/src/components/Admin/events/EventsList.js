@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../pages/kalender/kalender.module.css'; // Import CSS module
-import { getEvents } from '../../services/ApiService';
+import styles from '../../../pages/kalender/kalender.module.css'; // Import CSS module
+import { getEvents } from '../../../services/ApiService';
 
 const Kalender = () => {
   const [events, setEvents] = useState([]);

@@ -9,7 +9,7 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import { createEvent, getEventTypes } from "../../services/ApiService"; // Import API functions
+import { createEvent, getEventTypes } from "../../../services/ApiService"; // Import API functions
 import { format } from 'date-fns'; // Import date-fns for date formatting
 
 const CreateEvent = () => {

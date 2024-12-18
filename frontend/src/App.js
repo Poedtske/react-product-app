@@ -30,14 +30,15 @@ import Login from './components/Login';
 import LoginSuccessful from './components/LoginSuccessful';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import EventsList from './components/Admin/EventsList';
-import CreateEvent from './components/Admin/CreateEvent';
-import EventDetails from './components/Admin/EventDetails';
-import EditEvent from './components/Admin/EditEvent';
+import EventsList from './components/Admin/events/EventsList';
+import CreateEvent from './components/Admin/events/CreateEvent';
+import EventDetails from './components/Admin/events/EventDetails';
+import EditEvent from './components/Admin/events/EditEvent';
 import { getUserRole, getAuthToken } from './utils/jwtUtils';
 import EventLayout from './pages/eventLayout/EventLayout';
 import Cart from './pages/cart/Cart';
 import Invoice from './pages/invoice/Invoice';
+import CreateProduct from './components/Admin/products/CreateProduct';
 
 function App() {
   const ADMIN_ROLE = "ADMIN";
@@ -60,6 +61,10 @@ function App() {
       <Route path="/admin/events/create" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><CreateEvent /></ProtectedRoute>} />
       <Route path="/admin/events/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EventDetails /></ProtectedRoute>} />
       <Route path="/admin/events/edit/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EditEvent /></ProtectedRoute>} />
+      <Route path="/admin/products" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><ProductList /></ProtectedRoute>} />
+      <Route path="/admin/products/create" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><CreateProduct /></ProtectedRoute>} />
+      <Route path="/admin/products/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><ProductDetail /></ProtectedRoute>} />
+      {/* <Route path="/admin/products/edit/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><Edit /></ProtectedRoute>} /> */}
     </>
   );
 
@@ -88,6 +93,7 @@ function App() {
   return (
     <>
       <AuthProvider>
+        <ProductListProvider>
         <EventProvider>
           {token ? (
             userRole === ADMIN_ROLE ? (
@@ -114,6 +120,7 @@ function App() {
             </>
           )}
         </EventProvider>
+        </ProductListProvider>
       </AuthProvider>
       <Footer />
     </>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getEventById, deleteEventById } from "../../services/ApiService"; // Import API functions
-import styles from "../../css/entity.module.css";
+import { getEventById, deleteEventById } from "../../../services/ApiService"; // Import API functions
+import styles from "../../../css/entity.module.css";
 
 const ShowEvent = () => {
   const { id } = useParams(); // Get event ID from route params

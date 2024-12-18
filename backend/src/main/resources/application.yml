@@ -21,4 +21,11 @@ spring:
         format_sql: true
     show-sql: true
 
+  servlet:
+    multipart:
+      enabled: true  # Enable file uploads
+      max-file-size: 5MB  # Maximum file size (adjust as needed)
+      max-request-size: 10MB  # Maximum request size (adjust as needed)
+      file-size-threshold: 2KB  # File size threshold for temporary storage
+
 spring.mvc.hiddenmethod.filter.enabled: true

@@ -22,7 +22,7 @@ export default function ProductList() {
   }, []);
 
   return(
-    <div>
+    <main>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
@@ -45,9 +45,9 @@ export default function ProductList() {
         </tbody>
       </table>
       <div>
-        <NavLink className="btn btn-primary" to="/new">Add</NavLink>
+        <NavLink className="btn btn-primary" to="/admin/products/create">Add</NavLink>
       </div>
-    </div>
+    </main>
 
   );
 

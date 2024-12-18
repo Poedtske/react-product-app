@@ -1,0 +1,32 @@
+.main {
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+h4 {
+  color: #00c4ff;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #444;
+}
+
+th {
+  background-color: #555;
+  color: #fff;
+}
+
+td {
+  background-color: #333;
+}

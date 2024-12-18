@@ -52,7 +52,7 @@ export const removeAuthToken = () => {
     window.localStorage.removeItem("auth_token");
   };
 
-export const request=(method,url,data,headersEnabled)=>{
+export const request=(method,url,data,headersEnabled,deleteContentType=false)=>{
     let headers= {};
     
     if(headersEnabled){
@@ -62,6 +62,11 @@ export const request=(method,url,data,headersEnabled)=>{
             //console.log(headers["Authorization"]);
         }
     }
+
+    if (deleteContentType) {
+        // Allow Axios to automatically set `Content-Type` with correct boundaries
+        headers={"Content-type":""};
+      }
     
     return axios({
         method:method,
