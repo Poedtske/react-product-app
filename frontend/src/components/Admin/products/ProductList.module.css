@@ -1,42 +1,88 @@
 .main {
-  background-color: #000;
-  color: #fff;
   padding: 20px;
-  border-radius: 8px;
 }
 
 .title {
-  text-align: center;
+  font-size: 24px;
   margin-bottom: 20px;
+}
+
+.actions {
+  margin-bottom: 20px;
+}
+
+.createButton {
+  padding: 10px 15px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.createButton:hover {
+  background-color: #006600;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #333;
+  margin-top: 20px;
 }
 
 .table th,
 .table td {
+  border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
-  border: 1px solid #444;
 }
 
 .table th {
-  background-color: #555;
-  color: #fff;
+  /* background-color: #f4f4f4; */
 }
 
-.table td img {
+.imageCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.productImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.editLink {
-  color: #00c4ff;
-  text-decoration: none;
+.actionButton {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #3399ff;
 }
 
-.editLink:hover {
-  text-decoration: underline;
+.actionButton:hover {
+  background-color: #f4f4f4;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.updateButton {
+  background-color: #fa6908;
+}
+
+.updateButton:hover {
+  background-color: #e15d05;
 }

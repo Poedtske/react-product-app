@@ -16,7 +16,7 @@ import Kalender from './pages/kalender/Kalender';
 import Sponsors from './pages/sponsors/Sponsors';
 import ShowEvent from './components/ShowEvent';
 import Test from './pages/Test';
-import ProductList from "./components/ProductList";
+import ProductList from "./components/Admin/products/ProductList";
 import Products from "./components/Products";
 import { ProductListProvider } from "./context/ProductContext";
 import ProductDetail from "./components/ProductDetail";

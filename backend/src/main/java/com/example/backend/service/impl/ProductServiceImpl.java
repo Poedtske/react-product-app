@@ -1,14 +1,18 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.ProductDto;
+import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
 import com.example.backend.model.User;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -72,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
         try{
 
             // Define the images directory path
-            String imagesDir = System.getProperty("user.dir") + "/src/main/resources/images/";
+            String imagesDir = System.getProperty("user.dir") + "/backend/src/main/resources/images/";
 
             // Ensure the directory exists
             Path imagesPath = Paths.get(imagesDir);
@@ -111,4 +115,44 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    public ResponseEntity<Resource> getImg(long id) {
+        try {
+            // Retrieve the product
+            Product p = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+
+            // Construct the file path
+            String imagesDir = System.getProperty("user.dir") + "/backend/src/main/resources/";
+            Path imagesPath = Paths.get(imagesDir);
+            if (!Files.exists(imagesPath)) {
+                return ResponseEntity.internalServerError().body(null);
+            }
+
+            Path filePath = imagesPath.resolve(p.getImg());
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            // Load the file as a Resource
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new RuntimeException("File not found or not readable");
+            }
+
+            // Determine the content type of the image
+            String contentType = Files.probeContentType(filePath);
+            if (StringUtils.isEmpty(contentType)) {
+                contentType = "application/octet-stream"; // Fallback content type
+            }
+
+            // Return the image file as a response
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType)) // Set the correct content type for your images
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
+
+
+    }
 }

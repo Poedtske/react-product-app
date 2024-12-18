@@ -52,7 +52,7 @@ export const removeAuthToken = () => {
     window.localStorage.removeItem("auth_token");
   };
 
-export const request=(method,url,data,headersEnabled,deleteContentType=false)=>{
+export const request=(method,url,data,headersEnabled,deleteContentType=false,responseTypeToBlob=false)=>{
     let headers= {};
     
     if (headersEnabled) {
@@ -70,12 +70,15 @@ export const request=(method,url,data,headersEnabled,deleteContentType=false)=>{
             "Content-Type": "", // Allow Axios to set the correct boundaries automatically
         };
     }
+
+    
     
     return axios({
         method: method,
         headers: headers,
         url: url,
         data: data,
+        ...(responseTypeToBlob && { responseType: "blob" }), // Add responseType: blob conditionally
     });
 
 

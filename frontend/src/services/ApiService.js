@@ -11,12 +11,22 @@ const apiUrlEvent = `${baseURL}/api/public/events`;
 //Products API
 export const getProducts = async () => {
   try {
-    const response = await request('GET','/api/products',false)
+    const response = await request('GET','/api/public/products',false)
     let products=response.data;
     if (!Array.isArray(products)) {
       console.error('Fetched products are not an array:', products);
       return [];
     }
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching products:', error.response || error);
+    throw error;
+  }
+};
+
+export const getProductImg = async (id) => {
+  try {
+    const response = await request('GET',`/api/public/products/${id}/image`,false,false,false,true)
     return response.data;
   } catch (error) {
     console.error('Error fetching products:', error.response || error);
@@ -56,7 +66,7 @@ export const updateProductById = async (id, product) => {
 
 export const deleteProductById = async (id) => {
   try {
-    const response = await request('DELETE',`/api/products/${id}`,null,true);
+    const response = await request('DELETE',`/api/admin/products/${id}`,null,true);
     return response.data;
   } catch (error) {
     console.error(`Error deleting product with ID ${id}:`, error.response || error);

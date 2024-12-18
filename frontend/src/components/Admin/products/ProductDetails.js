@@ -1,175 +1,111 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import {
-  getProductById,
-  deleteProduct,
-  updateProduct,
-} from "../../../services/ApiService"; // Replace with correct paths
-import styles from "../../../pages/kalender/kalender.module.css"; // CSS module
-import {
-  Container,
-  Typography,
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { getProducts, getProductImg, deleteProduct } from "../../../services/ApiService"; // Replace with correct API calls
+import styles from "./ProductList.module.css"; // Import CSS module
 
-const ProductDetails = () => {
-  const { id } = useParams(); // Product ID from the route
-  const navigate = useNavigate();
-
-  const [product, setProduct] = useState(null);
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [updates, setUpdates] = useState({}); // State for updating product fields
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
       try {
-        const productData = await getProductById(id);
-        console.log("Product Details:", productData);
-        setProduct(productData);
-        setUpdates({
-          name: productData.name,
-          price: productData.price,
-          available: productData.available,
-        });
+        const productData = await getProducts(); // Fetch the products list
+
+        // Map through products to fetch their images
+        const productsWithImages = await Promise.all(
+          productData.map(async (product) => {
+            const imageResponse = await getProductImg(product.id); // Fetch product image
+            return {
+              ...product,
+              img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
+            };
+          })
+        );
+
+        setProducts(productsWithImages);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching product details");
+        setError("Error fetching products");
         setLoading(false);
       }
     };
-    fetchProduct();
-  }, [id]);
 
-  const handleDelete = async () => {
-    try {
-      await deleteProduct(id);
-      alert("Product deleted successfully");
-      navigate("/admin/products"); // Redirect to product list
-    } catch (err) {
-      console.error("Failed to delete product", err);
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteProduct(id);
+        setProducts(products.filter((product) => product.id !== id));
+        alert("Product deleted successfully");
+      } catch (err) {
+        alert("Failed to delete product");
+      }
     }
   };
 
-  const handleUpdate = async () => {
-    try {
-      await updateProduct(id, updates);
-      alert("Product updated successfully");
-    } catch (err) {
-      console.error("Failed to update product", err);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUpdates({ ...updates, [name]: value });
-  };
-
-  if (loading) return <p>Loading product details...</p>;
+  if (loading) return <p>Loading products...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <Container maxWidth="md" className={styles.main}>
-      <Typography variant="h4" gutterBottom>
-        Product Details
-      </Typography>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Product Information</Typography>
-        <TextField
-          label="Name"
-          name="name"
-          value={updates.name}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Price (€)"
-          name="price"
-          value={updates.price}
-          onChange={handleInputChange}
-          type="number"
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Available"
-          name="available"
-          value={updates.available}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
-        <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-          <Button variant="contained" color="primary" onClick={handleUpdate}>
-            Update Product
-          </Button>
-          <Button variant="outlined" color="error" onClick={handleDelete}>
-            Delete Product
-          </Button>
-        </Box>
-      </Box>
+    <main className={styles.main}>
+      <h2 className={styles.title}>Product List</h2>
 
-      {/* Invoice Table */}
-      <Typography variant="h6" gutterBottom>
-        Invoices Containing this Product
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Invoice ID</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Confirmed</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {product.invoices && product.invoices.length > 0 ? (
-              product.invoices.map((invoice) => (
-                <TableRow key={invoice.id}>
-                  <TableCell>{invoice.id}</TableCell>
-                  <TableCell>
-                    {invoice.user?.name || "N/A"} <br />
-                    {invoice.user?.email || "N/A"}
-                  </TableCell>
-                  <TableCell>{invoice.amount}</TableCell>
-                  <TableCell>
-                    <TextField
-                      defaultValue={invoice.paid ? "Yes" : "No"}
-                      InputProps={{ readOnly: true }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      defaultValue={invoice.confirmed ? "Yes" : "No"}
-                      InputProps={{ readOnly: true }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  No invoices found for this product.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+      {/* Create Product Button */}
+      <div className={styles.actions}>
+        <button
+          className={styles.createButton}
+          onClick={() => navigate("/admin/products/create")}
+        >
+          Create New Product
+        </button>
+      </div>
+
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Price (€)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id}>
+              <td>{product.id}</td>
+              <td className={styles.imageCell}>
+                <img
+                  src={product.img}
+                  alt={product.name}
+                  className={styles.productImage}
+                />
+              </td>
+              <td>{product.price}</td>
+              <td>
+                <button
+                  className={styles.actionButton}
+                  onClick={() => navigate(`/admin/products/${product.id}`)}
+                >
+                  Update
+                </button>
+                <button
+                  className={`${styles.actionButton} ${styles.deleteButton}`}
+                  onClick={() => handleDelete(product.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </main>
   );
 };
 
-export default ProductDetails;
+export default ProductList;

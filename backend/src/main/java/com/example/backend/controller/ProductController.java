@@ -9,6 +9,7 @@ import com.example.backend.model.User;
 import com.example.backend.service.ProductService;
 import com.example.backend.service.impl.ProductServiceImpl;
 import com.example.backend.service.impl.UserService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,7 +48,7 @@ public class ProductController {
         return productService.updateById(id, product, imageFile);
     }
 
-    @GetMapping
+    @GetMapping("/public/products")
     public List<Product> findAll() {
         return productService.findAll();
     }
@@ -63,7 +64,7 @@ public class ProductController {
         productService.deleteById(id);
     }
 
-    @PostMapping("/api/secure/products/{id}")
+    @PostMapping("/secure/products/{id}")
     public ResponseEntity addProductToCart(@PathVariable Long id){
         Product p=productService.findById(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,6 +77,11 @@ public class ProductController {
         return Arrays.stream(Category.values())
                 .map(Enum::name)
                 .toList();
+    }
+
+    @GetMapping("/public/products/{productId}/image")
+    public ResponseEntity<?> getImageByProductId(@PathVariable long productId){
+        return productService.getImg(productId);
     }
 
 }
