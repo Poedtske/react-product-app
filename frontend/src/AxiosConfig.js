@@ -55,25 +55,28 @@ export const removeAuthToken = () => {
 export const request=(method,url,data,headersEnabled,deleteContentType=false)=>{
     let headers= {};
     
-    if(headersEnabled){
-        
-        if(getAuthToken()!=null && getAuthToken()!=="null"){            
-            headers={"Authorization":`Bearer ${getAuthToken()}`};
-            //console.log(headers["Authorization"]);
+    if (headersEnabled) {
+        if (getAuthToken() != null && getAuthToken() !== "null") {
+            headers = {
+                ...headers, // Retain existing headers
+                "Authorization": `Bearer ${getAuthToken()}`,
+            };
         }
     }
-
+    
     if (deleteContentType) {
-        // Allow Axios to automatically set `Content-Type` with correct boundaries
-        headers={"Content-type":""};
-      }
+        headers = {
+            ...headers, // Retain existing headers
+            "Content-Type": "", // Allow Axios to set the correct boundaries automatically
+        };
+    }
     
     return axios({
-        method:method,
-        headers:headers,
-        url:url,
-        data:data
-    })
+        method: method,
+        headers: headers,
+        url: url,
+        data: data,
+    });
 
 
     // axiosInstance.interceptors.request.use(

@@ -41,8 +41,10 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register", "/css/**", "/js/**", "/login").permitAll()
+                        .requestMatchers("/admin/**","/api/admin/**").hasAuthority(Role.ADMIN.getValue())
+                        .requestMatchers("/profile","/cart","/api/secure/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.disable()) // Disable basic authentication if not required
                 .logout(logout -> logout.permitAll());

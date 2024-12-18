@@ -96,7 +96,7 @@ export const createEvent = async (event) => {
 
 export const getEvents = async () => {
   try {
-    const response = await request('GET', '/api/public/events', false);
+    const response = await request('GET', '/api/public/events', false, false);
     const events = response.data;
 
     console.log(events);

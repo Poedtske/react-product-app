@@ -11,9 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,19 +70,41 @@ public class ProductServiceImpl implements ProductService {
 
     public ResponseEntity createProduct(ProductDto productDto, MultipartFile imageFile){
         try{
-            String a=System.getProperty("user.dir");
-            String folder="/images/";
-            byte[] bytes= imageFile.getBytes();
-            Path path=Paths.get(folder+imageFile.getOriginalFilename());
-            Files.write(path,bytes);
-            Product p=new Product(productDto.getName(),
+
+            // Define the images directory path
+            String imagesDir = System.getProperty("user.dir") + "/src/main/resources/images/";
+
+            // Ensure the directory exists
+            Path imagesPath = Paths.get(imagesDir);
+            if (!Files.exists(imagesPath)) {
+                Files.createDirectories(imagesPath);
+            }
+
+            // Save product initially without the image path to generate the ID
+            Product product = new Product(
+                    productDto.getName(),
                     productDto.getPrice(),
-                    path.toString(),
+                    "", // Temporarily empty image path
                     productDto.getAvailable(),
                     productDto.getQuantity(),
-                    productDto.getCategory());
-            productRepository.save(p);
-            return new ResponseEntity<>(p, HttpStatus.CREATED);
+                    productDto.getCategory()
+            );
+            product = productRepository.save(product); // Save product to get ID
+
+            // Generate the new filename and construct the file path
+            String newFilename = product.getName() + "_" + product.getId() + "." +
+                    StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
+            Path newFilePath = imagesPath.resolve(newFilename);
+
+            // Write the file with the new name
+            Files.write(newFilePath, imageFile.getBytes());
+
+            // Update the product with the relative path to the image
+            String relativePath = "images/" + newFilename;
+            product.setImg(relativePath);
+            productRepository.save(product); // Save updated product
+
+            return new ResponseEntity<>(product, HttpStatus.CREATED);
 
         } catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
