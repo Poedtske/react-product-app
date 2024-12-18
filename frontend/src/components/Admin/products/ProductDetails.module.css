@@ -30,3 +30,21 @@ th {
 td {
   background-color: #333;
 }
+
+/* Update Button (Edit Product) */
+.updateButton {
+  background-color: #fa6908; /* Default background */
+  color: white; /* Text color */
+  &:hover {
+    background-color: #e15d05; /* Hover background */
+  }
+}
+
+/* Delete Button */
+.deleteButton {
+  background-color: #dc3545; /* Default background */
+  color: white; /* Text color */
+  &:hover {
+    background-color: #c82333; /* Hover background */
+  }
+}

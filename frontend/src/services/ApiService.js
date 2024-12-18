@@ -46,7 +46,17 @@ export const createProduct = async (product) => {
 
 export const getProductById = async (id) => {
   try {
-    const response = await request('GET',`/api/products/${id}`,false)
+    const response = await request('GET',`/api/public/products/${id}`,false)
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching product with ID ${id}:`, error.response || error);
+    throw error;
+  }
+};
+
+export const adminGetProductById = async (id) => {
+  try {
+    const response = await request('GET',`/api/admin/products/${id}`,null,true)
     return response.data;
   } catch (error) {
     console.error(`Error fetching product with ID ${id}:`, error.response || error);

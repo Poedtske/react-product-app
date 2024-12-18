@@ -53,9 +53,14 @@ public class ProductController {
         return productService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Product findById(@PathVariable Long id) {
-        return productService.findById(id);
+    @GetMapping("public/products/{id}")
+    public ResponseEntity findById(@PathVariable Long id) {
+        return productService.adminFindById(id);
+    }
+
+    @GetMapping("admin/products/{id}")
+    public ResponseEntity adminFindById(@PathVariable Long id) {
+        return productService.adminFindById(id);
     }
 
     @DeleteMapping("admin/products/{id}")

@@ -99,7 +99,7 @@ const ProductList = () => {
                 </button>
                 <button
                   className={`${styles.actionButton} ${styles.updateButton}`}
-                  onClick={() => navigate(`/admin/products/${product.id}`)}
+                  onClick={() => navigate(`/admin/products/update${product.id}`)}
                 >
                   Update
                 </button>

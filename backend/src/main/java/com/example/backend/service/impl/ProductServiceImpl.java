@@ -1,8 +1,10 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.ProductDto;
+import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
+import com.example.backend.repository.ProductDao;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private static String IMG_DIR=System.getProperty("user.dir") + "/backend/src/main/resources/images/";
+    private static String IMG_DIR=System.getProperty("user.dir") + "/backend/src/main/resources/images/products";
     private static Path IMGS_PATH=Paths.get(IMG_DIR);
 
     @Autowired
@@ -162,5 +164,14 @@ public class ProductServiceImpl implements ProductService {
         }
 
 
+    }
+
+    public ResponseEntity adminFindById(Long id) {
+        try{
+            Product p=productRepository.findById(id).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
+            return ResponseEntity.ok(p);
+        }catch (AppException a){
+            return ResponseEntity.internalServerError().body(a.getMessage());
+        }
     }
 }
