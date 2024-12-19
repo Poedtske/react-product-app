@@ -16,7 +16,7 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "Invoice_Products",
             joinColumns =@JoinColumn(name = "invoice_id"),

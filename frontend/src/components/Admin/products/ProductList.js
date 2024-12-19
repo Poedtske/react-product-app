@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getProducts, getProductImg, deleteProductById } from "../../../services/ApiService"; // Replace with correct API calls
+import { getProducts, getProductImg, deleteProductById, manageAvailabilityProduct } from "../../../services/ApiService"; // Replace with correct API calls
 import styles from "./ProductList.module.css"; // Import CSS module
 
 const ProductList = () => {
@@ -48,6 +48,21 @@ const ProductList = () => {
     }
   };
 
+  const handleAvailabilityProduct = async (id) => {
+    try {
+      await manageAvailabilityProduct(id);
+
+      // Update the product's availability in the state
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, available: !product.available } : product
+        )
+      );
+    } catch (err) {
+      alert("Failed to change product availability");
+    }
+  };
+
   if (loading) return <p>Loading products...</p>;
   if (error) return <p>{error}</p>;
 
@@ -72,6 +87,7 @@ const ProductList = () => {
             <th>Image</th>
             <th>Name</th>
             <th>Price (€)</th>
+            <th>Available</th> {/* New column */}
             <th>Actions</th>
           </tr>
         </thead>
@@ -86,12 +102,21 @@ const ProductList = () => {
                   className={styles.productImage}
                 />
               </td>
-              <td>
-                {product.name}
-              </td>
+              <td>{product.name}</td>
               <td>{product.price}</td>
               <td>
-              <button
+                {/* Availability button */}
+                <button
+                  className={`${styles.actionButton} ${
+                    product.available ? styles.available : styles.unavailable
+                  }`}
+                  onClick={() => handleAvailabilityProduct(product.id)}
+                >
+                  {product.available ? "Available" : "Unavailable"}
+                </button>
+              </td>
+              <td>
+                <button
                   className={`${styles.actionButton}`}
                   onClick={() => navigate(`/admin/products/${product.id}`)}
                 >
@@ -99,7 +124,7 @@ const ProductList = () => {
                 </button>
                 <button
                   className={`${styles.actionButton} ${styles.updateButton}`}
-                  onClick={() => navigate(`/admin/products/update${product.id}`)}
+                  onClick={() => navigate(`/admin/products/update/${product.id}`)}
                 >
                   Update
                 </button>

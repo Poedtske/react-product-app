@@ -4,6 +4,7 @@ import com.example.backend.dto.ProductDto;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
+import com.example.backend.repository.InvoiceRepository;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Override
     public Product save(Product product) {
@@ -97,13 +100,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity deleteById(Long id) {
+    public ResponseEntity<?> deleteById(Long id) {
         try{
             Product p=productRepository.findById(id).orElseThrow();
 
-            if (p.getInvoices().stream().filter(invoice -> invoice.getPaid()==true&& invoice.getClosed()==false).findFirst()!=null){
+            boolean hasUnclosedPaidInvoice = p.getInvoices().stream()
+                    .anyMatch(invoice -> (invoice.getPaid() == true && invoice.getClosed() == false));
+
+            if (hasUnclosedPaidInvoice){
                 return ResponseEntity.internalServerError().body("Cannot be deleted, there are invoices that have been paid and are still open");
             }
+
+            p.getInvoices().forEach(invoice -> {
+                if(invoice.getPaid()==false){
+                    invoice.removeProduct(p);
+                    invoiceRepository.save(invoice);
+                } else if (invoice.getPaid()==true && invoice.getClosed()==true) {
+                    invoiceRepository.delete(invoice);
+                }
+            });
+            //p.getInvoices().removeIf(invoice -> invoice.getPaid()==false);
+            //p.getInvoices().removeIf(invoice -> invoice.getPaid()==true && invoice.getClosed()==true);
+
+            productRepository.save(p);
+
             if (!Files.exists(IMGS_PATH)) {
                 return ResponseEntity.internalServerError().body(null);
             }
@@ -112,8 +132,9 @@ public class ProductServiceImpl implements ProductService {
             if (!Files.exists(filePath)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            Files.deleteIfExists(filePath);
+
             productRepository.deleteById(id);
+            Files.deleteIfExists(filePath);
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -220,4 +241,24 @@ public class ProductServiceImpl implements ProductService {
             return ResponseEntity.internalServerError().body(a.getMessage());
         }
     }
+
+    public ResponseEntity availabilityProduct(Long id){
+        try{
+            Product p= productRepository.findById(id).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
+            if(p.getAvailable()==false){
+                p.setAvailable(true);
+            }else{
+                p.setAvailable(false);
+            }
+            productRepository.save(p);
+            return ResponseEntity.ok().build();
+        }catch (AppException a){
+            return ResponseEntity.badRequest().body(a.getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+
 }

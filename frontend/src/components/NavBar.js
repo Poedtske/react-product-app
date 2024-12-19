@@ -120,6 +120,13 @@ export default function NavBar() {
         >
           Kalender
         </NavLink>
+        <NavLink 
+          to="/products" 
+          activeClassName="active" 
+          onClick={handleToggle}
+        >
+          Shop
+        </NavLink>
         {isAuthenticated ? (
           <NavLink to="/" onClick={logoutUser}>
           Logout

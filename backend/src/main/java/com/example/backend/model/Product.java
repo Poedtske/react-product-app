@@ -33,14 +33,13 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
-
     @Nullable
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products",cascade = CascadeType.REMOVE)
     private List<Invoice> invoices =new ArrayList<>();
 
     public Product() {
     }
-
+    //malajdndf_8.png
     public Product(String name, BigDecimal price, String img, Boolean available, int quantity, Category category) {
         this.name = name;
         this.price = price;

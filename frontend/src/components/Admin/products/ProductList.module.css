@@ -86,3 +86,17 @@
 .updateButton:hover {
   background-color: #e15d05;
 }
+
+/* Available button */
+.available {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+/* Unavailable button */
+.unavailable {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+}

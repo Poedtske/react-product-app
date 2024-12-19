@@ -331,3 +331,13 @@ export const pay= async()=>{
     throw error;
   }
 }
+
+export const manageAvailabilityProduct= async(id)=>{
+  try {
+    const response = await request('PUT',`/api/admin/products/${id}/availability`,null,true);
+    return response.data;
+  } catch (error) {
+    console.error(`Error managing availability:`, error.response || error);
+    throw error;
+  }
+}

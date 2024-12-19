@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -161,6 +162,7 @@ public class UserService {
     public CartDto getCart(String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        removeUnavailableProductsFromCart(user);
         Invoice i = user.getActiveInvoice();
         invoiceRepository.save(i);
         return new CartDto(i.getProducts(),i.getTickets());
@@ -207,9 +209,19 @@ public class UserService {
         }
     }
 
+    public void removeUnavailableProductsFromCart(User u){
+        if(u.getActiveInvoice().getProducts().stream().anyMatch(product -> product.getAvailable()==false)){
+            Invoice i=u.getActiveInvoice();
+            i.getProducts().stream().filter(product -> product.getAvailable()==false).map(product -> i.removeProduct(product));
+            invoiceRepository.save(i);
+            throw new AppException("Had inactive products in cart, are now removed",HttpStatus.FORBIDDEN);
+        }
+    }
+
     public ResponseEntity pay(String email) {
         try {
             User u=this.findUserByEmail(email);
+            removeUnavailableProductsFromCart(u);
             u.pay();
             userRepository.save(u);
             return ResponseEntity.ok().build();

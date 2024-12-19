@@ -65,8 +65,8 @@ public class ProductController {
 
     @DeleteMapping("admin/products/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) {
-        productService.deleteById(id);
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        return productService.deleteById(id);
     }
 
     @PostMapping("/secure/products")
@@ -74,6 +74,11 @@ public class ProductController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the logged-in username
         return userService.addProductToUserCart(username,productDto);
+    }
+
+    @PutMapping("/admin/products/{id}/availability")
+    public ResponseEntity manageAvailabilityProduct(@PathVariable Long id){
+        return productService.availabilityProduct(id);
     }
 
     @GetMapping("/public/categories")

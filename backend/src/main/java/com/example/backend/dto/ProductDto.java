@@ -37,6 +37,7 @@ public class ProductDto {
                         invoice.getId(),
                         invoice.getPaid(),
                         invoice.getConfirmed(),
+                        invoice.getClosed(),
                         invoice.getDescription(),
                         invoice.getUser())).collect(Collectors.toList());
     }
