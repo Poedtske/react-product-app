@@ -19,6 +19,7 @@ public class InvoiceDto {
     private Long id;
     private Boolean paid;
     private Boolean confirmed;
+    private Boolean done;
     private String description;
     private UserDto user;
     private List<Product> productList;
@@ -29,11 +30,12 @@ public class InvoiceDto {
         this.user = user;
     }
 
-    public InvoiceDto(Long id, Boolean paid, Boolean confirmed, String description, User user) {
+    public InvoiceDto(Long id, Boolean paid, Boolean confirmed,Boolean done, String description, User user) {
         this.id = id;
         this.paid = paid;
         this.description = description;
         this.confirmed=confirmed;
+        this.done=done;
         this.user = new UserDto(user.getFirstName(), user.getLastName(), user.getEmail());
     }
 }

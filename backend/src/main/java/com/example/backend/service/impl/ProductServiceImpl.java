@@ -101,6 +101,9 @@ public class ProductServiceImpl implements ProductService {
         try{
             Product p=productRepository.findById(id).orElseThrow();
 
+            if (p.getInvoices().stream().filter(invoice -> invoice.getPaid()==true&& invoice.getClosed()==false).findFirst()!=null){
+                return ResponseEntity.internalServerError().body("Cannot be deleted, there are invoices that have been paid and are still open");
+            }
             if (!Files.exists(IMGS_PATH)) {
                 return ResponseEntity.internalServerError().body(null);
             }

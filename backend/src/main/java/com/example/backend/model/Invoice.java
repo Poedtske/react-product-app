@@ -34,6 +34,8 @@ public class Invoice {
 
     private Boolean confirmed= false;
 
+    private Boolean closed =false;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
@@ -65,6 +67,14 @@ public class Invoice {
 
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean done) {
+        this.closed = done;
     }
 
     public Long getId() {
