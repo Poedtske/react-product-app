@@ -1,54 +1,136 @@
-import React, {useContext, useEffect} from 'react';
-import ProductTableRow from "./ProductTableRow";
-import { ProductContext } from "../context/ProductContext";
-import { getProducts } from "../services/ApiService"
-import {NavLink} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { getProducts, getProductImg, getCategories } from "../services/ApiService"; // API service calls
+import { Grid, Box, Typography, Button, Paper } from "@mui/material";
+import styles from "../css/productList.module.css"; // CSS module for styling
 
-export default function ProductList() {
-
-  const { products, updateProducts } = useContext(ProductContext);
+const WebshopPage = () => {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchCategoriesAndProducts = async () => {
       try {
-        const products = await getProducts();
-        updateProducts(products);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    }
+        const categoryData = await getCategories(); // Fetch categories for the filter
+        const productData = await getProducts(); // Fetch all products
 
-    fetchData();
+        // Fetch images for each product
+        const productsWithImages = await Promise.all(
+          productData.map(async (product) => {
+            const imageResponse = await getProductImg(product.id);
+            return {
+              ...product,
+              img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
+            };
+          })
+        );
+
+        setCategories(categoryData);
+        setProducts(productsWithImages);
+        setFilteredProducts(productsWithImages);
+        setLoading(false);
+      } catch (err) {
+        setError("Error fetching products or categories");
+        setLoading(false);
+      }
+    };
+
+    fetchCategoriesAndProducts();
   }, []);
 
-  return(
+  // Filter products based on selected category
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+
+    if (category === "") {
+      setFilteredProducts(products); // Show all products if no category selected
+    } else {
+      setFilteredProducts(products.filter((product) => product.category === category));
+    }
+  };
+
+  if (loading) return <p>Loading products...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
     <main>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="breadcrumb-item">
-            <NavLink to="/">Products</NavLink>
-          </li>
-        </ol>
-      </nav>
-      <table className="table table-striped">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Title</th>
-          <th scope="col">Price</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {products.map(product => <ProductTableRow key={product.id} {...product} />)}
-        </tbody>
-      </table>
-      <div>
-        <NavLink className="btn btn-primary" to="/admin/products/create">Add</NavLink>
-      </div>
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: 4, padding: 4 }}>
+      {/* Sidebar for Category Filter */}
+      <Box
+        sx={{
+          width: "20%",
+          minWidth: "200px",
+          paddingRight: 2,
+          borderRight: "1px solid #ddd",
+        }}
+      >
+        <Typography variant="h6">Filter by Category</Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Button
+            variant={selectedCategory === "" ? "contained" : "outlined"}
+            onClick={() => handleCategoryChange("")}
+            fullWidth
+          >
+            All Products
+          </Button>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "contained" : "outlined"}
+              onClick={() => handleCategoryChange(category)}
+              fullWidth
+            >
+              {category}
+            </Button>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Product Grid */}
+      <Box
+        sx={{
+          width: "80%",
+          maxWidth: "1200px", // Max width for the product grid
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Grid container spacing={4} sx={{ justifyContent: "center" }}>
+          {filteredProducts.map((product) => (
+            <Grid item xs={12} sm={6} md={4} key={product.id}>
+              <Box sx={{ textAlign: "center" }}>
+                <Link to={`/products/${product.id}`}>
+                  <img
+                    src={product.img}
+                    alt={product.name}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Link>
+                <Typography variant="body1" sx={{ mt: 2 }}>
+                  {product.name}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "gray" }}>
+                  {product.price} €
+                </Typography>
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Box>
     </main>
-
   );
+};
 
-}
+export default WebshopPage;

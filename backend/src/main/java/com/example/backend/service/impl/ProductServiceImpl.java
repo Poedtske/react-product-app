@@ -4,7 +4,6 @@ import com.example.backend.dto.ProductDto;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Invoice;
 import com.example.backend.model.Product;
-import com.example.backend.repository.ProductDao;
 import com.example.backend.repository.ProductRepository;
 import com.example.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateById(Long id, Product product, MultipartFile imageFile) throws IOException {
 
-        Product managedProduct = this.findById(id);
+        Product managedProduct = productRepository.findById(id).orElseThrow();
         managedProduct.setName(product.getName());
         managedProduct.setQuantity(product.getQuantity());
         managedProduct.setPrice(product.getPrice());
@@ -56,9 +56,44 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll();
     }
 
+    public List<ProductDto> getAllProductDtos() {
+        return productRepository.findAll()
+                .stream()
+                .map(product -> new ProductDto(
+                        product.getId(),
+                        product.getName(),
+                        product.getPrice(),
+                        product.getImg(),
+                        product.getCategory(),
+                        product.getAvailable(),
+                        product.getInvoices()
+                ))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public Product findById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        Product p= productRepository.findById(id).orElseThrow(()-> new AppException("Product not found",HttpStatus.NOT_FOUND));
+        if(p.getAvailable()){
+            return p;
+        }else{
+            return null;
+        }
+    }
+
+    public ResponseEntity<?> getProductById(Long id) {
+        try{
+            Product p= productRepository.findById(id).orElseThrow(()-> new AppException("Product not found",HttpStatus.NOT_FOUND));
+            /*if(p.getAvailable()==false){
+                throw  new AppException("Product not found",HttpStatus.NOT_FOUND);
+            }*/
+            ProductDto productDto=new ProductDto(p.getId(),p.getName(),p.getPrice(),p.getImg(),p.getCategory(),p.getAvailable(),p.getInvoices());
+            return ResponseEntity.ok(productDto);
+        } catch (AppException a){
+            return ResponseEntity.internalServerError().body(a.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 
     @Override
@@ -169,7 +204,15 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity adminFindById(Long id) {
         try{
             Product p=productRepository.findById(id).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
-            return ResponseEntity.ok(p);
+            ProductDto productDto= new ProductDto(
+                    p.getId(),
+                    p.getName(),
+                    p.getPrice(),
+                    p.getImg(),
+                    p.getCategory(),
+                    p.getAvailable(),
+                    p.getInvoices());
+            return ResponseEntity.ok(productDto);
         }catch (AppException a){
             return ResponseEntity.internalServerError().body(a.getMessage());
         }

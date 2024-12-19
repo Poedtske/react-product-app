@@ -50,6 +50,13 @@ export default function NavBar() {
         >
           Evenementen
         </NavLink>
+        <NavLink 
+          to="/admin/products" 
+          activeClassName="active" 
+          onClick={handleToggle}
+        >
+          Producten
+        </NavLink>
         
         
         {isAuthenticated ? (

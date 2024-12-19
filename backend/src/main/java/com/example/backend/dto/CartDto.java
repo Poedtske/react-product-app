@@ -14,15 +14,20 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDto {
-    private Map<Product, Integer> productMap;
+    private Set<ProductDto> products;
     private Set<Ticket> tickets;
 
     public CartDto(Iterable<Product> productList, Iterable<Ticket> ticketSet) {
         this.tickets = new HashSet<>();
-        productMap = new HashMap<>();
-        productList.forEach(product ->
-                productMap.merge(product, 1, Integer::sum)
-        );
+        this.products=new HashSet<>();
+        productList.forEach(product -> {
+            ProductDto productDto = new ProductDto(
+                    product.getId(),
+                    product.getName(),
+                    product.getPrice()
+            );
+            products.add(productDto);
+        });
 
         ticketSet.forEach(ticket -> {
             tickets.add(ticket);

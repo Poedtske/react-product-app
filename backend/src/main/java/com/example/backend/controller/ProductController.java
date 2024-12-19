@@ -39,7 +39,7 @@ public class ProductController {
     }
 
     @PostMapping(value = "/admin/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity addProduct(@RequestPart ProductDto productDto, @RequestPart MultipartFile imageFile){
+    public ResponseEntity createProduct(@RequestPart ProductDto productDto, @RequestPart MultipartFile imageFile){
         return productService.createProduct(productDto,imageFile);
     }
 
@@ -49,13 +49,13 @@ public class ProductController {
     }
 
     @GetMapping("/public/products")
-    public List<Product> findAll() {
-        return productService.findAll();
+    public List<ProductDto> findAll() {
+        return productService.getAllProductDtos();
     }
 
     @GetMapping("public/products/{id}")
-    public ResponseEntity findById(@PathVariable Long id) {
-        return productService.adminFindById(id);
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        return productService.getProductById(id);
     }
 
     @GetMapping("admin/products/{id}")
@@ -69,16 +69,15 @@ public class ProductController {
         productService.deleteById(id);
     }
 
-    @PostMapping("/secure/products/{id}")
-    public ResponseEntity addProductToCart(@PathVariable Long id){
-        Product p=productService.findById(id);
+    @PostMapping("/secure/products")
+    public ResponseEntity addProductToCart(@RequestBody ProductDto productDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the logged-in username
-        return userService.addProductToUserCart(username,p);
+        return userService.addProductToUserCart(username,productDto);
     }
 
     @GetMapping("/public/categories")
-    public List<String> getEventTypes() {
+    public List<String> getCategories() {
         return Arrays.stream(Category.values())
                 .map(Enum::name)
                 .toList();

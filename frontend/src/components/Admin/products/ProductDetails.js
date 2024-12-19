@@ -28,21 +28,38 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Function to calculate the quantity of a specific product in the invoices
+  const calculateQuantity = (invoices, invoiceId) => {
+    let quantity = 0;
+    invoices.forEach((invoice) => {
+      if (invoice.id === invoiceId) {
+        quantity++;
+      }
+    });
+    return quantity;
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const productData = await adminGetProductById(id); // Fetch the product details
         const imageResponse = await getProductImg(id); // Fetch product image
-        
-        // Calculate the quantity based on the sum of the invoice amounts
+
+        // Calculate the quantity based on the number of times this product appears in the invoices
         const totalQuantity = productData.invoices
+          ? productData.invoices.reduce((sum, invoice) => sum + 1, 0) // Count how many times the product appears in the invoices
+          : 0;
+
+        // Calculate the sum of all invoice amounts (if needed)
+        const totalAmount = productData.invoices
           ? productData.invoices.reduce((sum, invoice) => sum + invoice.amount, 0)
           : 0;
 
         const productWithImageAndQuantity = {
           ...productData,
           img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
-          quantity: totalQuantity, // Set quantity as the sum of invoice amounts
+          quantity: totalQuantity, // Set quantity as the sum of the number of appearances in invoices
+          totalAmount: totalAmount, // Set total amount from all invoices
         };
 
         setProduct(productWithImageAndQuantity);
@@ -64,6 +81,21 @@ const ProductDetails = () => {
     } catch (err) {
       console.error("Failed to delete product", err);
     }
+  };
+
+  // Function to filter unique invoices based on invoiceId
+  const getUniqueInvoices = (invoices) => {
+    const seenInvoiceIds = new Set();
+    const uniqueInvoices = [];
+
+    invoices.forEach((invoice) => {
+      if (!seenInvoiceIds.has(invoice.id)) {
+        seenInvoiceIds.add(invoice.id);
+        uniqueInvoices.push(invoice);
+      }
+    });
+
+    return uniqueInvoices;
   };
 
   if (loading) return <p>Loading product details...</p>;
@@ -156,21 +188,21 @@ const ProductDetails = () => {
             <TableRow>
               <TableCell>Invoice ID</TableCell>
               <TableCell>User</TableCell>
-              <TableCell>Amount</TableCell>
+              <TableCell>Quantity</TableCell>
               <TableCell>Paid</TableCell>
               <TableCell>Confirmed</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {product.invoices && product.invoices.length > 0 ? (
-              product.invoices.map((invoice) => (
+              getUniqueInvoices(product.invoices).map((invoice) => (
                 <TableRow key={invoice.id}>
                   <TableCell>{invoice.id}</TableCell>
                   <TableCell>
-                    {invoice.user?.name || "N/A"} <br />
+                    {invoice.user.firstName+' '+invoice.user.lastName || "N/A"} <br />
                     {invoice.user?.email || "N/A"}
                   </TableCell>
-                  <TableCell>{invoice.amount}</TableCell>
+                  <TableCell>{calculateQuantity(product.invoices,invoice.id) || 'error'} </TableCell> {/* Display amount with default 0 if missing */}
                   <TableCell>{invoice.paid ? "Yes" : "No"}</TableCell>
                   <TableCell>{invoice.confirmed ? "Yes" : "No"}</TableCell>
                 </TableRow>

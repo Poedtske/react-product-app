@@ -52,7 +52,7 @@ const ProductList = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <main className={styles.main}>
+    <main>
       <h2 className={styles.title}>Product List</h2>
 
       {/* Create Product Button */}

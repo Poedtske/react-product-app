@@ -1,9 +1,6 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.dto.CartDto;
-import com.example.backend.dto.CredentialsDto;
-import com.example.backend.dto.SignUpDto;
-import com.example.backend.dto.UserDto;
+import com.example.backend.dto.*;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.model.Invoice;
@@ -99,12 +96,19 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity addProductToUserCart(String email, Product p){
+    public ResponseEntity addProductToUserCart(String email, ProductDto productDto){
         try{
             User user=userRepository.findByEmail(email).orElseThrow(()->new AppException("Unknown user", HttpStatus.NOT_FOUND));
+            Product p=productRepository.findById(productDto.getId()).orElseThrow(()->new AppException("Product not found", HttpStatus.NOT_FOUND));;
+            if(!p.getAvailable()){
+                return ResponseEntity.badRequest().body("Product is no longer available");
+            }
             Invoice i = user.getActiveInvoice();
-            i.addProduct(p);
-            productService.addInvoiceToProduct(i,p);
+
+            for(int y=0;y<productDto.getQuantity();y++){
+                i.addProduct(p);
+            }
+            //productService.addInvoiceToProduct(i,p);
 
             invoiceRepository.save(i);
             return ResponseEntity.ok().build();

@@ -16,10 +16,10 @@ import Kalender from './pages/kalender/Kalender';
 import Sponsors from './pages/sponsors/Sponsors';
 import ShowEvent from './components/ShowEvent';
 import Test from './pages/Test';
-import ProductList from "./components/Admin/products/ProductList";
+import AdminProductList from "./components/Admin/products/ProductList";
 import Products from "./components/Products";
 import { ProductListProvider } from "./context/ProductContext";
-import ProductDetail from "./components/Admin/products/ProductDetails";
+import AdminProductDetail from "./components/Admin/products/ProductDetails";
 import UpdateProductForm from './components/UpdateProductForm';
 import CreateProductForm from './components/CreateProductForm';
 import './App.css';
@@ -39,6 +39,8 @@ import EventLayout from './pages/eventLayout/EventLayout';
 import Cart from './pages/cart/Cart';
 import Invoice from './pages/invoice/Invoice';
 import CreateProduct from './components/Admin/products/CreateProduct';
+import ProductList from './components/ProductList';
+import ProductDetails from './components/ProductDetail';
 
 function App() {
   const ADMIN_ROLE = "ADMIN";
@@ -61,9 +63,9 @@ function App() {
       <Route path="/admin/events/create" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><CreateEvent /></ProtectedRoute>} />
       <Route path="/admin/events/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EventDetails /></ProtectedRoute>} />
       <Route path="/admin/events/edit/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EditEvent /></ProtectedRoute>} />
-      <Route path="/admin/products" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><ProductList /></ProtectedRoute>} />
+      <Route path="/admin/products" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><AdminProductList /></ProtectedRoute>} />
       <Route path="/admin/products/create" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><CreateProduct /></ProtectedRoute>} />
-      <Route path="/admin/products/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><ProductDetail /></ProtectedRoute>} />
+      <Route path="/admin/products/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><AdminProductDetail /></ProtectedRoute>} />
       {/* <Route path="/admin/products/edit/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><Edit /></ProtectedRoute>} /> */}
     </>
   );
@@ -87,6 +89,8 @@ function App() {
       <Route path="/registrationSuccessful" element={<RegistrationSuccess />} />
       <Route path="/login" element={<Login />} />
       <Route path="/loginSuccessful" element={<LoginSuccessful />} />
+      <Route path="/products" element={<ProductList />} />
+      <Route path="/products/:id" element={<ProductDetails />} />
     </>
   );
 

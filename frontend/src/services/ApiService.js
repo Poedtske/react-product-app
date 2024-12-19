@@ -271,6 +271,16 @@ export const addTicketToCart= async(ticket)=>{
   }
 }
 
+export const addProductToCart= async(product)=>{
+  try {
+    const response = await request('POST',`/api/secure/products`,product,true);
+    return response;
+  } catch (error) {
+    console.error(`Error adding product ${product}:`, error.response || error);
+    throw error;
+  }
+}
+
 export const getCart= async()=>{
   try {
     const response = await request('GET',`/api/secure/cart`,null,true);
