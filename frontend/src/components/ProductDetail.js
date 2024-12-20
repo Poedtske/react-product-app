@@ -3,11 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProductById, getProductImg } from "../services/ApiService";
 import { Container, Typography, Box, TextField, Button } from "@mui/material";
 import { addProductToCart, getProductCountInCart } from "../services/ProductCartService";
+import { isAuthenticated } from "../utils/jwtUtils"; // Assuming you have an auth context
+import { MdAddShoppingCart } from "react-icons/md";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Directly use the result of isAuthenticated to check if the user is logged in
+  const authenticated = isAuthenticated(); // should return a boolean directly
+  
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,6 +50,14 @@ const ProductDetails = () => {
   const handleAddToCart = async (event) => {
     event.preventDefault();
 
+    // Check if the user is authenticated
+    if (!authenticated) {
+      // Redirect to the login page if the user is not authenticated
+      navigate("/login");
+      return; // Exit the function early
+    }
+
+    // Add product to cart if the user is authenticated
     for (let i = 0; i < quantity; i++) {
       addProductToCart({ id, type: "product" });
     }
@@ -63,181 +76,188 @@ const ProductDetails = () => {
   if (error) return <p>{error}</p>;
 
   return (
-   <main>
-     <Container maxWidth="md" sx={{ marginTop: 4 }}>
-      <Button
-        onClick={() => navigate("/products")}
-        sx={{
-          mb: 2,
-          color: "white",
-          backgroundColor: "#007bff",
-          "&:hover": {
-            backgroundColor: "#0056b3",
-          },
-        }}
-      >
-        &larr; Go Back
-      </Button>
-
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          Product Details
-        </Typography>
-      </Box>
-
-      {product.img && (
-        <Box
+    <main>
+      <Container maxWidth="md" sx={{ marginTop: 4 }}>
+        <Button
+          onClick={() => navigate("/products")}
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mb: 3,
+            mb: 2,
+            color: "white",
+            backgroundColor: "#007bff",
+            "&:hover": {
+              backgroundColor: "#0056b3",
+            },
           }}
         >
-          <img
-            src={product.img}
-            alt={product.name}
-            style={{
-              width: "300px",
-              height: "300px",
-              objectFit: "cover",
-              borderRadius: "10px",
-            }}
-          />
+          &larr; Go Back
+        </Button>
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            Product Details
+          </Typography>
         </Box>
-      )}
 
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Product Information</Typography>
-        <Typography variant="body1">
-          <strong>Name:</strong> {product.name}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Price (€):</strong> {product.price}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Available:</strong> {product.available ? "Yes" : "No"}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Category:</strong> {product.category}
-        </Typography>
-        <Typography variant="body1">
-          <strong>In Cart:</strong> {productCount} times
-        </Typography>
-      </Box>
-
-      {product.available ? (
-        <Box
-          component="form"
-          onSubmit={handleAddToCart}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            maxWidth: "400px",
-            margin: "0 auto",
-          }}
-        >
-          <TextField
-            label="Quantity"
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            inputProps={{ min: 1 }}
-            required
-            InputLabelProps={{
-              style: { color: "white" },
-            }}
-            InputProps={{
-              style: { color: "white", borderColor: "white" },
-            }}
+        {product.img && (
+          <Box
             sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "white",
-                },
-                "&:hover fieldset": {
-                  borderColor: "white",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "white",
-                },
-              },
-            }}
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            sx={{
-              backgroundColor: "#28a745",
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#218838",
-              },
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mb: 3,
             }}
           >
-            Add to Cart
-          </Button>
-        </Box>
-      ) : (
-        <Typography
-          variant="body1"
-          color="error"
-          sx={{
-            textAlign: "center",
-            marginTop: 2,
-          }}
-        >
-          This product is currently unavailable and cannot be added to the cart.
-        </Typography>
-      )}
+            <img
+              src={product.img}
+              alt={product.name}
+              style={{
+                width: "300px",
+                height: "300px",
+                objectFit: "cover",
+                borderRadius: "10px",
+              }}
+            />
+          </Box>
+        )}
 
-      {cartOptionsVisible && (
-        <Box
-          sx={{
-            marginTop: 4,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            textAlign: "center",
-          }}
-        >
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6">Product Information</Typography>
           <Typography variant="body1">
-            Product added to cart successfully!
+            <strong>Name:</strong> {product.name}
           </Typography>
-          <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-            <Button
-              onClick={() => navigate("/products")}
-              variant="outlined"
+          <Typography variant="body1">
+            <strong>Price (€):</strong> {product.price}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Available:</strong> {product.available ? "Yes" : "No"}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Category:</strong> {product.category}
+          </Typography>
+          <Typography variant="body1">
+            <strong>In Cart:</strong> {productCount} times
+          </Typography>
+        </Box>
+
+        {product.available ? (
+          <Box
+            component="form"
+            onSubmit={handleAddToCart}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              maxWidth: "400px",
+              margin: "0 auto",
+            }}
+          >
+            <TextField
+              label="Quantity"
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              inputProps={{ min: 1 }}
+              required
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              InputProps={{
+                style: { color: "white", borderColor: "white" },
+              }}
               sx={{
-                borderColor: "#007bff",
-                color: "#007bff",
-                "&:hover": {
-                  borderColor: "#0056b3",
-                  backgroundColor: "rgba(0, 123, 255, 0.1)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "white",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "white",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "white",
+                  },
                 },
               }}
-            >
-              Continue Shopping
-            </Button>
+            />
             <Button
-              onClick={() => navigate("/cart")}
               variant="contained"
+              type="submit"
               sx={{
-                backgroundColor: "#007bff",
+                backgroundColor: "#28a745",
                 color: "white",
                 "&:hover": {
-                  backgroundColor: "#0056b3",
+                  backgroundColor: "#218838",
                 },
+                padding: "10px 16px", // Adjust the size of the button
+                display: "flex", // Make button size adjust to the content
+                justifyContent: "center", // Center the icon inside the button
+                alignItems: "center", // Ensure the icon is vertically centered
+                minWidth: "60px", // Ensure the button has a reasonable minimum size
+                borderRadius: "8px", // Optional, to add rounded corners to the button
               }}
             >
-              Go to Cart
+              <MdAddShoppingCart style={{ fontSize: "24px", marginRight: "8px" }} />
+              Add to Cart
             </Button>
           </Box>
-        </Box>
-      )}
-    </Container>
-   </main>
+        ) : (
+          <Typography
+            variant="body1"
+            color="error"
+            sx={{
+              textAlign: "center",
+              marginTop: 2,
+            }}
+          >
+            This product is currently unavailable and cannot be added to the cart.
+          </Typography>
+        )}
+
+        {cartOptionsVisible && (
+          <Box
+            sx={{
+              marginTop: 4,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="body1">
+              Product added to cart successfully!
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+              <Button
+                onClick={() => navigate("/products")}
+                variant="outlined"
+                sx={{
+                  borderColor: "#007bff",
+                  color: "#007bff",
+                  "&:hover": {
+                    borderColor: "#0056b3",
+                    backgroundColor: "rgba(0, 123, 255, 0.1)",
+                  },
+                }}
+              >
+                Continue Shopping
+              </Button>
+              <Button
+                onClick={() => navigate("/cart")}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "#0056b3",
+                  },
+                }}
+              >
+                Go to Cart
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </Container>
+    </main>
   );
 };
 

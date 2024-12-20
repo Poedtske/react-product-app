@@ -84,7 +84,7 @@ function App() {
       <Route path="/info/privacy" element={<Privacy />} />
       <Route path="/kalender" element={<Kalender />} />
       <Route path="/sponsors" element={<Sponsors />} />
-      <Route path="/registration" element={<Registration />} />
+      <Route path="/register" element={<Registration />} />
       <Route path="/registrationSuccessful" element={<RegistrationSuccess />} />
       <Route path="/login" element={<Login />} />
       <Route path="/loginSuccessful" element={<LoginSuccessful />} />
