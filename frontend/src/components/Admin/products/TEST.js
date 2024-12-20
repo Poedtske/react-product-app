@@ -1,362 +1,160 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import {
-    getCategories,
-  getProductById,
-  getProductImg,
-  updateProductById,
-} from "../../../services/ApiService"; // Replace with correct paths
-import styles from "./ProductDetails.module.css"; // CSS module
-import {
-  Container,
-  Typography,
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-} from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import styles from '../home/home.module.css';
+import { getEvents } from '../../services/ApiService';
 
-const UpdateProduct = () => {
-  const { id } = useParams(); // Product ID from the route
-  const navigate = useNavigate();
-
-  const [imageFile, setImageFile] = useState(null);
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [categories, setCategories] = useState([]);
-    const [formData, setFormData] = useState({
-      name: "",
-      price: "",
-      available: true,
-      category: "",
-    });
-
-    const [errors, setErrors] = useState({});
-      const [submitStatus, setSubmitStatus] = useState("");
-      const [apiError, setApiError] = useState("");
-      const [productImageUrl, setProductImageUrl] = useState(""); // State for current product image URL
+const Home = () => {
+  const [events, setEvents] = useState([]); // Store events data
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    let fetchData = async () => {
       try {
-        const productData = await getProductById(id); // Fetch the product details
-        const imageResponse = await getProductImg(id); // Fetch product image
-        const categoriesData = await getCategories();
-
-        const productWithImageAndQuantity = {
-          ...productData,
-          img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
-        };
-
-        setCategories(categoriesData);
-
-        setProduct(productWithImage);
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching product details");
-        setLoading(false);
+        const events = await getEvents(); // Assuming getEvents fetches events from your backend
+        if (Array.isArray(events)) {
+          setEvents(events); // Only update state if events is an array
+        } else {
+          console.error('Fetched data is not an array:', events);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
       }
     };
+    fetchData();
+  }, []);
 
-    fetchProduct();
-  }, [id]);
+  // Helper function to format date to 'DD/MM/YYYY'
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const year = date.getFullYear();
 
-  if (loading) return <p>Loading product details...</p>;
-  if (error) return <p>{error}</p>;
+    return `${day}/${month}/${year}`;
+  };
 
-    // Input change handler
-    const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData({
-          ...formData,
-          [name]: type === "checkbox" ? checked : value,
-        });
+  // Helper function to format time for spond events to 'HH:mm'
+  const formatTimeSpond = (dateString) => {
+    const date = new Date(dateString);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+  };
+
+  // Helper function to format time for regular events to 'HH:mm'
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':');
+    return `${hours}:${minutes}`;
+  };
+
+  // Function to get event details
+  const getEventDetails = (event) => {
+    if (event.spondId) {
+      // For spondEvents (events with spondId), use startTime directly
+      return (
+        <>
+          <p className={styles.p} id="naam">{event.title}</p>
+          <p className={styles.p} id="datum">{formatDate(event.startTime)}</p>
+          <p className={styles.p} id="uur">{formatTimeSpond(event.startTime)}</p>
+          <p className={styles.p} id="locatie">{event.location}</p>
+        </>
+      );
+    } else if (event.dates && event.dates.length > 0) {
+      // For regular events with multiple dates
+      const firstDate = event.dates[0]; // You can adjust this logic to pick a specific date
+      return (
+        <>
+          <p className={styles.p} id="naam">{event.title}</p>
+          <p className={styles.p} id="datum">{formatDate(firstDate.date)}</p>
+          <p className={styles.p} id="uur">{formatTime(firstDate.startTime)}</p>
+          <p className={styles.p} id="locatie">{event.location}</p>
+        </>
+      );
+    }
+    return null; // Return null if no valid event data is found
+  };
+
+  // Function to go to the next activity/event
+  const nextActivity = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex === events.length - 1 ? 0 : prevIndex + 1));
+  };
+
+  // Function to go to the previous activity/event
+  const prevActivity = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? events.length - 1 : prevIndex - 1));
+  };
+
+  // Start the auto sliding when events are available
+  useEffect(() => {
+    if (events.length > 0) {
+      const id = setInterval(nextActivity, 5000); // Slide every 5 seconds
+      setIntervalId(id);
+    }
+    return () => {
+      clearInterval(intervalId); // Clear the interval when the component is unmounted
     };
+  }, [events]);
 
-    // Image file change handler
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+  const handleNext = () => {
+    nextActivity();
+    clearInterval(intervalId); // Stop auto slide on interaction
+  };
 
-        // Validate file type
-        if (!file.type.startsWith("image/")) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            img: "Only image files are allowed.",
-        }));
-        setImageFile(null);
-        return;
-        }
+  const handlePrev = () => {
+    prevActivity();
+    clearInterval(intervalId); // Stop auto slide on interaction
+  };
 
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            img: "File size must not exceed 5MB.",
-        }));
-        setImageFile(null);
-        return;
-        }
+  const firstEvent = events.length > 0 ? events[currentImageIndex] : null;
 
-        setErrors((prevErrors) => ({ ...prevErrors, img: "" })); // Clear errors
-        setImageFile(file);
-    };
-
-    // Submit handler
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        // Validate form fields
-        const validationErrors = {};
-        if (!formData.name) validationErrors.name = "Name is required.";
-        if (!formData.price || formData.price <= 0)
-          validationErrors.price = "Price must be greater than 0.";
-        if (!formData.category) validationErrors.category = "Category is required.";
-    
-        setErrors(validationErrors);
-        if (Object.keys(validationErrors).length > 0) return;
-    
-        // Prepare FormData
-        const data = new FormData();
-        data.append("productDto", new Blob([JSON.stringify(formData)], { type: "application/json" }));
-        if (imageFile) {
-          data.append("imageFile", imageFile);
-        }
-    
-        try {
-          // API call to update product
-          await updateProductById(id, data);
-          setSubmitStatus("Product updated successfully!");
-          setErrors({});
-          setApiError("");
-          navigate("/admin/products"); // Redirect to product list
-        } catch (error) {
-          console.error("Error updating product:", error);
-          const errorMessage =
-            error.response?.data?.message || "Failed to update product. Please try again.";
-          setSubmitStatus("");
-          setApiError(errorMessage);
-        }
-      };
-    
   return (
-    <Container
-        maxWidth="sm"
-        sx={{
-          backgroundColor: "#000",
-          color: "white",
-          borderRadius: 2,
-          padding: 3,
-          boxShadow: 3,
-        }}
-      >
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography variant="h5" align="center" sx={{ color: "white" }}>
-            Update Product
-          </Typography>
+    <main className={styles.main}>
+      {/* Banner Image */}
+      <img src="/images/banner.jpeg" alt="banner" id="banner" />
 
-          {/* Status Messages */}
-          {submitStatus && (
-            <Typography variant="body2" align="center" sx={{ color: "green" }}>
-              {submitStatus}
-            </Typography>
-          )}
-          {apiError && (
-            <Typography variant="body2" align="center" sx={{ color: "red" }}>
-              {apiError}
-            </Typography>
-          )}
-
-          {Object.values(errors).length > 0 && (
-            <Typography variant="body2" color="error" align="center">
-              {Object.values(errors).join(" \n")}
-            </Typography>
-          )}
-
-          {/* Product Name */}
-          <TextField
-            label="Product Name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            InputLabelProps={{ style: { color: "white" } }}
-            InputProps={{ style: { color: "white", backgroundColor: "#333" } }}
-          />
-
-          {/* Price */}
-          <TextField
-            label="Price (€)"
-            name="price"
-            type="number"
-            value={formData.price}
-            onChange={handleInputChange}
-            fullWidth
-            required
-            InputLabelProps={{ style: { color: "white" } }}
-            InputProps={{ style: { color: "white", backgroundColor: "#333" } }}
-          />
-
-          {/* Image File */}
-          <Box>
-            <label
-              htmlFor="product-image"
-              style={{
-                color: "white",
-                display: "block",
-                marginBottom: "8px",
-                fontSize: "16px",
-              }}
-            >
-              Product Image
-            </label>
-            <input
-              id="product-image"
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              style={{
-                display: "block",
-                color: "white",
-                backgroundColor: "#333",
-                border: "1px solid #555",
-                borderRadius: "4px",
-                padding: "8px",
-                width: "100%",
-                cursor: "pointer",
-              }}
+      {/* Display first event poster if available */}
+      {firstEvent && firstEvent.poster && (
+        <section className={styles.section} style={{ backgroundColor: 'black' }}>
+          <Link to={`/events/${firstEvent.id}`} style={{ marginInline: 'auto', width: '30%' }}>
+            <img
+              width="100%"
+              id="poster"
+              src={firstEvent.poster}
+              alt={`${firstEvent.title}_poster`}
             />
-            {errors.img && (
-              <Typography variant="body2" color="error" sx={{ marginTop: "8px" }}>
-                {errors.img}
-              </Typography>
-            )}
-          </Box>
+          </Link>
+        </section>
+      )}
 
+      {/* Event Slider */}
+      <section className={styles.activity} style={{ backgroundColor: 'white', color: 'black', textAlign: 'center' }}>
+        {firstEvent && getEventDetails(firstEvent)}
 
-          {/* Availability */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={formData.available}
-                onChange={handleInputChange}
-                name="available"
-                sx={{
-                  color: "white",
-                  "&.Mui-checked": { color: "green" },
-                }}
-              />
-            }
-            label="Available"
-            sx={{ color: "white" }}
-          />
+        <div>
+          <button style={{ width: '10em' }}>
+            <Link to="/kalender">Kalender</Link>
+          </button>
+        </div>
 
-          {/* Category */}
-          <Select
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            displayEmpty
-            fullWidth
-            sx={{
-              color: "white",
-              backgroundColor: "#333",
-              "& .MuiSelect-icon": { color: "white" },
-              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#555" },
-              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "white" },
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  backgroundColor: "#333",
-                  color: "white",
-                  "& .MuiMenuItem-root": {
-                    "&:hover": {
-                      backgroundColor: "#555",
-                    },
-                  },
-                },
-              },
-            }}
+        {/* Slider Controls */}
+        <div>
+          <button
+            style={{ width: '2em', marginRight: '10px' }} // Add margin-right for spacing
+            className="prev"
+            onClick={handlePrev}
           >
-            <MenuItem value="" disabled sx={{ color: "#aaa" }}>
-              Select Category
-            </MenuItem>
-            {categories.map((category) => (
-              <MenuItem
-                key={category}
-                value={category}
-                sx={{
-                  backgroundColor: "#333",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#555",
-                  },
-                }}
-              >
-                {category}
-              </MenuItem>
-            ))}
-          </Select>
+            &#10094;
+          </button>
 
-          {/* Product Image */}
-{product.img && (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        mb: 3,
-      }}
-    >
-      <img
-        src={product.img} // Use the image URL created from the Blob
-        alt={product.name}
-        style={{
-          width: "300px",
-          height: "300px",
-          objectFit: "cover",
-          borderRadius: "10px",
-        }}
-      />
-    </Box>
-  )}
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            sx={{
-              backgroundColor: "white",
-              color: "black",
-              "&:hover": {
-                backgroundColor: "gray",
-                color: "white",
-              },
-            }}
-          >
-            Update Product
-          </Button>
-        </Box>
-      </Container>
+          <button style={{ width: '2em' }} className="next" onClick={handleNext}>
+            &#10095;
+          </button>
+        </div>
+      </section>
+    </main>
   );
 };
 
-export default UpdateProduct;
-
-
+export default Home;
