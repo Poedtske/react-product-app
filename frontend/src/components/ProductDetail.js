@@ -2,28 +2,28 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProductById, getProductImg } from "../services/ApiService";
 import { Container, Typography, Box, TextField, Button } from "@mui/material";
-import { addProductToCart, getProductCountInCart } from "../services/ProductCartService"; // Ensure getCart and getProductCountInCart are imported
+import { addProductToCart, getProductCountInCart } from "../services/ProductCartService";
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Product ID from the route
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1); // State for quantity input
-  const [cartOptionsVisible, setCartOptionsVisible] = useState(false); // Show cart options after adding to cart
-  const [productCount, setProductCount] = useState(0); // State for product count in cart
+  const [quantity, setQuantity] = useState(1);
+  const [cartOptionsVisible, setCartOptionsVisible] = useState(false);
+  const [productCount, setProductCount] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const productData = await getProductById(id); // Fetch the product details
-        const imageResponse = await getProductImg(id); // Fetch product image
+        const productData = await getProductById(id);
+        const imageResponse = await getProductImg(id);
 
         const productWithImage = {
           ...productData,
-          img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
+          img: URL.createObjectURL(new Blob([imageResponse])),
         };
 
         setProduct(productWithImage);
@@ -37,36 +37,34 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  // Update the product count after adding to the cart
   const updateProductCountInCart = () => {
-    const count = getProductCountInCart(id); // Get the updated count
-    setProductCount(count); // Update the state with the new count
+    const count = getProductCountInCart(id);
+    setProductCount(count);
   };
 
   const handleAddToCart = async (event) => {
     event.preventDefault();
 
-    // Add the product to the cart the specified number of times
     for (let i = 0; i < quantity; i++) {
       addProductToCart({ id, type: "product" });
     }
 
-    updateProductCountInCart(); // After adding, update the count
-    setCartOptionsVisible(true); // Show the cart options after adding
+    updateProductCountInCart();
+    setCartOptionsVisible(true);
   };
 
   useEffect(() => {
     if (product) {
-      updateProductCountInCart(); // Initially set the product count when the product is fetched
+      updateProductCountInCart();
     }
-  }, [product]); // Runs once when the product is loaded
+  }, [product]);
 
   if (loading) return <p>Loading product details...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <Container maxWidth="md" sx={{ marginTop: 4 }}>
-      {/* Go Back Button */}
+   <main>
+     <Container maxWidth="md" sx={{ marginTop: 4 }}>
       <Button
         onClick={() => navigate("/products")}
         sx={{
@@ -81,14 +79,12 @@ const ProductDetails = () => {
         &larr; Go Back
       </Button>
 
-      {/* Product Details */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4" gutterBottom>
           Product Details
         </Typography>
       </Box>
 
-      {/* Product Image */}
       {product.img && (
         <Box
           sx={{
@@ -111,7 +107,6 @@ const ProductDetails = () => {
         </Box>
       )}
 
-      {/* Product Information */}
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6">Product Information</Typography>
         <Typography variant="body1">
@@ -126,68 +121,77 @@ const ProductDetails = () => {
         <Typography variant="body1">
           <strong>Category:</strong> {product.category}
         </Typography>
-        {/* Display how many times the product is in the cart */}
         <Typography variant="body1">
           <strong>In Cart:</strong> {productCount} times
         </Typography>
       </Box>
 
-      {/* Add to Cart Form */}
-      <Box
-        component="form"
-        onSubmit={handleAddToCart}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          maxWidth: "400px",
-          margin: "0 auto",
-          color: "white;",
-        }}
-      >
-        <TextField
-          label="Quantity"
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-          inputProps={{ min: 1 }}
-          required
-          InputLabelProps={{
-            style: { color: "white" },
-          }}
-          InputProps={{
-            style: { color: "white", borderColor: "white" },
-          }}
+      {product.available ? (
+        <Box
+          component="form"
+          onSubmit={handleAddToCart}
           sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "white",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "white",
-              },
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{
-            backgroundColor: "#28a745",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#218838",
-            },
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            maxWidth: "400px",
+            margin: "0 auto",
           }}
         >
-          Add to Cart
-        </Button>
-      </Box>
+          <TextField
+            label="Quantity"
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+            inputProps={{ min: 1 }}
+            required
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            InputProps={{
+              style: { color: "white", borderColor: "white" },
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "white",
+                },
+              },
+            }}
+          />
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              backgroundColor: "#28a745",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#218838",
+              },
+            }}
+          >
+            Add to Cart
+          </Button>
+        </Box>
+      ) : (
+        <Typography
+          variant="body1"
+          color="error"
+          sx={{
+            textAlign: "center",
+            marginTop: 2,
+          }}
+        >
+          This product is currently unavailable and cannot be added to the cart.
+        </Typography>
+      )}
 
-      {/* Cart Options */}
       {cartOptionsVisible && (
         <Box
           sx={{
@@ -233,6 +237,7 @@ const ProductDetails = () => {
         </Box>
       )}
     </Container>
+   </main>
   );
 };
 

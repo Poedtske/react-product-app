@@ -158,7 +158,8 @@ const UpdateProduct = () => {
   };
 
   return (
-    <Container
+    <main>
+        <Container
       maxWidth="sm"
       sx={{
         backgroundColor: "#000",
@@ -366,6 +367,7 @@ const UpdateProduct = () => {
         </Button>
       </Box>
     </Container>
+    </main>
   );
 };
 

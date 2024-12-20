@@ -102,7 +102,8 @@ const ProductDetails = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <Container maxWidth="md" className={styles.main}>
+    <main>
+      <Container maxWidth="md" className={styles.main}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4" gutterBottom>
           Product Details
@@ -218,6 +219,7 @@ const ProductDetails = () => {
         </Table>
       </TableContainer>
     </Container>
+    </main>
   );
 };
 

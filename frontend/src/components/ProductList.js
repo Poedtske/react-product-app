@@ -117,40 +117,40 @@ const WebshopPage = () => {
                       }}
                     />
                     {/* Overlay for Unavailable Products */}
-{!product.available && (
-  <div
-    style={{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0, 0, 0, 0.6)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: "8px",
-      zIndex: 1,
-    }}
-  >
-    <Typography
-      variant="h5"
-      sx={{
-        color: "red",
-        fontWeight: "bold",
-        textTransform: "uppercase",
-        textAlign: "center",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%) rotate(+45deg)", // Rotate the text and center it
-        whiteSpace: "nowrap", // Prevent text wrapping
-      }}
-    >
-      Currently Unavailable
-    </Typography>
-  </div>
-)}
+                    {!product.available && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "rgba(0, 0, 0, 0.6)",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "8px",
+                          zIndex: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            color: "red",
+                            fontWeight: "bold",
+                            textTransform: "uppercase",
+                            textAlign: "center",
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%) rotate(+45deg)", // Rotate the text and center it
+                            whiteSpace: "nowrap", // Prevent text wrapping
+                          }}
+                        >
+                          Currently Unavailable
+                        </Typography>
+                      </div>
+                    )}
 
                   </Link>
                   <Typography variant="body1" sx={{ mt: 2 }}>
