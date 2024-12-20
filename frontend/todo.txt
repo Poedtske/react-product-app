@@ -9,13 +9,10 @@ tables have list of dates, show tickets that match certain date)
 
 
 PRODUCTS:
--U
--update View
-
+-if unavailable, you can't add to cart
 
 FRONTEND:
 -cleaning code, to much chatgpt bs
--session
 
 TICKETS:
 -add option to choose date if there are multiple

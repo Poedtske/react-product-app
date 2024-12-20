@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,17 +40,85 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateById(Long id, Product product, MultipartFile imageFile) throws IOException {
+    public ResponseEntity updateById(Long id, ProductDto productDto, MultipartFile imageFile) {
 
-        Product managedProduct = productRepository.findById(id).orElseThrow();
-        managedProduct.setName(product.getName());
-        managedProduct.setQuantity(product.getQuantity());
-        managedProduct.setPrice(product.getPrice());
-        managedProduct.setImg(imageFile.getName());
-        managedProduct.setAvailable(product.getAvailable());
-        managedProduct.setCategory(product.getCategory());
+        try{
+            Product managedProduct=productRepository.findById(id).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
 
-        return this.save(managedProduct);
+            boolean hasUnclosedPaidInvoice = managedProduct.getInvoices().stream()
+                    .anyMatch(invoice -> (invoice.getPaid() == true && invoice.getClosed() == false));
+
+            if (hasUnclosedPaidInvoice){
+                return ResponseEntity.internalServerError().body("Cannot be updated, there are invoices that have been paid and are still open");
+            }
+
+            managedProduct.setName(productDto.getName());
+            managedProduct.setPrice(productDto.getPrice());
+            managedProduct.setAvailable(productDto.getAvailable());
+            managedProduct.setCategory(productDto.getCategory());
+
+
+
+            //delete the current img
+            if (!Files.exists(IMGS_PATH)) {
+                return ResponseEntity.internalServerError().body(null);
+            }
+
+            Path filePath = IMGS_PATH.resolve(managedProduct.getImg());
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            Files.deleteIfExists(filePath);
+
+            //save the new img
+
+            // Generate the new filename and construct the file path
+            String newFilename = managedProduct.getName() + "_" + managedProduct.getId() + "." +
+                    StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
+            Path newFilePath = IMGS_PATH.resolve(newFilename);
+
+            // Write the file with the new name
+            Files.write(newFilePath, imageFile.getBytes());
+
+            // Update the product with the relative path to the image
+            //String relativePath = "images/" + newFilename;
+            managedProduct.setImg(newFilename);
+
+            this.save(managedProduct);
+
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+
+    }
+
+    public ResponseEntity updateById(Long id, ProductDto productDto) {
+
+        try{
+            Product managedProduct=productRepository.findById(id).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
+
+            boolean hasUnclosedPaidInvoice = managedProduct.getInvoices().stream()
+                    .anyMatch(invoice -> (invoice.getPaid() == true && invoice.getClosed() == false));
+
+            if (hasUnclosedPaidInvoice){
+                return ResponseEntity.internalServerError().body("Cannot be updated, there are invoices that have been paid and are still open");
+            }
+
+            managedProduct.setName(productDto.getName());
+            managedProduct.setPrice(productDto.getPrice());
+            managedProduct.setAvailable(productDto.getAvailable());
+            managedProduct.setCategory(productDto.getCategory());
+
+            this.save(managedProduct);
+
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+
     }
 
     @Override
@@ -84,7 +151,20 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    public ResponseEntity<?> getProductById(Long id) {
+    /*public ResponseEntity<ProductDto> findProductDtoById(Long id){
+        Product product= productRepository.findById(id).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
+        ProductDto productDto=new ProductDto(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getImg(),
+                product.getCategory(),
+                product.getAvailable(),
+                product.getInvoices());
+        return ResponseEntity.ok().body(productDto);
+    }*/
+
+    public ResponseEntity<?> getProductDtoById(Long id) {
         try{
             Product p= productRepository.findById(id).orElseThrow(()-> new AppException("Product not found",HttpStatus.NOT_FOUND));
             /*if(p.getAvailable()==false){

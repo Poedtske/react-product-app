@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.ProductDto;
 import com.example.backend.model.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface ProductService {
     Product save(Product product);
 
-    Product updateById(Long id, Product product, MultipartFile imageFile) throws IOException;
+    ResponseEntity updateById(Long id, ProductDto productDto, MultipartFile imageFile);
 
     List<Product> findAll();
 

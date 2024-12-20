@@ -1,15 +1,10 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.EventDto;
 import com.example.backend.dto.ProductDto;
 import com.example.backend.enums.Category;
-import com.example.backend.enums.EventType;
 import com.example.backend.model.Product;
-import com.example.backend.model.User;
-import com.example.backend.service.ProductService;
 import com.example.backend.service.impl.ProductServiceImpl;
 import com.example.backend.service.impl.UserService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,9 +38,14 @@ public class ProductController {
         return productService.createProduct(productDto,imageFile);
     }
 
-    @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestPart Product product,@RequestPart MultipartFile imageFile) throws IOException {
-        return productService.updateById(id, product, imageFile);
+    @PutMapping("/admin/products/{id}/img")
+    public ResponseEntity update(@PathVariable Long id, @RequestPart ProductDto productDto,@RequestPart MultipartFile imageFile) throws IOException {
+        return productService.updateById(id, productDto, imageFile);
+    }
+
+    @PutMapping("/admin/products/{id}")
+    public ResponseEntity update(@PathVariable Long id, @RequestPart ProductDto productDto) throws IOException {
+        return productService.updateById(id, productDto);
     }
 
     @GetMapping("/public/products")
@@ -55,7 +55,7 @@ public class ProductController {
 
     @GetMapping("public/products/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        return productService.getProductById(id);
+        return productService.getProductDtoById(id);
     }
 
     @GetMapping("admin/products/{id}")

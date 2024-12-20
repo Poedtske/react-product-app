@@ -64,9 +64,19 @@ export const adminGetProductById = async (id) => {
   }
 };
 
-export const updateProductById = async (id, product) => {
+export const updateProductByIdWithImg = async (id, product) => {
   try {
-    const response = await request('PUT',`/api/products/${id}`,product,true)
+    const response = await request('PUT',`/api/admin/products/${id}/img`,product,true,true)
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating product with ID ${id}:`, error.response || error);
+    throw error;
+  }
+};
+
+export const updateProductByIdWithoutImg = async (id, product) => {
+  try {
+    const response = await request('PUT',`/api/admin/products/${id}`,product,true,true)
     return response.data;
   } catch (error) {
     console.error(`Error updating product with ID ${id}:`, error.response || error);
