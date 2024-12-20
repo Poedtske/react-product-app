@@ -13,8 +13,9 @@ import{
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {request, setAuthToken} from '../AxiosConfig';
+import {request} from '../AxiosConfig';
 import {useAuth} from '../context/AuthContext'
+import { getAuthToken, setAuthToken } from "../utils/jwtUtils"; // Import JWT utility functions
 
 export default function Login() {
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { removeProductFromCart, removeTicketFromCart, clearCart, getCart } from "../../services/ApiService"; // Import API functions
+import { removeAllProductsFromCart, getProductCart } from "../../services/ProductCartService"; // Import the ProductCart service for product-specific functionality
+import { removeTicketFromCart, clearCart, getCart, getProductById } from "../../services/ApiService"; // Import the API functions
 import styles from "./Cart.module.css";
 
 const Cart = () => {
@@ -13,11 +14,24 @@ const Cart = () => {
   const [error, setError] = useState(null); // State for error handling
 
   useEffect(() => {
-    // Fetch cart data (products and tickets) on component mount
     const fetchCartData = async () => {
       try {
-        const cartData = await getCart(); // Replace with actual function to fetch cart data
-        setCart(cartData); // Update cart state
+        const productList = getProductCart(); // Get products from sessionStorage using ProductCart service
+        const groupedProducts = groupProductsById(productList.products); // Group products by ID and sum quantities
+
+        // Fetch product details for each unique product
+        const productDetails = await Promise.all(
+          Object.keys(groupedProducts).map(async (productId) => {
+            const product = await getProductById(productId); // Fetch product details from API
+            return {
+              ...product,
+              quantity: groupedProducts[productId], // Add quantity information
+            };
+          })
+        );
+
+        const cartData = await getCart();  // Fetch tickets via the API service
+        setCart({ products: productDetails, tickets: cartData.tickets }); // Update cart state
         setLoading(false);
       } catch (err) {
         console.error("Error fetching cart data:", err);
@@ -29,12 +43,20 @@ const Cart = () => {
     fetchCartData();
   }, []);
 
+  // Helper function to group products by ID and sum the quantities
+  const groupProductsById = (products) => {
+    return products.reduce((acc, product) => {
+      acc[product.id] = acc[product.id] ? acc[product.id] + 1 : 1; // Sum quantities
+      return acc;
+    }, {});
+  };
+
   const handleRemoveProduct = async (productId) => {
     try {
-      await removeProductFromCart(productId); // Call the API to remove product
+      removeAllProductsFromCart(productId); // Call the ProductCart service to remove the product
       setCart((prevCart) => ({
         ...prevCart,
-        products: prevCart.products.filter((product) => product.id !== productId),
+        products: prevCart.products.filter((product) => product.id !== productId), // Remove locally from state
       }));
     } catch (err) {
       console.error("Error removing product:", err);
@@ -44,10 +66,10 @@ const Cart = () => {
 
   const handleRemoveTicket = async (ticketId) => {
     try {
-      await removeTicketFromCart(ticketId); // Call the API to remove ticket
+      await removeTicketFromCart(ticketId); // Call the API to remove the ticket
       setCart((prevCart) => ({
         ...prevCart,
-        tickets: prevCart.tickets.filter((ticket) => ticket.id !== ticketId),
+        tickets: prevCart.tickets.filter((ticket) => ticket.id !== ticketId), // Remove locally from state
       }));
     } catch (err) {
       console.error("Error removing ticket:", err);
@@ -57,7 +79,7 @@ const Cart = () => {
 
   const handleClearCart = async () => {
     try {
-      await clearCart(); // Call the API to clear the entire cart
+      await clearCart(); // Clear the entire cart via API (products and tickets)
       setCart({ products: [], tickets: [] }); // Clear cart state locally
     } catch (err) {
       console.error("Error clearing cart:", err);
@@ -75,13 +97,17 @@ const Cart = () => {
 
     if (cart.products != null && cart.products.length !== 0) {
       for (let product of cart.products) {
-        total += product.price;
+        if (product.price != null && !isNaN(product.price)) {
+          total += product.price * product.quantity; // Multiply price by quantity
+        }
       }
     }
 
     if (cart.tickets != null && cart.tickets.length !== 0) {
       for (let ticket of cart.tickets) {
-        total += ticket.price;
+        if (ticket.price != null && !isNaN(ticket.price)) {
+          total += ticket.price; // Add price of ticket
+        }
       }
     }
 
@@ -126,7 +152,7 @@ const Cart = () => {
             <ul>
               {cart.products.map((product) => (
                 <li key={product.id} className={styles.cart_item}>
-                  <span>{product.name}</span> - €{product.price.toFixed(2)}
+                  <span>{product.name}</span> - €{(product.price && !isNaN(product.price) ? product.price.toFixed(2) : "0.00")} x {product.quantity}
                   <button
                     className={styles.remove_button}
                     onClick={() => handleRemoveProduct(product.id)}
@@ -146,7 +172,7 @@ const Cart = () => {
             <ul>
               {cart.tickets.map((ticket) => (
                 <li key={ticket.id} className={styles.cart_item}>
-                  <span>{ticket.name}</span> - €{ticket.price.toFixed(2)}
+                  <span>{ticket.name}</span> - €{(ticket.price && !isNaN(ticket.price) ? ticket.price.toFixed(2) : "0.00")}
                   <button
                     className={styles.remove_button}
                     onClick={() => handleRemoveTicket(ticket.id)}

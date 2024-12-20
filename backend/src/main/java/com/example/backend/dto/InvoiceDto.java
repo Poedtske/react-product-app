@@ -38,4 +38,10 @@ public class InvoiceDto {
         this.done=done;
         this.user = new UserDto(user.getFirstName(), user.getLastName(), user.getEmail());
     }
+
+    public InvoiceDto(UserDto user, List<Product> productList, Set<Ticket> ticketSet) {
+        this.user = user;
+        this.productList = productList;
+        this.ticketSet = ticketSet;
+    }
 }

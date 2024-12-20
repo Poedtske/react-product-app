@@ -15,6 +15,7 @@ PRODUCTS:
 
 FRONTEND:
 -cleaning code, to much chatgpt bs
+-session
 
 TICKETS:
 -add option to choose date if there are multiple

@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.dto.ProductPaymentDTO;
 import com.example.backend.enums.Role;
 import com.example.backend.exceptions.AppException;
 import jakarta.persistence.*;
@@ -161,6 +162,8 @@ public class User implements UserDetails {
         if(i.getProducts().isEmpty()&&i.getTickets().isEmpty()){
             throw new AppException("Cart is empty", HttpStatus.BAD_REQUEST);
         }
+
+
         i.setPaid(true);
         this.addInvoice(new Invoice(this));
     }

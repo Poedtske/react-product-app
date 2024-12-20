@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  getProductById,
-  getProductImg,
-  addProductToCart,
-} from "../services/ApiService";
-import {
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Button,
-} from "@mui/material";
+import { getProductById, getProductImg } from "../services/ApiService";
+import { Container, Typography, Box, TextField, Button } from "@mui/material";
+import { addProductToCart, getProductCountInCart } from "../services/ProductCartService"; // Ensure getCart and getProductCountInCart are imported
 
 const ProductDetails = () => {
   const { id } = useParams(); // Product ID from the route
@@ -22,6 +13,7 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1); // State for quantity input
   const [cartOptionsVisible, setCartOptionsVisible] = useState(false); // Show cart options after adding to cart
+  const [productCount, setProductCount] = useState(0); // State for product count in cart
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -45,27 +37,29 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
+  // Update the product count after adding to the cart
+  const updateProductCountInCart = () => {
+    const count = getProductCountInCart(id); // Get the updated count
+    setProductCount(count); // Update the state with the new count
+  };
+
   const handleAddToCart = async (event) => {
     event.preventDefault();
 
-    try {
-      const productToAdd = {
-        ...product,
-        quantity, // Include the quantity from the input field
-      };
-
-      const response = await addProductToCart(productToAdd); // API call to add the product to the cart
-
-      if (response.status === 200) {
-        setCartOptionsVisible(true); // Show cart options on success
-      }
-    } catch (err) {
-      if (err.response?.status === 403) {
-        navigate("/login");
-      }
-      console.error("Failed to add product to cart", err);
+    // Add the product to the cart the specified number of times
+    for (let i = 0; i < quantity; i++) {
+      addProductToCart({ id, type: "product" });
     }
+
+    updateProductCountInCart(); // After adding, update the count
+    setCartOptionsVisible(true); // Show the cart options after adding
   };
+
+  useEffect(() => {
+    if (product) {
+      updateProductCountInCart(); // Initially set the product count when the product is fetched
+    }
+  }, [product]); // Runs once when the product is loaded
 
   if (loading) return <p>Loading product details...</p>;
   if (error) return <p>{error}</p>;
@@ -131,6 +125,10 @@ const ProductDetails = () => {
         </Typography>
         <Typography variant="body1">
           <strong>Category:</strong> {product.category}
+        </Typography>
+        {/* Display how many times the product is in the cart */}
+        <Typography variant="body1">
+          <strong>In Cart:</strong> {productCount} times
         </Typography>
       </Box>
 

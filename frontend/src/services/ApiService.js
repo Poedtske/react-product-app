@@ -322,9 +322,9 @@ export const removeTicketFromCart= async(id)=>{
   }
 }
 
-export const pay= async()=>{
+export const pay= async(products)=>{
   try {
-    const response = await request('PUT',`/api/secure/pay`,null,true);
+    const response = await request('PUT',`/api/secure/pay`,products,true);
     return response.data;
   } catch (error) {
     console.error(`Error removing ticket:`, error.response || error);

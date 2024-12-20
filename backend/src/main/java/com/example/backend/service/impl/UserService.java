@@ -218,10 +218,18 @@ public class UserService {
         }
     }
 
-    public ResponseEntity pay(String email) {
+    public ResponseEntity pay(String email, List<ProductPaymentDTO> productPayments) {
         try {
             User u=this.findUserByEmail(email);
             removeUnavailableProductsFromCart(u);
+            for (ProductPaymentDTO p: productPayments
+            ) {
+                Product product=productRepository.findById(p.getProductId()).orElseThrow(()->new AppException("Product not found",HttpStatus.NOT_FOUND));
+                for(int y=0;y<p.getQuantity();y++){
+                    u.getActiveInvoice().addProduct(product);
+                }
+            }
+            invoiceRepository.save(u.getActiveInvoice());
             u.pay();
             userRepository.save(u);
             return ResponseEntity.ok().build();

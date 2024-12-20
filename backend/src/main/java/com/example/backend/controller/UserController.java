@@ -1,10 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.config.UserAuthProvider;
-import com.example.backend.dto.CartDto;
-import com.example.backend.dto.CredentialsDto;
-import com.example.backend.dto.SignUpDto;
-import com.example.backend.dto.UserDto;
+import com.example.backend.dto.*;
 import com.example.backend.model.LoginRequest;
 import com.example.backend.model.User;
 import com.example.backend.service.AuthService;
@@ -22,7 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,10 +69,14 @@ public class UserController {
     }
 
     @PutMapping("pay")
-    public ResponseEntity payCart(){
+    public ResponseEntity payCart(@RequestBody List<ProductPaymentDTO> paymentData){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the logged-in username
-        return  userService.pay(username);
+        paymentData.forEach(item -> {
+            System.out.println("Product ID: " + item.getProductId() + ", Quantity: " + item.getQuantity());
+        });
+        return  userService.pay(username, paymentData);
+        //return ResponseEntity.ok().build();
     }
 
 

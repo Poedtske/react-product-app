@@ -1,18 +1,22 @@
-import {jwtDecode} from "jwt-decode"; // Ensure proper import syntax
+import { jwtDecode } from "jwt-decode"; // Ensure proper import syntax
 
-// Get the authentication token from localStorage
+// Get the authentication token from sessionStorage
 export const getAuthToken = () => {
-  if(localStorage.getItem("auth_token")!=null){
-    return localStorage.getItem("auth_token");
-  }else{
-      return false;;
+  if (sessionStorage.getItem("auth_token") != null) {
+    return sessionStorage.getItem("auth_token");
+  } else {
+    return false;
   }
-
 };
 
-// Remove the authentication token from localStorage
+// Remove the authentication token from sessionStorage
 export const removeAuthToken = () => {
-  localStorage.removeItem("auth_token");
+  sessionStorage.removeItem("auth_token");
+};
+
+// Set the authentication token in sessionStorage
+export const setAuthToken = (token) => {
+  sessionStorage.setItem("auth_token", token);
 };
 
 // Decode JWT and get user details
@@ -24,16 +28,16 @@ export const getUserFromToken = () => {
       return decoded; // Returns the decoded JWT payload (e.g., { role: 'USER', ... })
     } catch (error) {
       console.error("Invalid token", error);
-      return "InvallidToken";
+      return "InvalidToken";
     }
   }
   return null;
 };
 
-export const getUserRole =()=>{
-  const user= getUserFromToken();
-  return user.role[0].authority;
-}
+export const getUserRole = () => {
+  const user = getUserFromToken();
+  return user?.role[0]?.authority || null;
+};
 
 // Check if the user has a specific role
 export const hasRole = (role) => {

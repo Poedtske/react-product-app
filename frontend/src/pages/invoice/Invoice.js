@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCart, pay } from "../../services/ApiService"; // Import the cart fetching function and pay function
+import { getCart, getProductById, pay } from "../../services/ApiService"; // Import the cart fetching function and pay function
+import { clearProductCart, getProductCart } from "../../services/ProductCartService"; // Import the service to get products from session
 import styles from "./Invoice.module.css"; // Import CSS module for styling
 
 const Invoice = () => {
@@ -10,15 +11,34 @@ const Invoice = () => {
     products: [],
     tickets: [],
   });
-
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const cartData = await getCart(); // Fetch cart data
-        setCart(cartData);
+        // Get the products saved in sessionStorage
+        const productList = getProductCart();
+        const groupedProducts = groupProductsById(productList.products);
+
+        // Fetch product details for each unique product
+        const productDetails = await Promise.all(
+          Object.keys(groupedProducts).map(async (productId) => {
+            const product = await getProductById(productId);
+            return {
+              ...product,
+              quantity: groupedProducts[productId], // Include quantity from session
+            };
+          })
+        );
+
+        // Fetch ticket data from API
+        const cartData = await getCart();
+        setCart({
+          products: productDetails,
+          tickets: cartData.tickets,
+        });
         setLoading(false);
       } catch (err) {
         console.error("Error fetching cart data:", err);
@@ -30,16 +50,26 @@ const Invoice = () => {
     fetchCartData();
   }, []);
 
+  // Helper function to group products by ID and sum the quantities
+  const groupProductsById = (products) => {
+    return products.reduce((acc, product) => {
+      acc[product.id] = acc[product.id] ? acc[product.id] + 1 : 1;
+      return acc;
+    }, {});
+  };
+
   // Function to calculate total price of cart items
   const calculateTotalPrice = () => {
     let total = 0;
 
+    // Add prices of products
     if (cart.products != null && cart.products.length !== 0) {
       for (let product of cart.products) {
-        total += product.price;
+        total += product.price * product.quantity; // Multiply price by quantity
       }
     }
 
+    // Add prices of tickets
     if (cart.tickets != null && cart.tickets.length !== 0) {
       for (let ticket of cart.tickets) {
         total += ticket.price;
@@ -51,14 +81,27 @@ const Invoice = () => {
 
   const handlePay = async () => {
     try {
-      await pay(); // Call the pay function from the APIService
-      alert("Payment successful!"); // Optional: Show confirmation to the user
-      navigate("/"); // Navigate back to home after successful payment
+        // Retrieve products saved in the session storage
+        const productList = getProductCart();
+        const groupedProducts = groupProductsById(productList.products);
+        
+        // Prepare data to be sent with the payment request
+        const paymentData = Object.keys(groupedProducts).map((productId) => ({
+            productId: parseInt(productId, 10), // Ensure the ID is parsed as an integer
+            quantity: groupedProducts[productId],
+        }));
+
+        // Pass the payment data to the `pay` function
+        await pay(paymentData);
+        console.log(paymentData);
+        alert("Payment successful!"); // Optional: Show confirmation to the user
+        clearProductCart();
+        navigate("/"); // Navigate back to home after successful payment
     } catch (err) {
-      console.error("Payment failed:", err);
-      alert("Payment failed. Please try again.");
+        console.error("Payment failed:", err);
+        alert("Payment failed. Please try again.");
     }
-  };
+};
 
   const totalPrice = calculateTotalPrice();
 
@@ -73,8 +116,37 @@ const Invoice = () => {
   return (
     <main className={styles.invoice_page}>
       <div className={styles.invoice_content}>
-        {/* Display Total Amount */}
         <h1>Invoice</h1>
+
+        {/* Display products in the invoice */}
+        {cart.products.length > 0 && (
+          <div className={styles.products_list}>
+            <h3>Products</h3>
+            <ul>
+              {cart.products.map((product) => (
+                <li key={product.id} className={styles.product_item}>
+                  <span>{product.name}</span> - €{(product.price * product.quantity).toFixed(2)} (x{product.quantity})
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Display tickets in the invoice */}
+        {cart.tickets.length > 0 && (
+          <div className={styles.tickets_list}>
+            <h3>Tickets</h3>
+            <ul>
+              {cart.tickets.map((ticket) => (
+                <li key={ticket.id} className={styles.ticket_item}>
+                  <span>{ticket.name}</span> - €{ticket.price.toFixed(2)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Display Total Amount */}
         <p className={styles.total_amount}>
           <strong>Total Amount: €{totalPrice.toFixed(2)}</strong>
         </p>
@@ -84,7 +156,7 @@ const Invoice = () => {
           <img src="/images/payconnicQrcode.png" alt="Invoice" className={styles.invoice_image} />
         </div>
 
-        {/* Paragraphs */}
+        {/* Invoice Text */}
         <div className={styles.invoice_text}>
           <p>
             Rekening nummer: <b>12544 454 751244 51044</b>
