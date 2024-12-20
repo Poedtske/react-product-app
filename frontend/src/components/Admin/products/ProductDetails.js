@@ -183,34 +183,40 @@ const ProductDetails = () => {
       <Typography variant="h6" gutterBottom>
         Invoices Containing this Product
       </Typography>
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={{ backgroundColor: 'black', borderRadius: 2 }}>
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
-            <TableRow>
-              <TableCell>Invoice ID</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Confirmed</TableCell>
+            <TableRow sx={{ backgroundColor: '#333' }}>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Invoice ID</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>User</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Quantity</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Paid</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Confirmed</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {product.invoices && product.invoices.length > 0 ? (
               getUniqueInvoices(product.invoices).map((invoice) => (
-                <TableRow key={invoice.id}>
-                  <TableCell>{invoice.id}</TableCell>
-                  <TableCell>
-                    {invoice.user.firstName+' '+invoice.user.lastName || "N/A"} <br />
+                <TableRow key={invoice.id} sx={{ '&:nth-of-type(even)': { backgroundColor: '#444' } }}>
+                  <TableCell sx={{ color: 'white', borderColor: 'white' }}>{invoice.id}</TableCell>
+                  <TableCell sx={{ color: 'white', borderColor: 'white' }}>
+                    {invoice.user.firstName + ' ' + invoice.user.lastName || "N/A"} <br />
                     {invoice.user?.email || "N/A"}
                   </TableCell>
-                  <TableCell>{calculateQuantity(product.invoices,invoice.id) || 'error'} </TableCell> {/* Display amount with default 0 if missing */}
-                  <TableCell>{invoice.paid ? "Yes" : "No"}</TableCell>
-                  <TableCell>{invoice.confirmed ? "Yes" : "No"}</TableCell>
+                  <TableCell sx={{ color: 'white', borderColor: 'white' }}>
+                    {calculateQuantity(product.invoices, invoice.id) || 'error'}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white', borderColor: 'white' }}>
+                    {invoice.paid ? "Yes" : "No"}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white', borderColor: 'white' }}>
+                    {invoice.confirmed ? "Yes" : "No"}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} align="center">
+                <TableCell colSpan={5} align="center" sx={{ color: 'white' }}>
                   No invoices found for this product.
                 </TableCell>
               </TableRow>
@@ -218,6 +224,7 @@ const ProductDetails = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
     </Container>
     </main>
   );

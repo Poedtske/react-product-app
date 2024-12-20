@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { removeAllProductsFromCart, getProductCart } from "../../services/ProductCartService"; // Import the ProductCart service for product-specific functionality
+import { removeAllProductsFromCart, getProductCart, clearProductCart } from "../../services/ProductCartService"; // Import the ProductCart service for product-specific functionality
 import { removeTicketFromCart, clearCart, getCart, getProductById } from "../../services/ApiService"; // Import the API functions
 import styles from "./Cart.module.css";
 
@@ -81,6 +81,7 @@ const Cart = () => {
     try {
       await clearCart(); // Clear the entire cart via API (products and tickets)
       setCart({ products: [], tickets: [] }); // Clear cart state locally
+      clearProductCart();
     } catch (err) {
       console.error("Error clearing cart:", err);
       setError("Failed to clear cart. Please try again.");
