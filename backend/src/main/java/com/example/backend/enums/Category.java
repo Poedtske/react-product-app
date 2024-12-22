@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 
 public enum Category {
-    TICKET("TICKET"), FOOD("FOOD"), DRINK("DRINK");
+    FOOD("FOOD"), DRINK("DRINK");
 
     private final String value;
 

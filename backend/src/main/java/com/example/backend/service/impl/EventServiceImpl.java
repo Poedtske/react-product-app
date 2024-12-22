@@ -262,6 +262,10 @@ public class EventServiceImpl implements EventService {
 
             tableService.CreateTables(event);
 
+            if (!Files.exists(IMGS_PATH)) {
+                Files.createDirectories(IMGS_PATH);
+            }
+
             // Handle image
             String newFilename = event.getTitle() + "_" + event.getId() + "." +
                     StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
