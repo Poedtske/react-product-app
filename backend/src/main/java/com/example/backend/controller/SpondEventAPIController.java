@@ -16,7 +16,7 @@ public class SpondEventAPIController {
     @Autowired
     private EventServiceImpl service;
 
-    @PostMapping("/api/secure/events")
+    @PostMapping("/api/secure/spondEvents")
     public String addSpondEvent(@RequestBody Event e) {
         // Check if an event with the same spondId already exists
         if (service.findById(e.getSpondId()) != null) {
@@ -29,7 +29,7 @@ public class SpondEventAPIController {
 
 
     // New POST method for handling a batch of events
-    @PostMapping("/api/secure/events/batch")
+    @PostMapping("/api/secure/spondEvents/batch")
     public String addMultipleEvents(@RequestBody List<Event> events) {
         for (Event event : events) {
             if (service.findById(event.getSpondId()) != null) {
@@ -41,13 +41,13 @@ public class SpondEventAPIController {
         return "All events have been added successfully";
     }
 
-    @DeleteMapping("/api/secure/events/spond")
+    @DeleteMapping("/api/secure/spondEvents")
     public String DeleteSpondEvent(@RequestBody Event e){
         service.deleteEvent(service.findById(e.getSpondId()));
         return "Spond event has been deleted";
     }
 
-    @PutMapping("/api/secure/events/spond")
+    @PutMapping("/api/secure/spondEvents")
     public String UpdateSpondEvent(@RequestBody Event e){
         Event oldEvent=service.findById(e.getSpondId());
         oldEvent.SpondUpdate(e);
@@ -55,7 +55,7 @@ public class SpondEventAPIController {
         return "Spond event has been updated";
     }
 
-    @GetMapping("/api/public/events/spond")
+    @GetMapping("/api/public/spondEvents")
     public Iterable<SpondEventDto> getAllSpondEvents() {
         Iterable<Event> allEvents = service.findAll();
         List<SpondEventDto> eventDtos = new ArrayList<>();

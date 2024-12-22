@@ -184,7 +184,7 @@ const CreateEvent = () => {
 
           {/* Type */}
           <Select
-            name="Type"
+            name="type"
             value={formData.type}
             onChange={handleInputChange}
             displayEmpty

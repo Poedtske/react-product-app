@@ -280,7 +280,7 @@ const UpdateProduct = () => {
 
         {/* Category */}
         <Select
-          name="Categorie"
+          name="category"
           value={formData.category}
           onChange={handleInputChange}
           displayEmpty

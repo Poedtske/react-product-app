@@ -4,10 +4,6 @@ OVERALL:
 BACKEND:
 -check file uploads from frontend
 
-FRONTEND:
--put everything in dutch
-
-
 ----------------------------------------------------------------------
 
 EXTRA

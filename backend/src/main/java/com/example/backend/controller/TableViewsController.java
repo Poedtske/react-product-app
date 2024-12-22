@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+
 @Controller
 @RequestMapping("/tables")
 public class TableViewsController {
@@ -101,7 +103,7 @@ public class TableViewsController {
 
 
     @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable Long id){
+    public String deleteEvent(@PathVariable Long id) throws IOException {
         eventService.deleteById(id);
         return "redirect:/events";
     }

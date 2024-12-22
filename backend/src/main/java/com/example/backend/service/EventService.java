@@ -3,6 +3,8 @@ package com.example.backend.service;
 import com.example.backend.model.Event;
 import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
+
 public interface EventService {
     Event save(Event event);
 
@@ -14,9 +16,9 @@ public interface EventService {
 
     Event findById(String id);
 
-    void deleteById(Long id);
+    ResponseEntity deleteById(Long id) throws IOException;
 
-    void deleteById(String id);
+    ResponseEntity deleteById(String id);
 
     void deleteEvent(Event e);
 }

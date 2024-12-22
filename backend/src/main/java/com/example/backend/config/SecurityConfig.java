@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**", "/public/**", "/images/**", "/favicon.ico", "/register", "/css/**", "/js/**", "/login").permitAll()
                         .requestMatchers("/admin/**","/api/admin/**").hasAuthority(Role.ADMIN.getValue())
+                        .requestMatchers("api/secure/spondEvents/**").authenticated()
                         .requestMatchers("/profile","/cart","/api/secure/**").authenticated()
                         .anyRequest().authenticated()
                 )

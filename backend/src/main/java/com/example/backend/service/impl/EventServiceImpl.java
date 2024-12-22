@@ -1,12 +1,13 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.EventDto;
-import com.example.backend.enums.EventType;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Event;
+import com.example.backend.model.Invoice;
 import com.example.backend.model.Ticket;
 import com.example.backend.repository.DateDao;
 import com.example.backend.repository.EventDao;
+import com.example.backend.repository.InvoiceRepository;
 import com.example.backend.repository.TicketRepository;
 import com.example.backend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +39,8 @@ public class EventServiceImpl implements EventService {
     private EventDao eventRepository;
     @Autowired
     private TicketRepository ticketRepository;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private DateDao dateDao;
@@ -155,14 +159,60 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findDistinctBySpondId(id);
     }
 
+    //Event
     @Override
-    public void deleteById(Long id) {
-        eventRepository.delete(eventRepository.findDistinctById(id));
+    public ResponseEntity deleteById(Long id) throws IOException {
+        Event e=eventRepository.findById(id).orElseThrow(()->new AppException("Event not found",HttpStatus.NOT_FOUND));
+        return handleDelete(e);
     }
 
+    private ResponseEntity handleDelete(Event e){
+        try{
+            boolean hasUnclosedPaidInvoice = e.getTickets().stream()
+                    .anyMatch(ticket -> ticket.getInvoice().getPaid() && !ticket.getInvoice().getClosed());
+
+
+
+            if (hasUnclosedPaidInvoice){
+                return ResponseEntity.internalServerError().body("Cannot be deleted, there are invoices that have been paid and are still open");
+            }
+
+            e.getTickets().forEach(ticket -> {
+                Invoice i=ticket.getInvoice();
+                if(i.getPaid()==false){
+
+                    i.removeTicket(ticket);
+                    invoiceRepository.save(i);
+                } else if (i.getPaid()==true && i.getClosed()==true) {
+                    invoiceRepository.delete(i);
+                }
+            });
+            //p.getInvoices().removeIf(invoice -> invoice.getPaid()==false);
+            //p.getInvoices().removeIf(invoice -> invoice.getPaid()==true && invoice.getClosed()==true);
+
+            eventRepository.save(e);
+
+            if (!Files.exists(IMGS_PATH)) {
+                return ResponseEntity.internalServerError().body(null);
+            }
+
+            Path filePath = IMGS_PATH.resolve(e.getImg());
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            eventRepository.deleteById(e.getId());
+            Files.deleteIfExists(filePath);
+            return ResponseEntity.ok().build();
+        }catch (Exception ex){
+            return ResponseEntity.internalServerError().body(ex.getMessage());
+        }
+    }
+    //SpondEvent
     @Override
-    public void deleteById(String id) {
-        eventRepository.delete(eventRepository.findDistinctBySpondId(id));
+    public ResponseEntity deleteById(String id) {
+        Event e= eventRepository.findDistinctBySpondId(id);
+        return handleDelete(e);
     }
 
     @Override
