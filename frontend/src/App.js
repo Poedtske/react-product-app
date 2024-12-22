@@ -17,7 +17,6 @@ import Sponsors from './pages/sponsors/Sponsors';
 import ShowEvent from './components/ShowEvent';
 import Test from './pages/Test';
 import AdminProductList from "./components/Admin/products/ProductList";
-import Products from "./components/Products";
 import { ProductListProvider } from "./context/ProductContext";
 import AdminProductDetail from "./components/Admin/products/ProductDetails";
 import './App.css';

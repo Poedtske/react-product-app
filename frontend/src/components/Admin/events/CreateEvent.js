@@ -144,7 +144,7 @@ const CreateEvent = () => {
           }}
         >
           <Typography variant="h5" align="center" sx={{ color: "white" }}>
-            Create Event
+            Maak Evenement
           </Typography>
 
           {submitStatus && (
@@ -160,7 +160,7 @@ const CreateEvent = () => {
 
           {/* Title */}
           <TextField
-            label="Title"
+            label="Titel"
             name="title"
             value={formData.title}
             onChange={handleInputChange}
@@ -172,7 +172,7 @@ const CreateEvent = () => {
 
           {/* Location */}
           <TextField
-            label="Location"
+            label="Locatie"
             name="location"
             value={formData.location}
             onChange={handleInputChange}
@@ -184,7 +184,7 @@ const CreateEvent = () => {
 
           {/* Type */}
           <Select
-            name="type"
+            name="Type"
             value={formData.type}
             onChange={handleInputChange}
             displayEmpty
@@ -211,7 +211,7 @@ const CreateEvent = () => {
             }}
           >
             <MenuItem value="" disabled>
-              Select Type
+              Selecteer Type
             </MenuItem>
             {eventTypes.map((type) => (
               <MenuItem key={type} value={type}>
@@ -222,7 +222,7 @@ const CreateEvent = () => {
 
           {/* Description */}
           <TextField
-            label="Description"
+            label="Omschrijving"
             name="description"
             value={formData.description}
             onChange={handleInputChange}
@@ -236,7 +236,7 @@ const CreateEvent = () => {
 
           {/* Ticket Price */}
           <TextField
-            label="Ticket Price (€)"
+            label="Ticket Prijs (€)"
             name="ticketPrice"
             type="number"
             value={formData.ticketPrice}
@@ -249,7 +249,7 @@ const CreateEvent = () => {
 
           {/* Seats per Table */}
           <TextField
-            label="Seats per Table"
+            label="Stoelen per Tafel"
             name="seatsPerTable"
             type="number"
             value={formData.seatsPerTable}
@@ -274,7 +274,7 @@ const CreateEvent = () => {
 
           {/* Start and End Times */}
           <TextField
-            label="Start Time"
+            label="Start Tijd"
             name="startTime"
             type="datetime-local"
             value={formData.startTime}
@@ -285,7 +285,7 @@ const CreateEvent = () => {
             InputProps={{ style: { color: "white", backgroundColor: "#333" } }}
           />
           <TextField
-            label="End Time"
+            label="Eind Tijd"
             name="endTime"
             type="datetime-local"
             value={formData.endTime}
@@ -310,7 +310,7 @@ const CreateEvent = () => {
 
           {/* Submit Button */}
           <Button type="submit" variant="contained" fullWidth>
-            Create Event
+            Maak aan
           </Button>
         </Box>
       </Container>

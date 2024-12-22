@@ -94,12 +94,12 @@ const Invoice = () => {
         // Pass the payment data to the `pay` function
         await pay(paymentData);
         console.log(paymentData);
-        alert("Payment successful!"); // Optional: Show confirmation to the user
+        alert("Betaling geslaagd!"); // Optional: Show confirmation to the user
         clearProductCart();
         navigate("/"); // Navigate back to home after successful payment
     } catch (err) {
         console.error("Payment failed:", err);
-        alert("Payment failed. Please try again.");
+        alert("Betaling gefaald.");
     }
 };
 
@@ -116,12 +116,12 @@ const Invoice = () => {
   return (
     <main className={styles.invoice_page}>
       <div className={styles.invoice_content}>
-        <h1>Invoice</h1>
+        <h1>Factuur</h1>
 
         {/* Display products in the invoice */}
         {cart.products.length > 0 && (
           <div className={styles.products_list}>
-            <h3>Products</h3>
+            <h3>Producten</h3>
             <ul>
               {cart.products.map((product) => (
                 <li key={product.id} className={styles.product_item}>
@@ -148,7 +148,7 @@ const Invoice = () => {
 
         {/* Display Total Amount */}
         <p className={styles.total_amount}>
-          <strong>Total Amount: €{totalPrice.toFixed(2)}</strong>
+          <strong>Totaal Bedrag: €{totalPrice.toFixed(2)}</strong>
         </p>
 
         {/* Big Image */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from '../../../pages/kalender/kalender.module.css'; // Import CSS module
 import { getEvents } from '../../../services/ApiService';
 
@@ -7,6 +7,7 @@ const Kalender = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +36,12 @@ const Kalender = () => {
   return (
     <main className={styles.main}>
       <div className={styles.eventList}>
+      <button
+          className={styles.createButton}
+          onClick={() => navigate("/admin/events/create")}
+        >
+          Maak Evenement
+        </button>
         <div className={styles.eventContainer}>
           {events.map((event) => {
             const mainDate = event.mainDate || { day: "--", month: "N/A" }; // Fallback for mainDate

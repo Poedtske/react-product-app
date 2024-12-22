@@ -58,132 +58,134 @@ export default function Registration(){
     }
 
     return (
-        <Container
-          maxWidth="xs"
-          sx={{
-            backgroundColor: "black",
-            color: "white",
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: 3,
-          }}
-        >
-        <Box sx={{ mt: 8 }}>
-        <Typography variant="h5" align="center" gutterBottom sx={{ color: "white" }}>
-            Register
-        </Typography>
-
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <TextField
-                label="First Name"
-                name="firstName"
-                fullWidth
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-                InputLabelProps={{
-                    style: { color: "white" },
-                }}
-                InputProps={{
-                    style: { color: "white", backgroundColor: "#333" },
-                }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                label="Last Name"
-                name="lastName"
-                fullWidth
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-                InputLabelProps={{
-                    style: { color: "white" },
-                }}
-                InputProps={{
-                    style: { color: "white", backgroundColor: "#333" },
-                }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                label="Email"
-                name="email"
-                fullWidth
-                value={formData.email}
-                onChange={handleChange}
-                required
-                InputLabelProps={{
-                    style: { color: "white" },
-                }}
-                InputProps={{
-                    style: { color: "white", backgroundColor: "#333" },
-                }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                label="Password"
-                name="password"
-                type="password"
-                fullWidth
-                value={formData.password}
-                onChange={handleChange}
-                required
-                InputLabelProps={{
-                    style: { color: "white" },
-                }}
-                InputProps={{
-                    style: { color: "white", backgroundColor: "#333" },
-                }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                fullWidth
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                InputLabelProps={{
-                    style: { color: "white" },
-                }}
-                InputProps={{
-                    style: { color: "white", backgroundColor: "#333" },
-                }}
-                />
-            </Grid>
-            {error && (
-                <Grid item xs={12}>
-                <Typography color="error" variant="body2" sx={{ color: "red" }}>
-                    {error}
-                </Typography>
-                </Grid>
-            )}
-            <Grid item xs={12}>
-                <Button
-                type="submit"
-                fullWidth
-                variant="contained"
+        <main>
+            <Container
+                maxWidth="xs"
                 sx={{
-                    backgroundColor: "white",
-                    color: "black",
-                    "&:hover": {
-                    backgroundColor: "gray",
+                    backgroundColor: "black",
                     color: "white",
-                    },
+                    borderRadius: 2,
+                    padding: 3,
+                    boxShadow: 3,
                 }}
                 >
-                Register
-                </Button>
-            </Grid>
-            </Grid>
-        </form>
-        </Box>
-    </Container>
+                <Box sx={{ mt: 8 }}>
+                <Typography variant="h5" align="center" gutterBottom sx={{ color: "white" }}>
+                    Register
+                </Typography>
+
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                        label="Voornaam"
+                        name="firstName"
+                        fullWidth
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        required
+                        InputLabelProps={{
+                            style: { color: "white" },
+                        }}
+                        InputProps={{
+                            style: { color: "white", backgroundColor: "#333" },
+                        }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                        label="Achternaam"
+                        name="lastName"
+                        fullWidth
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        required
+                        InputLabelProps={{
+                            style: { color: "white" },
+                        }}
+                        InputProps={{
+                            style: { color: "white", backgroundColor: "#333" },
+                        }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                        label="e-mail"
+                        name="email"
+                        fullWidth
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        InputLabelProps={{
+                            style: { color: "white" },
+                        }}
+                        InputProps={{
+                            style: { color: "white", backgroundColor: "#333" },
+                        }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                        label="Passwoord"
+                        name="password"
+                        type="password"
+                        fullWidth
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        InputLabelProps={{
+                            style: { color: "white" },
+                        }}
+                        InputProps={{
+                            style: { color: "white", backgroundColor: "#333" },
+                        }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                        label="Bevestig Passwoord"
+                        name="confirmPassword"
+                        type="password"
+                        fullWidth
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
+                        InputLabelProps={{
+                            style: { color: "white" },
+                        }}
+                        InputProps={{
+                            style: { color: "white", backgroundColor: "#333" },
+                        }}
+                        />
+                    </Grid>
+                    {error && (
+                        <Grid item xs={12}>
+                        <Typography color="error" variant="body2" sx={{ color: "red" }}>
+                            {error}
+                        </Typography>
+                        </Grid>
+                    )}
+                    <Grid item xs={12}>
+                        <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                            backgroundColor: "white",
+                            color: "black",
+                            "&:hover": {
+                            backgroundColor: "gray",
+                            color: "white",
+                            },
+                        }}
+                        >
+                        Registreer
+                        </Button>
+                    </Grid>
+                    </Grid>
+                </form>
+                </Box>
+            </Container>
+        </main>
     );
 }

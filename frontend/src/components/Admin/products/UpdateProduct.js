@@ -179,7 +179,7 @@ const UpdateProduct = () => {
         }}
       >
         <Typography variant="h5" align="center" sx={{ color: "white" }}>
-          Update Product
+          Aanpassing Product
         </Typography>
 
         {/* Status Messages */}
@@ -202,7 +202,7 @@ const UpdateProduct = () => {
 
         {/* Product Name */}
         <TextField
-          label="Product Name"
+          label="Product Naam"
           name="name"
           value={formData.name}
           onChange={handleInputChange}
@@ -214,7 +214,7 @@ const UpdateProduct = () => {
 
         {/* Price */}
         <TextField
-          label="Price (€)"
+          label="Prijs (€)"
           name="price"
           type="number"
           value={formData.price}
@@ -236,7 +236,7 @@ const UpdateProduct = () => {
               fontSize: "16px",
             }}
           >
-            Product Image
+            Product Foto
           </label>
           <input
             id="product-image"
@@ -267,20 +267,20 @@ const UpdateProduct = () => {
             <Checkbox
               checked={formData.available}
               onChange={handleInputChange}
-              name="available"
+              name="Available"
               sx={{
                 color: "white",
                 "&.Mui-checked": { color: "green" },
               }}
             />
           }
-          label="Available"
+          label="Beschikbaar"
           sx={{ color: "white" }}
         />
 
         {/* Category */}
         <Select
-          name="category"
+          name="Categorie"
           value={formData.category}
           onChange={handleInputChange}
           displayEmpty
@@ -307,7 +307,7 @@ const UpdateProduct = () => {
           }}
         >
           <MenuItem value="" disabled sx={{ color: "#aaa" }}>
-            Select Category
+            Selecteer Categorie
           </MenuItem>
           {categories.map((category) => (
             <MenuItem
@@ -363,7 +363,7 @@ const UpdateProduct = () => {
             },
           }}
         >
-          Update Product
+          Pas Product Aan
         </Button>
       </Box>
     </Container>

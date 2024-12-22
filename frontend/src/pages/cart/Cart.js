@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { removeAllProductsFromCart, getProductCart, clearProductCart } from "../../services/ProductCartService"; // Import the ProductCart service for product-specific functionality
 import { removeTicketFromCart, clearCart, getCart, getProductById } from "../../services/ApiService"; // Import the API functions
 import styles from "./Cart.module.css";
+import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -139,17 +141,17 @@ const Cart = () => {
               Betalen
             </button>
             <button className={styles.clear_button} onClick={handleClearCart}>
-              Clear Cart
+              Kar leegmaken
             </button>
           </div>
         )}
 
-        <h2>Your Cart</h2>
+        <h2>Uw Kar</h2>
 
         {/* Display Products in the Cart */}
         {cart.products && cart.products.length > 0 && (
           <div className={styles.cart_section}>
-            <h3>Products</h3>
+            <h3>Producten</h3>
             <ul>
               {cart.products.map((product) => (
                 <li key={product.id} className={styles.cart_item}>
@@ -158,7 +160,7 @@ const Cart = () => {
                     className={styles.remove_button}
                     onClick={() => handleRemoveProduct(product.id)}
                   >
-                    Remove
+                    <MdOutlineRemoveShoppingCart style={{ fontSize: "24px"}}/>
                   </button>
                 </li>
               ))}

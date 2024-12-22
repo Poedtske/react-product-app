@@ -37,13 +37,13 @@ const ProductList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
+    if (window.confirm("Ben je zeker dat je dit product wilt verwijderen?")) {
       try {
         await deleteProductById(id);
         setProducts(products.filter((product) => product.id !== id));
-        alert("Product deleted successfully");
+        alert("Product successvol verwijderd");
       } catch (err) {
-        alert("Failed to delete product");
+        alert("Kon product niet verwijderen");
       }
     }
   };
@@ -68,7 +68,7 @@ const ProductList = () => {
 
   return (
     <main>
-      <h2 className={styles.title}>Product List</h2>
+      <h2 className={styles.title}>Product Lijst</h2>
 
       {/* Create Product Button */}
       <div className={styles.actions}>
@@ -76,7 +76,7 @@ const ProductList = () => {
           className={styles.createButton}
           onClick={() => navigate("/admin/products/create")}
         >
-          Create New Product
+          Maak Nieuw Product
         </button>
       </div>
 
@@ -84,11 +84,11 @@ const ProductList = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Price (€)</th>
-            <th>Available</th> {/* New column */}
-            <th>Actions</th>
+            <th>Foto</th>
+            <th>Naam</th>
+            <th>Prijs (€)</th>
+            <th>Beschikbaar</th> {/* New column */}
+            <th>Acties</th>
           </tr>
         </thead>
         <tbody>
@@ -112,7 +112,7 @@ const ProductList = () => {
                   }`}
                   onClick={() => handleAvailabilityProduct(product.id)}
                 >
-                  {product.available ? "Available" : "Unavailable"}
+                  {product.available ? "Beschikbaar" : "Niet Beschikbaar"}
                 </button>
               </td>
               <td>
@@ -120,19 +120,19 @@ const ProductList = () => {
                   className={`${styles.actionButton}`}
                   onClick={() => navigate(`/admin/products/${product.id}`)}
                 >
-                  View
+                  Bekijken
                 </button>
                 <button
                   className={`${styles.actionButton} ${styles.updateButton}`}
                   onClick={() => navigate(`/admin/products/update/${product.id}`)}
                 >
-                  Update
+                  Aanpassen
                 </button>
                 <button
                   className={`${styles.actionButton} ${styles.deleteButton}`}
                   onClick={() => handleDelete(product.id)}
                 >
-                  Delete
+                  Verwijderen
                 </button>
               </td>
             </tr>

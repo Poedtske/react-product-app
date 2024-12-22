@@ -152,7 +152,7 @@ const EventGrid = () => {
       {sidebarVisible && (
         <div className={`${styles.sidebar} ${sidebarVisible ? styles.open : ""}`}>
           <button onClick={closeSidebar} className={styles.closeBtn}>
-            Close &times;
+            Sluiten &times;
           </button>
           {selectedTable && (
             <div>
@@ -193,7 +193,7 @@ const EventGrid = () => {
                       value={event.ticketPrice} // Price from the event
                     />
                     <label>
-                      Amount:
+                      Hoeveelheid:
                       <input
                         type="number"
                         name="amount"
@@ -205,7 +205,7 @@ const EventGrid = () => {
                         required
                       />
                     </label>
-                    <button type="submit">Buy Ticket</button>
+                    <button type="submit">Koop Ticket</button>
                   </form>
                 )}
             </div>

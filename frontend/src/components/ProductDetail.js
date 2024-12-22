@@ -89,7 +89,7 @@ const ProductDetails = () => {
             },
           }}
         >
-          &larr; Go Back
+          &larr; Ga Terug
         </Button>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
@@ -121,21 +121,21 @@ const ProductDetails = () => {
         )}
 
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h6">Product Information</Typography>
+          <Typography variant="h6">Product Informatie</Typography>
           <Typography variant="body1">
-            <strong>Name:</strong> {product.name}
+            <strong>Naam:</strong> {product.name}
           </Typography>
           <Typography variant="body1">
-            <strong>Price (€):</strong> {product.price}
+            <strong>Prijs (€):</strong> {product.price}
           </Typography>
           <Typography variant="body1">
-            <strong>Available:</strong> {product.available ? "Yes" : "No"}
+            <strong>Beschikbaar:</strong> {product.available ? "Yes" : "No"}
           </Typography>
           <Typography variant="body1">
-            <strong>Category:</strong> {product.category}
+            <strong>Categorie:</strong> {product.category}
           </Typography>
           <Typography variant="body1">
-            <strong>In Cart:</strong> {productCount} times
+            <strong>In Kar:</strong> {productCount} keer
           </Typography>
         </Box>
 
@@ -152,7 +152,7 @@ const ProductDetails = () => {
             }}
           >
             <TextField
-              label="Quantity"
+              label="Aantal"
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
@@ -196,7 +196,7 @@ const ProductDetails = () => {
               }}
             >
               <MdAddShoppingCart style={{ fontSize: "24px", marginRight: "8px" }} />
-              Add to Cart
+              Voeg aan kar toe
             </Button>
           </Box>
         ) : (
@@ -208,7 +208,7 @@ const ProductDetails = () => {
               marginTop: 2,
             }}
           >
-            This product is currently unavailable and cannot be added to the cart.
+            Product is momenteel niet beschikbaar en kan dus niet aan de kar toegevoegd worden
           </Typography>
         )}
 
@@ -223,7 +223,7 @@ const ProductDetails = () => {
             }}
           >
             <Typography variant="body1">
-              Product added to cart successfully!
+              Product successvol toegevoegd aan de kar!
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
               <Button
@@ -238,7 +238,7 @@ const ProductDetails = () => {
                   },
                 }}
               >
-                Continue Shopping
+                Verder shoppen
               </Button>
               <Button
                 onClick={() => navigate("/cart")}
@@ -251,7 +251,7 @@ const ProductDetails = () => {
                   },
                 }}
               >
-                Go to Cart
+                Bekijk je Kar
               </Button>
             </Box>
           </Box>

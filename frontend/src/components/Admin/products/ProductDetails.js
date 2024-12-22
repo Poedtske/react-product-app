@@ -135,12 +135,12 @@ const ProductDetails = () => {
 
       {/* Product Information */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Product Information</Typography>
-        <Typography variant="body1"><strong>Name:</strong> {product.name}</Typography>
-        <Typography variant="body1"><strong>Price (€):</strong> {product.price}</Typography>
-        <Typography variant="body1"><strong>Available:</strong> {product.available ? "Yes" : "No"}</Typography>
-        <Typography variant="body1"><strong>Quantity:</strong> {product.quantity}</Typography>
-        <Typography variant="body1"><strong>Category:</strong> {product.category}</Typography>
+        <Typography variant="h6">Product Informatie</Typography>
+        <Typography variant="body1"><strong>Naam:</strong> {product.name}</Typography>
+        <Typography variant="body1"><strong>Prijs (€):</strong> {product.price}</Typography>
+        <Typography variant="body1"><strong>Beschikbaar:</strong> {product.available ? "Yes" : "No"}</Typography>
+        <Typography variant="body1"><strong>Aantal in Manden:</strong> {product.quantity}</Typography>
+        <Typography variant="body1"><strong>Categorie:</strong> {product.category}</Typography>
       </Box>
 
       {/* Actions */}
@@ -158,7 +158,7 @@ const ProductDetails = () => {
             },
           }}
         >
-          Edit Product
+          Aanpassen
         </Button>
 
         {/* Delete button */}
@@ -175,23 +175,24 @@ const ProductDetails = () => {
             borderColor: "#dc3545", // Initial border color for the Delete button
           }}
         >
-          Delete Product
+          Verwijderen
         </Button>
       </Box>
 
       {/* Invoice Table */}
       <Typography variant="h6" gutterBottom>
-        Invoices Containing this Product
+        Rekeningen die dit product bevatten.
       </Typography>
       <TableContainer component={Paper} sx={{ backgroundColor: 'black', borderRadius: 2 }}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: '#333' }}>
-              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Invoice ID</TableCell>
-              <TableCell sx={{ color: 'white', borderColor: 'white' }}>User</TableCell>
-              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Quantity</TableCell>
-              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Paid</TableCell>
-              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Confirmed</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Rekening ID</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Gebruiker</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Aantal</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Betaald</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Bevestigd</TableCell>
+              <TableCell sx={{ color: 'white', borderColor: 'white' }}>Afgesloten</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -207,17 +208,20 @@ const ProductDetails = () => {
                     {calculateQuantity(product.invoices, invoice.id) || 'error'}
                   </TableCell>
                   <TableCell sx={{ color: 'white', borderColor: 'white' }}>
-                    {invoice.paid ? "Yes" : "No"}
+                    {invoice.paid ? "Ja" : "Nee"}
                   </TableCell>
                   <TableCell sx={{ color: 'white', borderColor: 'white' }}>
-                    {invoice.confirmed ? "Yes" : "No"}
+                    {invoice.confirmed ? "Ja" : "Nee"}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white', borderColor: 'white' }}>
+                    {invoice.closed ? "Ja" : "Nee"}
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell colSpan={5} align="center" sx={{ color: 'white' }}>
-                  No invoices found for this product.
+                  Geen rekeningen bevatten dit product
                 </TableCell>
               </TableRow>
             )}

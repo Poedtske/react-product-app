@@ -68,14 +68,14 @@ const WebshopPage = () => {
             borderRight: "1px solid #ddd",
           }}
         >
-          <Typography variant="h6">Filter by Category</Typography>
+          <Typography variant="h6">Filter op Categorie</Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
               variant={selectedCategory === "" ? "contained" : "outlined"}
               onClick={() => handleCategoryChange("")}
               fullWidth
             >
-              All Products
+              Alle Producten
             </Button>
             {categories.map((category) => (
               <Button
@@ -147,7 +147,7 @@ const WebshopPage = () => {
                             whiteSpace: "nowrap", // Prevent text wrapping
                           }}
                         >
-                          Currently Unavailable
+                          Niet Beschikbaar
                         </Typography>
                       </div>
                     )}

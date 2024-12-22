@@ -136,7 +136,7 @@ const CreateProduct = () => {
           }}
         >
           <Typography variant="h5" align="center" sx={{ color: "white" }}>
-            Create Product
+            Maak Product Aan
           </Typography>
 
           {/* Status Messages */}
@@ -167,7 +167,7 @@ const CreateProduct = () => {
 
           {/* Product Name */}
           <TextField
-            label="Product Name"
+            label="Product Naam"
             name="name"
             value={formData.name}
             onChange={handleInputChange}
@@ -179,7 +179,7 @@ const CreateProduct = () => {
 
           {/* Price */}
           <TextField
-            label="Price (€)"
+            label="Prijs (€)"
             name="price"
             type="number"
             value={formData.price}
@@ -201,7 +201,7 @@ const CreateProduct = () => {
                 fontSize: "16px",
               }}
             >
-              Product Image
+              Product Foto
             </label>
             <input
               id="product-image"
@@ -232,7 +232,7 @@ const CreateProduct = () => {
               <Checkbox
                 checked={formData.available}
                 onChange={handleInputChange}
-                name="available"
+                name="beschikbaar"
                 sx={{
                   color: "white",
                   "&.Mui-checked": { color: "green" },
@@ -245,7 +245,7 @@ const CreateProduct = () => {
 
           {/* Category */}
           <Select
-            name="category"
+            name="Categorie"
             value={formData.category}
             onChange={handleInputChange}
             displayEmpty
@@ -272,7 +272,7 @@ const CreateProduct = () => {
             }}
           >
             <MenuItem value="" disabled sx={{ color: "#aaa" }}>
-              Select Category
+              Selecteer Categorie
             </MenuItem>
             {categories.map((category) => (
               <MenuItem
@@ -305,7 +305,7 @@ const CreateProduct = () => {
               },
             }}
           >
-            Create Product
+            Maak Product
           </Button>
         </Box>
       </Container>

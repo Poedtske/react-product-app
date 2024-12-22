@@ -14,15 +14,17 @@ import{
 
 export default function LoginSuccessful() {
   return (
-    <Container maxWidth="xs">
-        <Box sx={{ mt: 8, color:'green' }}>
-            <Typography variant="h3" align="center" gutterBottom>
-                You have sucessfully Logged in. You can now login!
-            </Typography>
-            <Typography variant="h6" align="center" gutterBottom>
-                <a href="/">Home</a>
-            </Typography>
-        </Box>
-    </Container>
+    <main>
+        <Container maxWidth="xs">
+            <Box sx={{ mt: 8, color:'green' }}>
+                <Typography variant="h3" align="center" gutterBottom>
+                    Je bent nu ingelogd
+                </Typography>
+                <Typography variant="h6" align="center" gutterBottom>
+                    <a href="/">Home</a>
+                </Typography>
+            </Box>
+        </Container>
+    </main>
   )
 }

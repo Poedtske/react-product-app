@@ -108,7 +108,7 @@ export default function Login() {
           />
 
           <TextField
-            label="Password"
+            label="Passwoord"
             variant="outlined"
             type="password"
             fullWidth
@@ -154,7 +154,7 @@ export default function Login() {
             }}
             onClick={() => navigate('/register')} // Navigate to the register page
           >
-            Don't have an account? Register
+            Registreer hier
           </Button>
         </Box>
       </Container>
