@@ -27,16 +27,10 @@ public class Event {
     @Nullable
     private String spondId;
 
-    @Nullable
-    private String poster;
-
     @NotBlank
     private String title;
 
-    @Nullable
-    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "UTC")
-    private List<EventDate> dates=new ArrayList<>();
+    private String img;
 
     @NotBlank
     private String location;
@@ -85,14 +79,15 @@ public class Event {
                  String location,
                  String description,
                  EventType type,
+                 Date startTime,
+                 Date endTime,
                  String layout,
                  int seatsPerTable,
                  BigDecimal ticketPrice) {
         this.spondId = null;
-        this.startTime = null;
-        this.endTime = null;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.title = title;
-        this.dates = new ArrayList<>();
         this.location = location;
         this.description = description;
         this.type = type;
@@ -111,7 +106,6 @@ public class Event {
         this.title = title;
         this.location = location;
         this.description = description;
-        this.dates=new ArrayList<>();
     }
 
     public BigDecimal getTicketPrice() {
@@ -130,12 +124,28 @@ public class Event {
         return kolommen;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
     public Date getStartTime() {
         return startTime;
     }
 
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
     public Date getEndTime() {
         return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public String getSpondId() {
@@ -144,14 +154,6 @@ public class Event {
 
     public void setSpondId(String spondId) {
         this.spondId = spondId;
-    }
-
-    public String getPoster() {
-        return poster;
-    }
-
-    public void setPoster(String poster) {
-        this.poster = poster;
     }
 
     public String getTitle() {
@@ -198,16 +200,8 @@ public class Event {
         this.layout = layout;
     }
 
-    public List<EventDate> getDates() {
-        return dates;
-    }
-
     public Set<Ticket> getTickets() {
         return tickets;
-    }
-
-    public void setDates(List<EventDate> dates) {
-        this.dates = dates;
     }
 
     public List<Tafel> getTables() {

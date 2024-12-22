@@ -1,26 +1,31 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.controller.AuthenticationResponse;
 import com.example.backend.dto.EventDto;
-import com.example.backend.dto.SignUpDto;
 import com.example.backend.enums.EventType;
-import com.example.backend.enums.Role;
+import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Event;
 import com.example.backend.model.EventDate;
-import com.example.backend.model.Tafel;
-import com.example.backend.model.User;
 import com.example.backend.repository.DateDao;
 import com.example.backend.repository.EventDao;
 import com.example.backend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
 public class EventServiceImpl implements EventService {
+
+    private static String IMG_DIR=System.getProperty("user.dir") + "/backend/src/main/resources/images/events";
+    private static Path IMGS_PATH= Paths.get(IMG_DIR);
 
     @Autowired
     private EventDao eventRepository;
@@ -41,8 +46,8 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
-    @Override
-    public Event updateById(Long id, Event updatedEvent) {
+
+    public ResponseEntity updateById(Long id, Event updatedEvent, MultipartFile imageFile) {
         Event e = this.findById(id);
         e.setTitle(updatedEvent.getTitle());
         e.setPoster(updatedEvent.getPoster());
@@ -52,7 +57,29 @@ public class EventServiceImpl implements EventService {
         e.setSeatsPerTable(updatedEvent.getSeatsPerTable());
 
 
-        return this.save(e);
+        return ResponseEntity.ok(0);
+    }
+
+
+    public ResponseEntity updateById(Long id, Event updatedEvent) {
+
+        try{
+            Event e=eventRepository.findById(id).orElseThrow(()->new AppException("Event not found",HttpStatus.NOT_FOUND));
+            e.setTitle(updatedEvent.getTitle());
+            e.setType(updatedEvent.getType());
+            e.setLocation(updatedEvent.getLocation());
+            e.setDescription(updatedEvent.getDescription());
+            e.setSeatsPerTable(updatedEvent.getSeatsPerTable());
+
+            e.setLayout(updatedEvent.getLayout());
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+
+
+
+        return ResponseEntity.ok(0);
     }
 
     @Override
@@ -109,67 +136,66 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    public ResponseEntity<EventDto> createEvent(EventDto eventDto) {
+    public ResponseEntity createEvent(EventDto eventDto, MultipartFile imageFile) {
         try {
-            // List to store EventDate objects
-            List<EventDate> eventDates = new ArrayList<>();
+            // Input format received
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-            // event object is filled with the data gained from the form
+            // Output format required
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            outputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            // Parse and reformat dates
+            Date startTime = inputFormat.parse(eventDto.getStartTime());
+            Date endTime = inputFormat.parse(eventDto.getEndTime());
+
+            String formattedStartTime = outputFormat.format(startTime);
+            String formattedEndTime = outputFormat.format(endTime);
+
+            // Create Event
             Event event = new Event(
                     eventDto.getTitle(),
                     eventDto.getLocation(),
                     eventDto.getDescription(),
                     EventType.valueOf(eventDto.getType()),
+                    startTime,
+                    endTime,
                     eventDto.getLayout(),
                     eventDto.getSeatsPerTable(),
                     eventDto.getTicketPrice()
             );
             eventRepository.save(event);
 
-            // Iterate over the dates provided in the form and create EventDate objects
-            for (Map<String, String> dateMap : eventDto.getDates()) {
-                String dateStr = dateMap.get("date"); // Expected format: dd/MM/yyyy
-                String startTimeStr = dateMap.get("startTime"); // Expected format: HH:mm
-                String endTimeStr = dateMap.get("endTime"); // Expected format: HH:mm
-
-                // Convert the strings to Date objects (we'll assume the helper methods parse correctly)
-                Date date = parseDate(dateStr);
-                Date startTime = parseTime(dateStr, startTimeStr);
-                Date endTime = parseTime(dateStr, endTimeStr);
-
-                // Create EventDate object and associate it with the Event
-                EventDate eventDate = new EventDate(date, startTime, endTime, event);
-                dateDao.save(eventDate);
-                eventDates.add(eventDate);
-            }
-
-            // Set the list of EventDates in the Event object
-            event.setDates(eventDates);
-
             tableService.CreateTables(event);
 
-            // Save the event object along with its EventDates
+            // Handle image
+            String newFilename = event.getTitle() + "_" + event.getId() + "." +
+                    StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
+            Path newFilePath = IMGS_PATH.resolve(newFilename);
+            Files.write(newFilePath, imageFile.getBytes());
+            event.setImg(newFilename);
             eventRepository.save(event);
 
-            // Create the response DTO with the saved event data
+            // Response
             EventDto savedEventDto = new EventDto(
                     event.getId(),
                     event.getTitle(),
                     event.getLocation(),
                     event.getType().toString(),
                     event.getDescription(),
+                    formattedStartTime,  // Send back in ISO format
+                    formattedEndTime,    // Send back in ISO format
                     event.getSeatsPerTable(),
                     event.getLayout(),
-                    eventDto.getDates(), // Send the dates back in the response
-                    event.getDates(), // Include the saved EventDates in the response
+                    event.getImg(),
                     event.getTicketPrice()
             );
 
-            return ResponseEntity.ok(savedEventDto);
+            return new ResponseEntity<>(savedEventDto, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            // Handle the error by returning the EventDto with a bad request status
-            e.printStackTrace();  // For logging the error
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(eventDto);
         }
     }

@@ -114,9 +114,11 @@ export const getCategories = async () => {
 
 // Events API
 
+
+
 export const createEvent = async (event) => {
   try {
-    const response = await request('POST','/api/admin/events',event,true)
+    const response = await request('POST','/api/admin/events',event,true, true)
     return response.data;
   } catch (error) {
     console.error('Error creating product:', error.response || error);

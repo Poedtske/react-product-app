@@ -1,14 +1,12 @@
 package com.example.backend.service;
 
 import com.example.backend.model.Event;
-import com.example.backend.model.Product;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 public interface EventService {
     Event save(Event event);
 
-    Event updateById(Long id, Event event);
+    ResponseEntity updateById(Long id, Event event);
 
     Iterable<Event> findAll();
 
