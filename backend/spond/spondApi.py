@@ -26,7 +26,7 @@ encoded_credentials = base64.b64encode(cred.encode("utf-8")).decode("utf-8")
 # Define the headers that will be used in every API call
 headers = {
     "Content-Type": "application/json",  # Replace with your actual API key
-    "Authorization":f"Basic {encoded_credentials}",
+    "x-api-token":os.getenv('API_KEY'),
 }
 
 def add_two_hours_to_timestamp(timestamp):
