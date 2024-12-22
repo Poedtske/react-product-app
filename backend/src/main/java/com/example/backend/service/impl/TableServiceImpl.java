@@ -4,8 +4,12 @@ import com.example.backend.model.Event;
 import com.example.backend.model.Tafel;
 import com.example.backend.repository.TableDao;
 import com.example.backend.service.TableService;
+import jakarta.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TableServiceImpl implements TableService {
@@ -50,5 +54,23 @@ public class TableServiceImpl implements TableService {
             tableRepository.save(t);
             e.AddTable(t);
         }
+    }
+    public void CreateTables(Event e, int amount){
+        for(int i = 0; i<amount; i++){
+            Tafel t=new Tafel(e,e.getSeatsPerTable());
+            tableRepository.save(t);
+            e.AddTable(t);
+        }
+    }
+
+    public void RemoveTables(Event e, int amount){
+        int arrayLength=e.getTables().size();
+        List<Tafel> tables=e.getTables();
+        List<Long> idList=new ArrayList<>();
+        for(int i=e.getTables().size()-1;i>=arrayLength-amount;i--){
+            Long id=tables.get(i).getId();
+            idList.add(id);
+        }
+        tableRepository.deleteAllById(idList);
     }
 }

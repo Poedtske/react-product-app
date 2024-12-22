@@ -40,6 +40,7 @@ import CreateProduct from './components/Admin/products/CreateProduct';
 import ProductList from './components/ProductList';
 import ProductDetails from './components/ProductDetail';
 import AdminUpdateProduct from './components/Admin/products/UpdateProduct';
+import UpdateEvent from './components/Admin/events/UpdateEvent';
 
 function App() {
   const ADMIN_ROLE = "ADMIN";
@@ -61,7 +62,7 @@ function App() {
       <Route path="/admin/events" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EventsList /></ProtectedRoute>} />
       <Route path="/admin/events/create" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><CreateEvent /></ProtectedRoute>} />
       <Route path="/admin/events/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EventDetails /></ProtectedRoute>} />
-      <Route path="/admin/events/edit/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><EditEvent /></ProtectedRoute>} />
+      <Route path="/admin/events/update/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><UpdateEvent /></ProtectedRoute>} />
       <Route path="/admin/products" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><AdminProductList /></ProtectedRoute>} />
       <Route path="/admin/products/create" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><CreateProduct /></ProtectedRoute>} />
       <Route path="/admin/products/:id" element={<ProtectedRoute requiredRole={ADMIN_ROLE}><AdminProductDetail /></ProtectedRoute>} />

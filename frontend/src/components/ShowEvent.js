@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getEventById, deleteEventById } from "../services/ApiService"; // Import API functions
+import { getEventById, deleteEventById, getEventImg } from "../services/ApiService"; // Import API functions
 import styles from "../css/entity.module.css";
+import {
+  Container,
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from "@mui/material";
 
 const ShowEvent = () => {
   const { id } = useParams(); // Get event ID from route params
@@ -15,7 +28,22 @@ const ShowEvent = () => {
     const fetchEvent = async () => {
       try {
         const fetchedEvent = await getEventById(id); // Fetch event details from API
-        setEvent(fetchedEvent); // Store the event in state
+        const imageResponse = await getEventImg(id);
+        if(imageResponse!=null){
+          const eventWithImage= {
+            ...fetchedEvent,
+            img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
+          };
+  
+          
+          setEvent(eventWithImage); // Store the event in state
+        }else{
+          const eventWithImage= {
+            ...fetchedEvent,
+            img: null, // Convert image response to blob
+          };
+          setEvent(eventWithImage);
+        }
         setLoading(false); // Stop loading once data is fetched
       } catch (err) {
         console.error("Error fetching event:", err);
@@ -26,6 +54,16 @@ const ShowEvent = () => {
 
     fetchEvent();
   }, [id]);
+
+  const deleteEvent = async () => {
+    try {
+      await deleteEventById(id); // Call API to delete the event
+      navigate("/admin/events"); // Navigate back after successful deletion
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      setError("Failed to delete the event. Please try again.");
+    }
+  };
 
   const formatTime = (date) => {
     const hours = String(date.getHours()).padStart(2, "0");
@@ -70,13 +108,28 @@ const ShowEvent = () => {
         <div className={styles.post_content}>
           <h1>{event.title}</h1>
 
-          {event.poster && (
-            <img
-              style={{ marginInline: "auto" }}
-              src={event.poster}
-              alt={`${event.title}_poster`}
-            />
-          )}
+          {/* event Image */}
+      {event.img && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
+          <img
+            src={event.img} // Use the image URL created from the Blob
+            alt={event.name}
+            style={{
+              width: "300px",
+              height: "300px",
+              objectFit: "cover",
+              borderRadius: "10px",
+            }}
+          />
+        </Box>
+      )}
 
           {event.description && (
             <>
@@ -84,14 +137,13 @@ const ShowEvent = () => {
               <p>{event.description}</p>
             </>
           )}
-          <br/>
+
           <h2>Locatie</h2>
           <p>{event.location}</p>
-          <br/>
           <h2>Datum & Tijd</h2> 
           {event.startTime && event.endTime ? (
             <>
-                           
+              <p>Datum: {formatDate(new Date(event.startTime))}</p> {/* Added date */}             
               <p>Begin: {formatTime(new Date(event.startTime))}</p>
               <p>Einde: {formatTime(new Date(event.endTime))}</p>
             </>
@@ -101,12 +153,6 @@ const ShowEvent = () => {
           ) : (
             <p>Geen tijd & datum beschikbaar</p>
           )}
-          <button
-              className={styles.button}
-              onClick={() => navigate(`/events/${id}/layout`)}
-            >
-              Koop Tickets
-            </button>
         </div>
       </div>
     </main>

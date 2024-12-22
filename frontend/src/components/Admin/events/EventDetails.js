@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getEventById, deleteEventById } from "../../../services/ApiService"; // Import API functions
+import { getEventById, deleteEventById, getEventImg } from "../../../services/ApiService"; // Import API functions
 import styles from "../../../css/entity.module.css";
+import {
+  Container,
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from "@mui/material";
 
 const ShowEvent = () => {
   const { id } = useParams(); // Get event ID from route params
@@ -15,7 +28,22 @@ const ShowEvent = () => {
     const fetchEvent = async () => {
       try {
         const fetchedEvent = await getEventById(id); // Fetch event details from API
-        setEvent(fetchedEvent); // Store the event in state
+        const imageResponse = await getEventImg(id);
+        if(imageResponse!=null){
+          const eventWithImage= {
+            ...fetchedEvent,
+            img: URL.createObjectURL(new Blob([imageResponse])), // Convert image response to blob
+          };
+  
+          
+          setEvent(eventWithImage); // Store the event in state
+        }else{
+          const eventWithImage= {
+            ...fetchedEvent,
+            img: null, // Convert image response to blob
+          };
+          setEvent(eventWithImage);
+        }
         setLoading(false); // Stop loading once data is fetched
       } catch (err) {
         console.error("Error fetching event:", err);
@@ -80,13 +108,28 @@ const ShowEvent = () => {
         <div className={styles.post_content}>
           <h1>{event.title}</h1>
 
-          {event.poster && (
-            <img
-              style={{ marginInline: "auto" }}
-              src={event.poster}
-              alt={`${event.title}_poster`}
-            />
-          )}
+          {/* event Image */}
+      {event.img && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
+          <img
+            src={event.img} // Use the image URL created from the Blob
+            alt={event.name}
+            style={{
+              width: "300px",
+              height: "300px",
+              objectFit: "cover",
+              borderRadius: "10px",
+            }}
+          />
+        </Box>
+      )}
 
           {event.description && (
             <>
@@ -100,7 +143,7 @@ const ShowEvent = () => {
           <h2>Datum & Tijd</h2> 
           {event.startTime && event.endTime ? (
             <>
-                           
+              <p>Datum: {formatDate(new Date(event.startTime))}</p> {/* Added date */}                          
               <p>Begin: {formatTime(new Date(event.startTime))}</p>
               <p>Einde: {formatTime(new Date(event.endTime))}</p>
             </>
@@ -130,7 +173,7 @@ const ShowEvent = () => {
           <div className="row">
             <button
               className={styles.updateBtn}
-              onClick={() => navigate(`/admin/events/edit/${id}`)}
+              onClick={() => navigate(`/admin/events/update/${id}`)}
             >
               Aanpassen
             </button>

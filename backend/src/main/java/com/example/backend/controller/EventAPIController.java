@@ -49,7 +49,15 @@ public class EventAPIController {
         return eventService.createEvent(eventDto,imageFile);
     }
 
+    @PutMapping("/admin/events/{id}/img")
+    public ResponseEntity update(@PathVariable Long id, @RequestPart EventDto eventDto,@RequestPart MultipartFile imageFile) throws IOException {
+        return eventService.updateById(id, eventDto,imageFile);
+    }
 
+    @PutMapping("/admin/events/{id}")
+    public ResponseEntity update(@PathVariable Long id, @RequestPart EventDto eventDto) throws IOException {
+        return eventService.updateById(id, eventDto);
+    }
 
     @GetMapping("/public/eventTypes")
     public List<String> getEventTypes() {
@@ -69,4 +77,8 @@ public class EventAPIController {
 
     }
 
+    @GetMapping("/public/events/{id}/image")
+    public ResponseEntity<?> getImageByProductId(@PathVariable long id){
+        return eventService.getImg(id);
+    }
 }

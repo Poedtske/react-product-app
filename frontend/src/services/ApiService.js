@@ -114,8 +114,6 @@ export const getCategories = async () => {
 
 // Events API
 
-
-
 export const createEvent = async (event) => {
   try {
     const response = await request('POST','/api/admin/events',event,true, true)
@@ -241,10 +239,9 @@ export const getEventTypes = async () => {
   }
 };
 
-
-export const updateEventById = async (id, event) => {
+export const updateEventByIdWithImg = async (id, event) => {
   try {
-    const response = await request('PUT',`/api/admin/events/${id}`,event,true)
+    const response = await request('PUT',`/api/admin/events/${id}/img`,event,true,true)
     return response.data;
   } catch (error) {
     console.error(`Error updating event with ID ${id}:`, error.response || error);
@@ -252,6 +249,15 @@ export const updateEventById = async (id, event) => {
   }
 };
 
+export const updateEventByIdWithoutImg = async (id, event) => {
+  try {
+    const response = await request('PUT',`/api/admin/events/${id}`,event,true,true)
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating event with ID ${id}:`, error.response || error);
+    throw error;
+  }
+};
 
 export const getEventById = async (id) => {
   try {
@@ -353,3 +359,13 @@ export const manageAvailabilityProduct= async(id)=>{
     throw error;
   }
 }
+
+export const getEventImg = async (id) => {
+  try {
+    const response = await request('GET',`/api/public/events/${id}/image`,false,false,false,true)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching events:', error.response || error);
+    return null;
+  }
+};
