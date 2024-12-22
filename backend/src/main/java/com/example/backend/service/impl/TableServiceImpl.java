@@ -56,7 +56,7 @@ public class TableServiceImpl implements TableService {
         }
     }
     public void CreateTables(Event e, int amount){
-        for(int i = 0; i<amount; i++){
+        for(int i = 0; i<Math.abs(amount); i++){
             Tafel t=new Tafel(e,e.getSeatsPerTable());
             tableRepository.save(t);
             e.AddTable(t);

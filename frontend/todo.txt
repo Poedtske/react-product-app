@@ -1,8 +1,8 @@
-EVENTS:
--edit for events 
-(layout can only be edited if none of its tables has sold tickets)
--add images for events
--edit show
+OVERALL:
+-show exceptions when failing
+
+BACKEND:
+-check file uploads from frontend
 
 FRONTEND:
 -put everything in dutch

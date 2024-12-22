@@ -128,7 +128,41 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <img src="/images/banner.jpeg" alt="banner" id="banner" />
-
+{/* Text Section */}
+<section className={styles.section} style={{ backgroundColor: 'gray' }}>
+        <p className={styles.p}>
+          Wij zijn een groep enthousiaste amateurmuzikanten bestaande uit momenteel een dertigtal
+          spelende leden waarvan de leeftijden uiteenlopend zijn, gaande van kinderen tot
+          gepensioneerden. Jong of oud, het maakt voor ons niet uit!!!
+        </p>
+        <br/>
+        <p className={styles.p}>
+          Het bestuur bestaat uit gemotiveerde leden, die allen instaan voor de bevordering van onze
+          fanfare.
+        </p>
+        <br/>
+        <p className={styles.p}>
+          Onze fanfare is altijd op zoek naar nieuwe leden, die interesse hebben in muziek. Ben je
+          -18, beginnende muzikant of een ervaren speler, wees er dan maar zeker van dat je altijd
+          welkom bent om onze rangen te komen bijvullen.
+        </p>
+        <br/>
+        <p className={styles.p}>
+          Indien je niets of bijna niets van muziek kent, geen nood, dan is er de mogelijkheid om
+          lessen aan te bieden alsook een instrument gratis in bruikleen te krijgen.
+        </p>
+        <br/>
+        <p className={styles.p}>
+          Het belangrijkste voor onze fanfare is dat deze hobby een unieke kijk op de samenleving
+          geeft, jong en oud die samenspelen en samen plezier hebben met de muziek die ze maken.
+        </p>
+        <br/>
+        <p className={styles.p}>
+          We repeteren op vrijdagavond in de feestzaal van de Borgt van 20 tot 22 uur.
+          Geïnteresseerden zijn altijd welkom om langs te komen!
+        </p>
+        <br/>
+      </section>
       {firstEvent && firstEvent.poster && (
         <section className={styles.section} style={{ backgroundColor: 'black' }}>
           <Link
@@ -173,6 +207,19 @@ const Home = () => {
           <button style={{ width: '2em', marginRight: '10px' }} onClick={handlePrev}>&#10094;</button>
           <button style={{ width: '2em' }} onClick={handleNext}>&#10095;</button>
         </div>
+      </section>
+
+      {/* Sponsor Section */}
+      <section className={styles.section} style={{ width: '80%', maxWidth: '600px' }}>
+        <button>
+          <a
+            href="https://www.trooper.be/nl/trooperverenigingen/kfdemoedigevrienden"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img className="fotos" src="/images/trooper_logo.png" alt="Trooper" />
+          </a>
+        </button>
       </section>
     </main>
   );

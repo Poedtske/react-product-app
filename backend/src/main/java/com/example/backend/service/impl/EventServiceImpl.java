@@ -352,16 +352,16 @@ public class EventServiceImpl implements EventService {
             //updates the amount of tables in the event
             if(!e.getLayout().equals(updatedEvent.getLayout())){
 
-                if(e.getRijen()*e.getKolommen()<updatedEvent.getRijen()*updatedEvent.getKolommen()){
+                if((e.getRijen()*e.getKolommen())>(updatedEvent.getRijen()*updatedEvent.getKolommen())){
 
                     tableService.RemoveTables(e,(e.getRijen()*e.getKolommen()-updatedEvent.getRijen()*updatedEvent.getKolommen()));
+                    e.setLayout(updatedEvent.getLayout());
                     e.CreateLayout();
-
                 }else{
 
                     tableService.CreateTables(e,(e.getRijen()*e.getKolommen()-updatedEvent.getRijen()*updatedEvent.getKolommen()));
+                    e.setLayout(updatedEvent.getLayout());
                     e.CreateLayout();
-
                 }
             }
         }
