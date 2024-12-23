@@ -28,3 +28,7 @@ docker-compose.yml
 frontend/z1.txt
 frontend/z.txt
 frontend/.docker/z.txt
+frontend/data/logs/fallback_error.log
+frontend/data/logs/fallback_access.log
+frontend/data/keys.json
+frontend/data/database.sqlite

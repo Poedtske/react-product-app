@@ -4,6 +4,9 @@ import com.example.backend.enums.Category;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,6 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Products")
 public class Product {
     @Id
@@ -37,8 +43,6 @@ public class Product {
     @ManyToMany(mappedBy = "products",cascade = CascadeType.REMOVE)
     private List<Invoice> invoices =new ArrayList<>();
 
-    public Product() {
-    }
     //malajdndf_8.png
     public Product(String name, BigDecimal price, String img, Boolean available, int quantity, Category category) {
         this.name = name;
