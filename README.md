@@ -40,6 +40,10 @@
      npm install
      npm start
      ```
+   - Run this command in the directory /backend/spond to seed the events
+     ```bash
+     python .\spondApi.py
+     ```
 
 ---
 ## Resources and References

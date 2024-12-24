@@ -52,6 +52,15 @@ public class DatabaseSeeder implements CommandLineRunner {
         admin.addInvoice(new Invoice(admin));
         userList.add(admin);
 
+        User admin2=User.builder()
+                .firstName("Robbe")
+                .lastName("Poedts")
+                .password(passwordEncoder.encode("1"))
+                .email("robbe.poedts@hotmail.be")
+                .role(Role.ADMIN)
+                .build();
+        admin2.addInvoice(new Invoice(admin));
+        userList.add(admin2);
 
         // Save admin user
         User user = User.builder()

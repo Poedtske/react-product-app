@@ -16,7 +16,7 @@ password = os.getenv('SPOND_PASSWORD')
 group_id = os.getenv('SPOND_GROUP_ID')
 api_base_url = os.getenv('URL')  # Fetch the base URL from the environment file
 api_spond_private="/api/secure/spondEvents"
-api_spond_public="/api/public/spondEvents/spond"
+api_spond_public="/api/public/spondEvents"
 
 usernameSpring="SpondApi@hotmail.com"
 passwordSpring="fdsghrefdgSFGDSF1654dfdsf;,sdjfsdf"
