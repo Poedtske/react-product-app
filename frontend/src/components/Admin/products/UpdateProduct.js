@@ -267,7 +267,7 @@ const UpdateProduct = () => {
             <Checkbox
               checked={formData.available}
               onChange={handleInputChange}
-              name="Available"
+              name="available"
               sx={{
                 color: "white",
                 "&.Mui-checked": { color: "green" },

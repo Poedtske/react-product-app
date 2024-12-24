@@ -232,14 +232,14 @@ const CreateProduct = () => {
               <Checkbox
                 checked={formData.available}
                 onChange={handleInputChange}
-                name="beschikbaar"
+                name="available"
                 sx={{
                   color: "white",
                   "&.Mui-checked": { color: "green" },
                 }}
               />
             }
-            label="Available"
+            label="Beschikbaar"
             sx={{ color: "white" }}
           />
 

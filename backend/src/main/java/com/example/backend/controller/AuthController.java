@@ -1,106 +1,53 @@
 package com.example.backend.controller;
 
-import com.example.backend.config.UserAuthProvider;
-import com.example.backend.dto.CartDto;
 import com.example.backend.dto.CredentialsDto;
 import com.example.backend.dto.SignUpDto;
-import com.example.backend.dto.UserDto;
-import com.example.backend.model.LoginRequest;
-import com.example.backend.model.User;
 import com.example.backend.service.AuthService;
-import com.example.backend.service.impl.UserService;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-
+/**
+ * Controller responsible for authentication operations, such as user login and registration.
+ * <p>
+ * This controller exposes endpoints for user authentication and registration,
+ * handling requests related to login and user registration processes.
+ * </p>
+ */
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
-    private final UserAuthProvider userAuthProvider;
     private final AuthService service;
 
-    /*@GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("account", new UserDto());
-        return "register";
-    }*/
-
-    /*@PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody() User user) {
-        User newUser=userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session){
-        try{
-            boolean isAuthenticated= userService.authenticate(loginRequest.getEmail(),loginRequest.getPassword());
-
-            if(isAuthenticated){
-                session.setAttribute("user",loginRequest.getEmail());
-                return ResponseEntity.ok("Login was successful");
-            }else{
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-            }
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unknown error occurred");
-        }
-    }*/
-
+    /**
+     * Authenticates a user based on their provided credentials.
+     * <p>
+     * This route accepts the user credentials (username and password), verifies them,
+     * and returns an authentication token if the credentials are valid. The response includes
+     * an authentication response with a token that can be used for subsequent requests.
+     * </p>
+     *
+     * @param credentialsDto {@link CredentialsDto} containing the user's credentials (username and password).
+     * @return {@link ResponseEntity} containing the {@link AuthenticationResponse} if login is successful.
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody CredentialsDto credentialsDto){
-        return ResponseEntity.ok(service.login(credentialsDto));
+        return ResponseEntity.ok(service.login(credentialsDto)); // Calls the service to authenticate the user
     }
 
+    /**
+     * Registers a new user in the system.
+     * <p>
+     * This route accepts user registration details, including username, password, and other necessary information.
+     * It creates a new user and returns an authentication response containing a token for the newly registered user.
+     * </p>
+     *
+     * @param signUpDto {@link SignUpDto} containing the user's registration details (username, password, etc.).
+     * @return {@link ResponseEntity} containing the {@link AuthenticationResponse} if registration is successful.
+     */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (@RequestBody SignUpDto signUpDto){
-
-        return ResponseEntity.ok(service.register(signUpDto));
+        return ResponseEntity.ok(service.register(signUpDto)); // Calls the service to register the new user
     }
-
-    /*@GetMapping("/users")
-    public Iterable<User> getUsers(){
-        return userService.getUsers();
-    }
-
-    @GetMapping("/users/{id}")
-    public User getUser(@PathVariable("id") Long id){
-        return userService.getUser(id);
-    }
-
-    @PutMapping("/users/{id}")
-    public User updateUser(@RequestBody()User user, @PathVariable("id")Long id){
-        return userService.updateUser(user);
-    }
-
-    @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable("id") Long id){
-        userService.deleteUser(id);
-    }*/
-
-    /*@PostMapping("/register")
-    public String registerUser(@ModelAttribute("account") UserDto userDto, Model model) {
-        try {
-            userService.registerUser(userDto);
-            return "redirect:/login?success";
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-            return "register";
-        }
-    }*/
-
 }
-

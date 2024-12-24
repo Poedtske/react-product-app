@@ -30,7 +30,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import EventsList from './components/Admin/events/EventsList';
 import CreateEvent from './components/Admin/events/CreateEvent';
 import EventDetails from './components/Admin/events/EventDetails';
-import EditEvent from './components/Admin/events/EditEvent';
 import { getUserRole, getAuthToken } from './utils/jwtUtils';
 import EventLayout from './pages/eventLayout/EventLayout';
 import Cart from './pages/cart/Cart';

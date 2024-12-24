@@ -138,7 +138,7 @@ const ProductDetails = () => {
         <Typography variant="h6">Product Informatie</Typography>
         <Typography variant="body1"><strong>Naam:</strong> {product.name}</Typography>
         <Typography variant="body1"><strong>Prijs (€):</strong> {product.price}</Typography>
-        <Typography variant="body1"><strong>Beschikbaar:</strong> {product.available ? "Yes" : "No"}</Typography>
+        <Typography variant="body1"><strong>Beschikbaar:</strong> {product.available ? "Ja" : "Nee"}</Typography>
         <Typography variant="body1"><strong>Aantal in Manden:</strong> {product.quantity}</Typography>
         <Typography variant="body1"><strong>Categorie:</strong> {product.category}</Typography>
       </Box>
