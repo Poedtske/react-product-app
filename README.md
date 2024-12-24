@@ -65,6 +65,8 @@
 - [Discussion 6](https://chatgpt.com/share/676993fc-2594-8008-be0f-9e3a3914b3c4)  
 - [Discussion 7](https://chatgpt.com/share/6769940f-d3f4-8008-b18b-ef48c0547d19)
 - [Discussion 8](https://chatgpt.com/share/67699868-b5d0-8008-85d1-6047ac234348)
+- [Discussion 9](https://chatgpt.com/share/676a4567-fdb0-8008-9bad-639214e2bef9) documentation
+- [Discussion 10](https://chatgpt.com/c/676995a8-9be8-8008-bed8-23778ebde367) README
 
 ### Discord Communities Consulted
 - [Developer Support Discord](http://discord.gg/0xZXblUU30hYo1vJ)
