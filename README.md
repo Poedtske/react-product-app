@@ -5,7 +5,7 @@
 **Frontend:** React  
 **Backend:** Spring Boot  
 **Database:** MySQL  
-**External APIs:** [Spond API](https://spond.com)  
+**External APIs:** [Spond API]([https://spond.com](https://github.com/Olen/Spond))  
 
 ---
 ## Prerequisites
