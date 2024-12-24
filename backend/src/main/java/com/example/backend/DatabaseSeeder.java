@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-// Ensures this seeder runs only in the 'dev' or 'test' profile
+//seeder
 
 @Component
 @RequiredArgsConstructor

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.EventDto;
 import com.example.backend.model.Event;
 import org.springframework.http.ResponseEntity;
 
@@ -8,7 +9,7 @@ import java.io.IOException;
 public interface EventService {
     Event save(Event event);
 
-    ResponseEntity updateById(Long id, Event event);
+    ResponseEntity updateById(Long id, EventDto eventDto);
 
     Iterable<Event> findAll();
 
@@ -18,7 +19,7 @@ public interface EventService {
 
     ResponseEntity deleteById(Long id) throws IOException;
 
-    ResponseEntity deleteById(String id);
+    ResponseEntity deleteById(String id) throws IOException;
 
     void deleteEvent(Event e);
 }

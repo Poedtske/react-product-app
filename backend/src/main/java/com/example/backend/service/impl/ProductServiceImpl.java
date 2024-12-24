@@ -78,8 +78,7 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity updateById(Long id, ProductDto productDto, MultipartFile imageFile) {
         try {
             // Find the product by ID
-            Product managedProduct = productRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Product not found", HttpStatus.NOT_FOUND));
+            Product managedProduct = findProductById(id);
 
             // Check for unclosed paid invoices
             boolean hasUnclosedPaidInvoice = managedProduct.getInvoices().stream()

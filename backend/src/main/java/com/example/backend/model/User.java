@@ -100,6 +100,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    //importand for authorization
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -161,10 +162,12 @@ public class User implements UserDetails {
         return i;
     }
 
+    //gets the invoice that isn't paid
     public Invoice getActiveInvoice(){
         return invoices.stream().filter(invoice -> invoice.getPaid()==false).findFirst().orElse(null);
     }
 
+    //sets not paid invoice on paid and creates new unpaid invoice
     public void pay(){
         Invoice i= getActiveInvoice();
         if(i.getProducts().isEmpty()&&i.getTickets().isEmpty()){

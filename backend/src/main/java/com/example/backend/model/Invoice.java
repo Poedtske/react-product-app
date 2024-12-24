@@ -29,11 +29,15 @@ public class Invoice {
 
     @Nullable
     private String description;
-
+    //event stages:
+    //if user claims to have paid
     private Boolean paid = false;
 
+    //if admin confirmed payment
     private Boolean confirmed= false;
 
+    //if the invoice has been entirely completed, ex. client "payed" for product, payment is confirmed by admin,
+    //after product is delived the invoice is closed
     private Boolean closed =false;
 
     @JsonIgnore

@@ -29,6 +29,7 @@ public class Tafel {
     @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = true, updatable = false, nullable = false)
     private Event event;
 
+    //was originally used for defining the widht and height of the table on the layout page
     private Integer width;
     private Integer height;
 

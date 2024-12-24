@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.Event;
 import com.example.backend.model.Product;
 import com.example.backend.model.Tafel;
 
@@ -15,4 +16,10 @@ public interface TableService {
     Tafel findById(Long id);
 
     void deleteById(Long id);
+
+    void CreateTables(Event e);
+
+    void CreateTables(Event e, int amount);
+
+    void RemoveTables(Event e, int amount);
 }

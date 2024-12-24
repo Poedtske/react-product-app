@@ -45,8 +45,8 @@ public class Event {
     @Nullable
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tafel> tables=new ArrayList<>();
-    //tafelNr= positie Tafel
 
+    //is used for layout and table creation
     @Nullable
     private int rijen;
     @Nullable
@@ -56,6 +56,7 @@ public class Event {
     @Nullable
     private String layout;
 
+    //set price for tickets
     private BigDecimal ticketPrice;
 
     @Nullable
@@ -245,6 +246,7 @@ public class Event {
         this.type = type;
     }
 
+    //method specifically for events created by spond
     public void SpondUpdate(Event e){
         this.startTime = e.startTime;
         this.endTime = e.endTime;
@@ -255,6 +257,7 @@ public class Event {
         }
     }
 
+    //creates rijen & kolommen if there are no tickets
     public void CreateLayout(){
         if(this.tickets.isEmpty()){
             if (LayoutFormatter()) {
@@ -267,6 +270,7 @@ public class Event {
         }
     }
 
+    //takes out the rijen and kolommen from the layout string and assigns them
     private Boolean LayoutFormatter() {
         if (layout == null || layout.isEmpty()) {
             System.out.println("Layout is null or empty.");
