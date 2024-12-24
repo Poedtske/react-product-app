@@ -1,18 +1,16 @@
-OVERALL:
+FRONTEND:
 -show exceptions when failing
+-documentation
 
-BACKEND:
--check file uploads from frontend
+
 
 ----------------------------------------------------------------------
 
 EXTRA
 
-BACKEND:
--adding API key for spond
-
 DOCKER:
--making it work on DOCKER
+-making it work on DOCKER (issue with resources/images directory, probably permission)
 
 FRONTEND:
 -using context correctly
+-prevent multiple apicalls on the same page (home has like 4 api calls to get events????)
