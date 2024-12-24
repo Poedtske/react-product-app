@@ -20,7 +20,7 @@ public class UserController {
     private final AuthService service;
 
     /**
-     * Retrieves the profile of the currently authenticated user.
+     * Endpoint for retrieving the profile of the currently authenticated user.
      * <p>
      * This route is used to fetch the profile details of the user who is currently logged in.
      * The user is identified by their authentication token, and their details are returned
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     /**
-     * Retrieves the current user's shopping cart.
+     * Endpoint for etrieving the current user's shopping cart.
      * <p>
      * This route returns the items present in the authenticated user's shopping cart.
      * The items are retrieved based on the user's authentication and are returned
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     /**
-     * Clears all items from the authenticated user's shopping cart.
+     *  Endpoint for clearing all items from the authenticated user's shopping cart.
      * <p>
      * This route allows the authenticated user to clear their entire shopping cart.
      * Once executed, the cart will be empty for that user.
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     /**
-     * Removes a specific ticket from the authenticated user's shopping cart.
+     * Endpoint for removing a specific ticket from the authenticated user's shopping cart.
      * <p>
      * This route allows the user to remove a ticket from their cart based on its ID.
      * The removal operation is performed for the authenticated user.
@@ -79,7 +79,7 @@ public class UserController {
     }
 
     /**
-     * Removes a specific product from the authenticated user's shopping cart.
+     * Endpoint for removing a specific product from the authenticated user's shopping cart.
      * <p>
      * This route allows the user to remove a product from their cart based on its ID.
      * The removal operation is performed for the authenticated user.
@@ -94,7 +94,7 @@ public class UserController {
     }
 
     /**
-     * Processes the payment for the authenticated user's shopping cart.
+     * Endpoint for processing the payment for the authenticated user's shopping cart.
      * <p>
      * This route allows the authenticated user to pay for the items in their cart.
      * The payment data is provided in the request body and includes the necessary

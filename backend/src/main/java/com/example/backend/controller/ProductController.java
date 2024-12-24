@@ -29,7 +29,7 @@ public class ProductController {
     private UserServiceImpl userServiceImpl;
 
     /**
-     * Creates a new product for the admin.
+     *  creating a new product.
      * <p>
      * This route allows the admin to create a new product by providing the product details and an image file.
      * The product data is encapsulated in a {@link ProductDto} object, and the image file is expected to be a valid image.
@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     /**
-     * Updates a product's details and its associated image.
+     * Endpoint for updating a product's details and its associated image.
      * <p>
      * This route is for admin users to update a product by providing the product ID and the new product details.
      * The image file must be a valid image.
@@ -63,7 +63,7 @@ public class ProductController {
     }
 
     /**
-     * Updates a product's details without updating its image.
+     * Endpoint for updating a product's details without updating its image.
      * <p>
      * This route allows admins to modify a product's attributes (e.g., name, price, availability) without changing the image.
      * </p>
@@ -78,7 +78,7 @@ public class ProductController {
     }
 
     /**
-     * Retrieves a list of all products.
+     * Endpoint for retrieving a list of all products.
      * <p>
      * This route returns a list of all products as {@link ProductDto} objects. It is accessible by the public.
      * </p>
@@ -91,7 +91,7 @@ public class ProductController {
     }
 
     /**
-     * Retrieves a specific product's details by its ID, accessible to the public.
+     * Endpoint for retrieving a specific product's details by its ID, accessible to the public.
      * <p>
      * This method provides basic product information such as name, price, and description.
      * For more detailed information, the admin version of this route can be used.
@@ -107,7 +107,7 @@ public class ProductController {
     }
 
     /**
-     * Retrieves detailed product information for admins, including additional product data.
+     * Endpoint for retrieving detailed product information for admins, including additional product data.
      * <p>
      * Admin users can access this endpoint to retrieve comprehensive details about a product,
      * such as internal metadata, that is not available to the general public.
@@ -123,7 +123,7 @@ public class ProductController {
     }
 
     /**
-     * Deletes a product by its ID.
+     * Endpoint for deleting a product by its ID.
      * <p>
      * This route allows the admin to delete a product from the system. The product is identified by its ID,
      * and the operation is performed without returning any content upon success.
@@ -139,7 +139,7 @@ public class ProductController {
     }
 
     /**
-     * Adds a product to the authenticated user's shopping cart.
+     * Endpoint for adding a product to the authenticated user's shopping cart.
      * <p>
      * This route allows an authenticated user to add a product to their cart. The user is identified
      * via their authentication token, and the product is added based on the details provided in the {@link ProductDto}.
@@ -156,7 +156,7 @@ public class ProductController {
     }
 
     /**
-     * Toggles the availability status of a product.
+     * Endpoint for toggling the availability status of a product.
      * <p>
      * This route allows an admin to enable or disable the availability of a product based on its ID.
      * </p>
@@ -170,7 +170,7 @@ public class ProductController {
     }
 
     /**
-     * Retrieves a list of all available product categories.
+     * Endpoint for retrieving a list of all available product categories.
      * <p>
      * This route returns all the categories defined in the {@link Category} enum.
      * </p>
@@ -185,7 +185,7 @@ public class ProductController {
     }
 
     /**
-     * Retrieves the image of a product by its ID.
+     * Endpoint for retrieving the image of a product by its ID.
      * <p>
      * This route allows the public to fetch the image associated with a specific product,
      * identified by the product ID.

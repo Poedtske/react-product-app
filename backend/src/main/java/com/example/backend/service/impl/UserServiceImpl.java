@@ -304,22 +304,47 @@ public class UserServiceImpl implements UserService {
      * products were present in the cart. The updated cart (invoice) is saved after removing the unavailable products.
      * </p>
      *
+     * <p>
+     * The method first checks if there are any products in the user's active invoice that are unavailable. If such products are found,
+     * they are removed from the invoice, and the IDs of the removed products are collected. The invoice is then saved with the updated list of products.
+     * Finally, an {@link AppException} is thrown, indicating that inactive products were present and have been removed, with the product IDs included in the message.
+     * </p>
+     *
      * @param user The user whose cart is to be checked and updated.
+     *             The user's active invoice is used to check for unavailable products.
      * @throws AppException If inactive products are found in the cart, an exception is thrown with a {@code FORBIDDEN} status.
+     *                      The exception message will contain the IDs of the removed inactive products.
      */
     @Override
     public void removeUnavailableProductsFromCart(User user) {
         if (user.getActiveInvoice().getProducts().stream().anyMatch(product -> !product.getAvailable())) {
             Invoice invoice = user.getActiveInvoice();
-            List<Product> inactiveProducts=invoice.getProducts().stream()
-                    .filter(product -> !product.getAvailable())
-                    .collect(Collectors.toList());  // collects the products that are inactive in the invoice
-            inactiveProducts.stream().forEach(product -> invoice.removeProduct(product));
 
-            invoiceRepository.save(invoice);  // Saves the updated invoice
-            throw new AppException("Had inactive products in cart, are now removed", HttpStatus.FORBIDDEN);  // Throws exception
+            // Collect the products that are inactive
+            List<Product> inactiveProducts = invoice.getProducts().stream()
+                    .filter(product -> !product.getAvailable())
+                    .collect(Collectors.toList());
+
+            // Collect the IDs of inactive products
+            List<Long> inactiveProductIds = inactiveProducts.stream()
+                    .map(Product::getId)
+                    .collect(Collectors.toList());
+
+            // Remove inactive products from the invoice
+            inactiveProducts.forEach(product -> invoice.removeProduct(product));
+
+            // Save the updated invoice
+            invoiceRepository.save(invoice);
+
+            // Throw exception with the product IDs in the message
+            throw new AppException(
+                    "Had inactive products in cart with IDs: " + inactiveProductIds.toString() + ", are now removed",
+                    HttpStatus.FORBIDDEN
+            );
         }
     }
+
+
 
 
     /**

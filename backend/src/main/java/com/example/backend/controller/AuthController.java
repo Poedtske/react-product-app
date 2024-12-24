@@ -21,7 +21,7 @@ public class AuthController {
     private final AuthService service;
 
     /**
-     * Authenticates a user based on their provided credentials.
+     * Endpoint for authenticating a user based on their provided credentials.
      * <p>
      * This route accepts the user credentials (username and password), verifies them,
      * and returns an authentication token if the credentials are valid. The response includes
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     /**
-     * Registers a new user in the system.
+     * Endpoint for registering a new user in the system.
      * <p>
      * This route accepts user registration details, including username, password, and other necessary information.
      * It creates a new user and returns an authentication response containing a token for the newly registered user.

@@ -8,11 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * <p>
+ * RestController that managed endpoints for tables, currently this is
+ * not used by the frontend.
+ * </p>
+ *
+ * <p>
+ *     Code is outdated and stems from using thymsleaves
+ *     for security reasons i commented it all out.
+ * </p>
+ *
+ */
 @RestController
 @RequestMapping("/api/tables")
 public class TableController {
 
-    @Autowired
+    //currently is not being used by the frontend
+
+    /*@Autowired
     private TableServiceImpl tableService;
 
     @Autowired
@@ -20,7 +34,7 @@ public class TableController {
 
     @PostMapping()
     public String addTable(@RequestBody Tafel t) {
-        // Check if an event with the same spondId already exists
+        // Check if an event with the same event already exists
         if ((t.getEvent()) != null) {
             tableService.save(t);
             Event e=t.getEvent();
@@ -34,6 +48,6 @@ public class TableController {
     @GetMapping("/{id}")
     public Tafel GetEvent(@PathVariable Long id){
         return tableService.findById(id);
-    }
+    }*/
 
 }
