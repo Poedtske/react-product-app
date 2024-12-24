@@ -51,6 +51,10 @@
 ### JWT Authentication
 - **Frontend Implementation:** [React JWT Handling Tutorial](https://www.youtube.com/watch?v=bqFjrhRrvy8&t=1s)  
 - **Backend Implementation:** [Spring Boot JWT Guide](https://app.pluralsight.com/ilx/video-courses/clips/7d9e33c7-01b8-4caa-9518-1b4d4801393c) (Part 4)
+- **Route Protection React:** [Youtube Video](https://www.youtube.com/watch?v=W4hBA2gACik&t=1180s)
+- **User Login Workflow React:** [Youtube Video](https://www.youtube.com/watch?v=9quu2psb_Ak) (have used this, changed later on but some stuff is still visible)
+- **User Registration:**[Youtube Video](https://www.youtube.com/watch?v=LXqbrtMnvkY&t=251s) (have used this, changed later on but some stuff is still visible)
+- 
 
 ### Relevant ChatGPT Conversations
 - [Discussion 1](https://chatgpt.com/share/67699274-3754-8008-aa08-5adbd6e8bdde)  
