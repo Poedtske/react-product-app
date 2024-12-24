@@ -4,6 +4,7 @@ import com.example.backend.dto.EventDto;
 import com.example.backend.exceptions.AppException;
 import com.example.backend.model.Event;
 import com.example.backend.model.Invoice;
+import com.example.backend.model.Tafel;
 import com.example.backend.model.Ticket;
 import com.example.backend.repository.EventDao;
 import com.example.backend.repository.InvoiceRepository;
@@ -494,8 +495,9 @@ public class EventServiceImpl implements EventService {
 
                 e.getTables().stream().forEach(table -> {
                     table.setSeats(e.getSeatsPerTable());
-                    tableService.save(table);
+                    //tableService.save(table);
                 });
+
             }
 
             // Set default layout if null and create the layout (SpondEvent has no layout)
