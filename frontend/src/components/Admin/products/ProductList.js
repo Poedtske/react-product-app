@@ -44,6 +44,7 @@ const ProductList = () => {
         alert("Product successvol verwijderd");
       } catch (err) {
         alert("Kon product niet verwijderen");
+        setError(err.message)
       }
     }
   };

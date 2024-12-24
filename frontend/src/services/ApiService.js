@@ -1,6 +1,6 @@
 import {request} from "../AxiosConfig";
 
-
+//handles all apicalls, uses AxiosConfig
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 

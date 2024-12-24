@@ -16,6 +16,7 @@ export const request = (
 ) => {
   let headers = {};
 
+  //use auth_token if it's an api call that needs authentication
   if (headersEnabled) {
     const token = getAuthToken(); // Retrieve the token using jwtUtils
     if (token && token !== "ERROR") {
@@ -26,6 +27,7 @@ export const request = (
     }
   }
 
+  //removes content-type
   if (deleteContentType) {
     headers = {
       ...headers, // Retain existing headers
@@ -33,6 +35,7 @@ export const request = (
     };
   }
 
+  //sets responsetype to blob for images
   return axios({
     method: method,
     headers: headers,

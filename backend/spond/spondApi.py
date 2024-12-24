@@ -40,12 +40,14 @@ def add_two_hours_to_timestamp(timestamp):
     return dt.strftime('%Y-%m-%d %H:%M:%S.0')
 
 async def get_events_spond():
+    #login and getting filtered events
     s = spond.Spond(username=username, password=password)
     group = await s.get_group(group_id)
     events = await s.get_events(group_id=group_id, include_scheduled=True, min_start=datetime.datetime.now())
     await s.clientsession.close()
     eventlist = []
 
+    #repetitie events not allowed because it's not a concert
     for event in events:
         if 'repetitie' not in event['heading'].lower():
             event_details = {
@@ -65,6 +67,7 @@ async def get_events_spond():
 
     return eventlist
 
+#Get events from the DB via endpoint
 async def get_local_events():
     url = f"{api_base_url+api_spond_public}"
     async with aiohttp.ClientSession() as session:
@@ -76,6 +79,7 @@ async def get_local_events():
                 print(f"Failed to fetch local events. Status: {response.status}")
                 return []
 
+#Delete Spond event from backend where date is overdue, may not work
 async def delete_event_from_local(event):
     url = f"{api_base_url+api_spond_private}/spond"
     async with aiohttp.ClientSession() as session:
@@ -88,6 +92,7 @@ async def delete_event_from_local(event):
                 print(f"Failed to delete event with ID {event['id']}. Status: {response.status}")
                 return False
 
+#Add Spond event to backend if spond event doesn't exist in the DB
 async def post_event_to_local(event):
     url = f"{api_base_url+api_spond_private}"
     async with aiohttp.ClientSession() as session:
@@ -100,6 +105,7 @@ async def post_event_to_local(event):
                 print(f"Failed to add event with ID {event['spondId']}. Status: {response.status}")
                 return False
 
+#Update Spond event off backend if fiels set by spondEvent don't match with the saved event in DB
 async def update_event_in_local(event):
     url = f"{api_base_url+api_spond_private}/spond"
     async with aiohttp.ClientSession() as session:
@@ -113,6 +119,7 @@ async def update_event_in_local(event):
                 return False
 
 
+#Compare events and decide which action to persue
 async def compare_and_update_events(spond_events, local_events):
     local_events_map = {event['spondId']: event for event in local_events if 'spondId' in event}
     
@@ -148,6 +155,7 @@ async def main():
     local_events = []
     firsttime = True
     while True:
+        #await asyncio.sleep(60)  # Wait 60 sec for the DB, is for docker
         try:
             if firsttime:
                 local_events = await get_local_events()

@@ -1,5 +1,7 @@
 import { jwtDecode } from "jwt-decode"; // Ensure proper import syntax
 
+//for managing authtoken
+
 // Get the authentication token from sessionStorage
 export const getAuthToken = () => {
   if (sessionStorage.getItem("auth_token") != null) {

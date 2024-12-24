@@ -64,7 +64,7 @@ const UpdateProduct = () => {
         setCategories(categoriesData);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching product details");
+        setError(err.message);
         setLoading(false);
       }
     };

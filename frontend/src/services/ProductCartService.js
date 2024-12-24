@@ -1,5 +1,7 @@
 import axios from "axios";
 
+//handles the productCart
+
 const PRODUCT_CART_KEY = "product_cart"; // Key for the product cart
 
 // Get the product cart from sessionStorage or return a default structure
