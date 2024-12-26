@@ -1,7 +1,24 @@
 # Project Overview
 
-### Tech Stack
+## Features
+
+### Admin 
+- CRUD events
+- CRUD products
+
+### User
+- Add tickets and products to cart
+- Manage own cart
+- Pay cart
+
+### Guest
+- Add products to cart
+
+## Spond Api
+- CRUD SpondEvents
 ---
+
+## Tech Stack
 **Frontend:** React  
 **Backend:** Spring Boot  
 **Database:** MySQL  
