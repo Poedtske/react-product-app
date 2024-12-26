@@ -28,7 +28,7 @@
 
 ### Manual Setup (Recommended)
 1. **Create the Database:**
-   - Log in to MySQL and create the database required for the application.
+   - Run MySQL in XAMPP, the application will create the database with its tables and seed it.
 2. **Configure Environment Variables:**
    - Create all `.env` files. Refer to the examples provided in the project.
 3. **Run the Application:**
