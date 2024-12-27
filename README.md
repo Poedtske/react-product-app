@@ -19,7 +19,7 @@
 ---
 
 ## Tech Stack
-**Frontend:** React  
+**Frontend:** React (npm v10.7.0) (node v18.20.3)
 **Backend:** Spring Boot  
 **Database:** MySQL  
 **External APIs:** [Spond API]([https://spond.com](https://github.com/Olen/Spond))  
