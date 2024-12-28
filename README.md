@@ -49,8 +49,8 @@
 2. **Configure Environment Variables:**
    - Create all `.env` files. Refer to the examples provided in the project.
 3. **Run the Application:**
-   - Start the backend and database.
-     run in intellij or other IDE
+   - Start the backend.
+     run Lab12BackendApplication.java in intellij or other IDE
    - Start the frontend.
      ```bash
      cd frontend/
