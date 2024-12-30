@@ -29,7 +29,7 @@
 
 ### Environment Setup
 - **Backend:**
-  - Set the required environment variables in `.env` located in `backend/spond/`.
+  - Set the required environment variables in `.env` located in `backend/spond/`. also execute command `pip install spond`
   - Update the API key in `backend/src/main/java/com/example/backend/config/ApiKeyAuthService.java` (line 12).  
     **⚠️ It is recommended to change the API key for security purposes.**
   - Verify the correct version of `application.yml` based on the environment (local/docker). Configurations are specified in `backend/src/main/resources/` and defined in `db.txt`.
