@@ -2,11 +2,16 @@ package com.example.backend.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Categories")
+@Getter
+@Setter
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,15 +19,18 @@ public class Category {
 
     private String name;
 
+    private String img;
+
     @Nullable
     @OneToMany(mappedBy = "category")
-    private HashSet<Product> products;
+    private Set<RestaurantProduct> products;
 
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(String name, String img) {
         this.name = name;
+        this.img = img;
         this.products = new HashSet<>();
     }
 
@@ -34,25 +42,21 @@ public class Category {
         return id;
     }
 
-    public HashSet<Product> getProducts() {
-        return products;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public Product AddProduct(Product p){
+    public RestaurantProduct AddProduct(RestaurantProduct p){
         products.add(p);
         return p;
     }
 
-    public Product RemoveProduct(Product p){
+    public RestaurantProduct RemoveProduct(RestaurantProduct p){
         products.remove(p);
         return p;
     }
 
-    public Product GetProduct(Product p){
+    public RestaurantProduct GetProduct(RestaurantProduct p){
         return products.stream().filter(product -> product.getId()==p.getId()).findFirst().orElse(null);
     }
 
