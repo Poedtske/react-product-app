@@ -35,4 +35,3 @@ services:
       context: ./backend/spond
       dockerfile: Dockerfile
     restart: unless-stopped
-

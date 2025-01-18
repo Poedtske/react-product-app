@@ -1,7 +1,9 @@
 package com.example.backend;
 
 import com.example.backend.model.Product;
+import com.example.backend.repository.RestaurantTableRepository;
 import com.example.backend.service.ProductService;
+import com.example.backend.service.RestaurantTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -11,21 +13,29 @@ import java.math.BigDecimal;
 @Component
 public class MyCommandLineRunner implements CommandLineRunner {
 
+
+    private final RestaurantTableService service;
+    private final RestaurantTableRepository restaurantTableRepository;
+
     @Autowired
-    private ProductService productService;
+    public MyCommandLineRunner(RestaurantTableService service, RestaurantTableRepository restaurantTableRepository) {
+        this.service = service;
+        this.restaurantTableRepository = restaurantTableRepository;
+    }
 
     @Override
     public void run(String... args) throws Exception {
-        Product product = new Product();
-        product.setName("iPhone");
-        product.setPrice(BigDecimal.valueOf(100D));
-        product.setQuantity(99);
-        productService.save(product);
+        // Check if the table already has 31 or more records
+        if (restaurantTableRepository.findAll().stream().count() >= 31) {
+            System.out.println("Seeding skipped: 31 or more products already exist in the database.");
+            return;
+        }
 
-        Product product2 = new Product();
-        product2.setName("Blackberry");
-        product2.setPrice(BigDecimal.valueOf(1100D));
-        product2.setQuantity(55);
-        productService.save(product2);
+        // Seed data
+        for (int i = 1; i <= 31; i++) {
+            service.save();
+        }
+
+        System.out.println("Seeding completed: 31 products added to the database.");
     }
 }
