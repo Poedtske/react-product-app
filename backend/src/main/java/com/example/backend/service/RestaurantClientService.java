@@ -19,6 +19,6 @@ public interface RestaurantClientService {
     ResponseEntity deleteById(Long id);
     ResponseEntity addOrder(Long id, Long orderId);
     ResponseEntity deleteOrder(Long id, Long orderId);
-    ResponseEntity changeTable(Long clientId,Long previousTableId, Long newTableId);
+    ResponseEntity changeTable(Long clientId,Long newTableId);
 
 }

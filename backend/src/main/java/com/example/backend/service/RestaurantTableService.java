@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface RestaurantTableService {
-    ResponseEntity save(RestaurantTableDto tableDto);
+    ResponseEntity save();
     ResponseEntity findById(Long id);
     ResponseEntity findAll();
     ResponseEntity updateById(Long id, RestaurantTableDto tableDto);

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class RestaurantOrderServiceImpl implements RestaurantOrderService {
                                     new RestaurantProductDto(
                                             product.getId(),
                                             product.getName(),
+                                            product.getImg(),
                                             product.getPrice(),
                                             product.getAvailable(),
                                             product.getHidden()))
@@ -61,18 +63,35 @@ public class RestaurantOrderServiceImpl implements RestaurantOrderService {
 
     @Override
     public ResponseEntity save(RestaurantOrderDto restaurantOrderDto) {
-        try{
-            RestaurantOrder order= new RestaurantOrder(
-                    clientRepository.findById(restaurantOrderDto.getClient().getId()).orElseThrow(Exception::new),
-                    restaurantOrderDto.getProducts().stream().map(product->
-                            productRepository.findById(product.getId()).orElseThrow()).collect(Collectors.toList())
+        try {
+            // Create the order
+            RestaurantOrder order = new RestaurantOrder(
+                    clientRepository.findById(restaurantOrderDto.getClient().getId())
+                            .orElseThrow(() -> new Exception("Client not found")),
+                    new ArrayList<>() // Initialize the product list
             );
+
+            // Fetch and add products to the order
+            List<RestaurantProduct> products = restaurantOrderDto.getProducts().stream()
+                    .map(productDto -> productRepository.findById(productDto.getId()).orElseThrow())
+                    .collect(Collectors.toList());
+
+            // Set products in the order and maintain the bidirectional relationship
+            products.forEach(product -> {
+                order.addProduct(product); // Add to the order
+                product.addOrder(order);   // Maintain the bidirectional relationship
+            });
+
+            // Save the order
             orderRepository.save(order);
+
             return ResponseEntity.ok().build();
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
     @Override
     public ResponseEntity delete(Long id) {

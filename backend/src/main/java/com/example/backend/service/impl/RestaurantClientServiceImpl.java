@@ -13,6 +13,7 @@ import com.example.backend.repository.RestaurantOrderRepository;
 import com.example.backend.repository.RestaurantProductRepository;
 import com.example.backend.repository.RestaurantTableRepository;
 import com.example.backend.service.RestaurantClientService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,7 @@ public class RestaurantClientServiceImpl implements RestaurantClientService {
                                                     .map(product->new RestaurantProductDto(
                                                             product.getId(),
                                                             product.getName(),
+                                                            product.getImg(),
                                                             product.getPrice(),
                                                             product.getAvailable(),
                                                             product.getHidden())).
@@ -125,7 +127,7 @@ public class RestaurantClientServiceImpl implements RestaurantClientService {
     }
 
     @Override
-    public ResponseEntity changeTable(Long clientId, Long previousTableId, Long newTableId) {
+    public ResponseEntity changeTable(Long clientId, Long newTableId) {
         try{
             RestaurantClient client = restaurantClientRepository.findById(clientId).orElseThrow();
             client.setTable(restaurantTableRepository.findById(newTableId).orElseThrow());

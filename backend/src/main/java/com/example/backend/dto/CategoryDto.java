@@ -28,6 +28,10 @@ public class CategoryDto {
     public CategoryDto() {
     }
 
+    public CategoryDto(Long id) {
+        this.id = id;
+    }
+
     public CategoryDto(String name, String img) {
         this.name = name;
         this.img = img;
@@ -40,6 +44,7 @@ public class CategoryDto {
         this.products = products.stream().map(product->new RestaurantProductDto(
                 product.getId(),
                 product.getName(),
+                product.getImg(),
                 product.getPrice(),
                 product.getAvailable(),
                 product.getHidden()

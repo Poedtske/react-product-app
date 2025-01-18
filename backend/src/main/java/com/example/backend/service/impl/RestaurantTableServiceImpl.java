@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 public class RestaurantTableServiceImpl implements RestaurantTableService {
     private final RestaurantTableRepository restaurantTableRepository;
     @Override
-    public ResponseEntity save(RestaurantTableDto tableDto) {
+    public ResponseEntity save() {
         try{
-            RestaurantTable table = restaurantTableRepository.findById(tableDto.getId()).orElseThrow(Exception::new);
+            restaurantTableRepository.save(new RestaurantTable());
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
@@ -31,7 +31,7 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
         try{
             RestaurantTable table = restaurantTableRepository.findById(id).orElseThrow(Exception::new);
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new RestaurantTableDto(table.getId(), table.getClients().stream().map(client->new RestaurantClientDto(client.getId(),client.getPaid())).collect(Collectors.toSet())));
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
@@ -50,7 +50,8 @@ public class RestaurantTableServiceImpl implements RestaurantTableService {
                                 table.getClients().stream()
                                         .map(client->
                                                 new RestaurantClientDto(
-                                                        client.getId()
+                                                        client.getId(),
+                                                        client.getPaid()
                                                 )
                                         ).collect(Collectors.toSet())
                         )

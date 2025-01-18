@@ -31,9 +31,9 @@ public class CategoryController {
         return categoryService.save(category);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteCategory(@RequestBody CategoryDto category) {
-        return categoryService.deleteById(category.getId());
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCategory(@PathVariable Long id) {
+        return categoryService.deleteById(id);
     }
 
     @PutMapping

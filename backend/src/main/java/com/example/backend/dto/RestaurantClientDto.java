@@ -2,12 +2,14 @@ package com.example.backend.dto;
 
 import com.example.backend.model.RestaurantTable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class RestaurantClientDto {
     private Long id;
     private RestaurantTableDto table;
@@ -29,5 +31,14 @@ public class RestaurantClientDto {
 
     public RestaurantClientDto(Long id) {
         this.id = id;
+    }
+
+    public RestaurantClientDto(RestaurantTableDto table) {
+        this.table = table;
+    }
+
+    public RestaurantClientDto(Long id, Boolean paid) {
+        this.id = id;
+        this.paid = paid;
     }
 }

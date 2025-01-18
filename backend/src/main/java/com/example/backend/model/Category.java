@@ -22,8 +22,7 @@ public class Category {
     private String img;
 
     @Nullable
-    @OneToMany(mappedBy = "category")
-    private Set<RestaurantProduct> products;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)    private Set<RestaurantProduct> products;
 
     public Category() {
     }
