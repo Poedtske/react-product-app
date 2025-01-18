@@ -43,8 +43,8 @@ public class CategoryDto {
         this.img = img;
         this.products = products.stream().map(product->new RestaurantProductDto(
                 product.getId(),
-                product.getName(),
                 product.getImg(),
+                product.getName(),
                 product.getPrice(),
                 product.getAvailable(),
                 product.getHidden()
