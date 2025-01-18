@@ -20,9 +20,10 @@ public class RestaurantProductDto {
     private List<RestaurantOrderDto> orders;
     private String img;
 
-    public RestaurantProductDto(Long id, String Img, String name, Double price, Boolean available, Boolean hidden, Category category) {
+    public RestaurantProductDto(Long id, String img, String name, Double price, Boolean available, Boolean hidden, Category category) {
         this.id = id;
         this.name = name;
+        this.img = img;
         this.price = price;
         this.available = available;
         this.hidden = hidden;

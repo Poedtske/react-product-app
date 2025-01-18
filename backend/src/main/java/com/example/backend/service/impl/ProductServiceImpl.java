@@ -26,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
         managedProduct.setName(product.getName());
         managedProduct.setQuantity(product.getQuantity());
         managedProduct.setPrice(product.getPrice());
+        managedProduct.setAvailable(product.getAvailable());
+        managedProduct.setCategory(product.getCategory());
+        managedProduct.setImg(product.getImg());
 
         return this.save(managedProduct);
     }
