@@ -42,8 +42,9 @@ public class RestaurantProductDto {
         this.orders=null;
     }
 
-    public RestaurantProductDto(Long id, String Img, String name, Double price, Boolean available, Boolean hidden) {
+    public RestaurantProductDto(Long id, String img, String name, Double price, Boolean available, Boolean hidden) {
         this.id = id;
+        this.img = img;
         this.name = name;
         this.price = price;
         this.available = available;
