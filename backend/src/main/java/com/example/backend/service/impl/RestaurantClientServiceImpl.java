@@ -92,8 +92,8 @@ public class RestaurantClientServiceImpl implements RestaurantClientService {
     @Override
     public ResponseEntity deleteById(Long id) {
         try{
-            RestaurantClient client = restaurantClientRepository.findById(id).orElseThrow();
-            if(client.getPaid()){
+            RestaurantClient client = restaurantClientRepository.findById(id).orElseThrow( () -> new RuntimeException("Client not found"));
+            if(client.getPaid() || client.getOrders().isEmpty()){
                 restaurantClientRepository.deleteById(id);
             }else{
                 throw new RuntimeException("Client not found");
