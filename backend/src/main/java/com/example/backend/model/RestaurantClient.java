@@ -27,7 +27,7 @@ public class RestaurantClient {
     @JoinColumn(name = "table_id",referencedColumnName = "id")
     private RestaurantTable table;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
     private Set<RestaurantOrder> orders = new HashSet<RestaurantOrder>();
 
     private Boolean paid;
