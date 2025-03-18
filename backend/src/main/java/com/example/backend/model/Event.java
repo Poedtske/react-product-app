@@ -60,6 +60,7 @@ public class Event {
     @ManyToMany(mappedBy = "events")
     private Set<Product> products;
 
+    @Column(columnDefinition = "LONGTEXT")
     @Nullable
     private String description;
 

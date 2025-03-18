@@ -76,10 +76,10 @@ async def delete_event_from_local(event):
         async with session.delete(url, json=event, headers=headers) as response:
             session.close()
             if response.status == 200:
-                print(f"Successfully deleted event with ID {event['id']}")
+                print(f"Successfully deleted event")
                 return True
             else:
-                print(f"Failed to delete event with ID {event['id']}. Status: {response.status}")
+                print(f"Failed to delete event Status: {response.status}")
                 return False
 
 async def post_event_to_local(event):
