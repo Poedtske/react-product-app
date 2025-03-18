@@ -84,7 +84,6 @@ export default function ShowEvent() {
                 <h2>Locatie en Tijd</h2>
                 <p>Locatie: {event.location}</p>
                 <p>Begin: {formatTime(event.startTime)}</p>
-                <p>Einde: {formatTime(event.endTime)}</p>
 
                 {/* {event.spondId && (
                     <button style={{ border: "none", backgroundColor:'transparent' }}>

@@ -41,7 +41,7 @@ async def get_events_spond():
     eventlist = []
 
     for event in events:
-        if 'repetitie' not in event['heading'].lower():
+        if 'repetitie' not in event['heading'].lower() or ('repetitie' in event['heading'].lower() and 'open' in event['heading'].lower()):
             event_details = {
                 "spondId": event['id'],
                 "title": event['heading'],
