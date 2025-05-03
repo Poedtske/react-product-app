@@ -47,7 +47,7 @@ async def get_events_spond():
                 "title": event['heading'],
                 "startTime": add_two_hours_to_timestamp(event['startTimestamp']),
                 "endTime": add_two_hours_to_timestamp(event['endTimestamp']),
-                "location": event['location']['feature']
+                "location": event.get('location', {}).get('feature', 'No Location Available')
             }
 
             # Add description if it exists

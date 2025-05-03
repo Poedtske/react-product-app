@@ -32,21 +32,30 @@ async def get_events_spond():
     s = spond.Spond(username=username, password=password)
     group = await s.get_group(group_id)
     events = await s.get_events(group_id=group_id, include_scheduled=True, min_start=datetime.datetime.now())
-    await s.clientsession.close()
+    await s.clientsession.close()  # Close the session after use
     eventlist = []
 
     for event in events:
-        if 'repetitie' not in event['heading'].lower() or ('repetitie' in event['heading'].lower() and 'open' in event['heading'].lower()):
-            event_details = {
-                "spondId": event['id'],
-                "title": event['heading'],
-                "startTime": add_two_hours_to_timestamp(event['startTimestamp']),
-                "endTime": add_two_hours_to_timestamp(event['endTimestamp']),
-                "location": event['location']['feature']
-            }
-            if 'description' in event:
-                event_details['description'] = event['description']
-            eventlist.append(event_details)
+        try:
+            if 'repetitie' not in event['heading'].lower() or ('repetitie' in event['heading'].lower() and 'open' in event['heading'].lower()):
+                event_details = {
+                    "spondId": event['id'],
+                    "title": event['heading'],
+                    "startTime": add_two_hours_to_timestamp(event['startTimestamp']),
+                    "endTime": add_two_hours_to_timestamp(event['endTimestamp']),
+                    # Safely access location feature (check if 'location' and 'feature' exist)
+                    "location": event.get('location', {}).get('feature', 'No Location Available')
+                }
+                if 'description' in event:
+                    event_details['description'] = event['description']
+                eventlist.append(event_details)
+        except KeyError as e:
+            # Print the event ID and the specific error
+            print(f"Error processing event ID {event['id']}: Missing key {e}")
+        except Exception as e:
+            # Catch other unexpected errors and print the event ID
+            print(f"Error processing event ID {event['id']}: {e}")
+
     return eventlist
 
 async def get_local_events():
