@@ -28,7 +28,7 @@ def add_two_hours_to_timestamp(timestamp):
     dt = datetime.datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
     
     # Add 2 hours
-    dt += datetime.timedelta(hours=1)
+    dt += datetime.timedelta(hours=2)
     
     # Return the formatted timestamp in the 'YYYY-MM-DD HH:MM:SS.0' format
     return dt.strftime('%Y-%m-%d %H:%M:%S.0')

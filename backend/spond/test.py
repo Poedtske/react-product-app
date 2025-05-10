@@ -25,7 +25,7 @@ headers = {
 
 def add_two_hours_to_timestamp(timestamp):
     dt = datetime.datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-    dt += datetime.timedelta(hours=1)
+    dt += datetime.timedelta(hours=2)
     return dt.strftime('%Y-%m-%d %H:%M:%S.0')
 
 async def get_events_spond():
