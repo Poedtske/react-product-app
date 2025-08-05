@@ -1,7 +1,7 @@
 import React from "react";
-import styles from './jeugd.module.css'; // Assuming you want to keep the custom styles in a separate CSS file
+import styles from './instaporkest.module.css'; // Assuming you want to keep the custom styles in a separate CSS file
 
-const Jeugd = () => {
+const Instaporkest = () => {
   return (
     <main className={styles.main}>
       {/* Logo Section */}
@@ -89,4 +89,4 @@ const Jeugd = () => {
   );
 };
 
-export default Jeugd;
+export default Instaporkest;

@@ -11,7 +11,6 @@ const bestuurMembers = [
   { name: 'Pascale Gysenbergs', image: 'icoonVrouwBestuur.png' },
   { name: 'Wim Mariën', image: 'icoonManBestuur.png' },
   { name: 'Chris Selleslagh', image: 'icoonManBestuur.png' },
-  { name: 'Marc De Wael', image: 'icoonManBestuur.png' }
 ];
 
 const Bestuur = () => {

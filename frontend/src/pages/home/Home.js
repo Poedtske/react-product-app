@@ -142,12 +142,6 @@ const handlePrev = () => {
           Jong of oud, het maakt voor ons niet uit!!!
         </p>
         <p className={styles.p}>
-            Het bestuur bestaat uit gemotiveerde leden, die allen instaan voor de bevordering van onze fanfare.
-        </p>
-        <p className={styles.p}></p>
-        <p className={styles.p}></p>
-        <p className={styles.p}></p>
-        <p className={styles.p}>
             Onze fanfare is altijd op zoek naar nieuwe leden, die interesse hebben in muziek.
             Ben je -18, beginnende muzikant of een ervaren speler,
             wees er dan maar zeker van dat je altijd welkom bent om onze rangen te komen bijvullen.
@@ -162,10 +156,6 @@ const handlePrev = () => {
         </p>
         <p className={styles.p}>
             We repeteren op vrijdagavond in de feestzaal van de Borgt van 20 tot 22 uur. Geïnteresseerden zijn altijd welkom om langs te komen!
-        </p>
-        <p className={styles.p}>
-          Wij zijn een groep enthousiaste amateurmuzikanten bestaande uit momenteel een dertigtal spelende leden waarvan de leeftijden uiteenlopend zijn, gaande van kinderen tot gepensioneerden.
-          Jong of oud, het maakt voor ons niet uit!!!
         </p>
       </section>
 

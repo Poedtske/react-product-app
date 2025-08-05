@@ -1,4 +1,4 @@
-import styles from './documenten.module.css'
+import styles from './krantje.module.css'
 
 export default () => (
     <p className={styles.p}>This should be red</p>

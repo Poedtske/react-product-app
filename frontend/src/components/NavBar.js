@@ -69,22 +69,22 @@ export default function NavBar() {
         </div>
         
         <NavLink 
-          to="/jeugd" 
+          to="/instaporkest"
           activeClassName="active" 
           onClick={handleToggle}
         >
-          Jeugd
+          Instaporkest
         </NavLink>
         
         <div className="dropdown">
           <button className="dropbtn">Info</button>
           <div className="dropdown-content">
             <NavLink 
-              to="/info/documenten" 
+              to="/info/krantje"
               activeClassName="active" 
               onClick={handleToggle}
             >
-              Documenten
+              Krantje
             </NavLink>
             <NavLink 
               to="/info/privacy" 
