@@ -26,11 +26,6 @@ public class PublicEventAPIController {
         return myEventDao.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Event GetEvent(@PathVariable Long id){
-        return myEventDao.findDistinctById(id);
-    }
-
     @GetMapping("/spond")
     public Iterable<SpondEventDto> getAllSpondEvents() {
         Iterable<Event> allEvents = myEventDao.findAll();
@@ -67,6 +62,13 @@ public class PublicEventAPIController {
 
         return eventDtos;
     }
+
+    @GetMapping("/{id}")
+    public Event GetEvent(@PathVariable Long id){
+        return myEventDao.findDistinctById(id);
+    }
+
+
 
 
 }

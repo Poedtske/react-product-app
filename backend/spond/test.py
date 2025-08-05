@@ -118,7 +118,7 @@ async def main():
             sys.exit(1)
         await asyncio.sleep(5)
         print("Done. Sleeping for 24 hours.")
-        sleep(24 * 60 * 60)
+        sys.exit()
 
 if __name__ == "__main__":
     asyncio.run(main())
