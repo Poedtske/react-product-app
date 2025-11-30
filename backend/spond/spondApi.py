@@ -1,5 +1,7 @@
 import asyncio
 import datetime
+from datetime import datetime as dt
+from zoneinfo import ZoneInfo
 import json
 from time import sleep
 import sys
@@ -23,15 +25,14 @@ headers = {
     "x-api-key": os.getenv('API_KEY')  # Replace with your actual API key
 }
 
-def add_two_hours_to_timestamp(timestamp):
-    # Parse the timestamp to a datetime object, replacing 'Z' with '+00:00'
-    dt = datetime.datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-    
-    # Add 2 hours
-    dt += datetime.timedelta(hours=2)
-    
-    # Return the formatted timestamp in the 'YYYY-MM-DD HH:MM:SS.0' format
-    return dt.strftime('%Y-%m-%d %H:%M:%S.0')
+def convert_to_local_timezone(timestamp, tz="Europe/Brussels"):
+    # Parse the ISO timestamp (Z → UTC)
+    date = dt.fromisoformat(timestamp.replace("Z", "+00:00"))
+
+    # Convert to the correct local timezone (handles DST automatically)
+    local_dt = date.astimezone(ZoneInfo(tz))
+
+    return local_dt.strftime('%Y-%m-%d %H:%M:%S.0')
 
 async def get_events_spond():
     s = spond.Spond(username=username, password=password)
@@ -45,8 +46,8 @@ async def get_events_spond():
             event_details = {
                 "spondId": event['id'],
                 "title": event['heading'],
-                "startTime": add_two_hours_to_timestamp(event['startTimestamp']),
-                "endTime": add_two_hours_to_timestamp(event['endTimestamp']),
+                "startTime": convert_to_local_timezone(event['startTimestamp']),
+                "endTime": convert_to_local_timezone(event['endTimestamp']),
                 "location": event.get('location', {}).get('feature', 'No Location Available')
             }
 
