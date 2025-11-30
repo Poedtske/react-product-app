@@ -9,7 +9,7 @@ COPY spondApi.py .
 COPY .env .
 
 # Install dependencies
-RUN pip install --no-cache-dir spond python-dotenv
+RUN pip install --no-cache-dir spond python-dotenv backports.zoneinfo
 
 # Run the script when the container starts
 CMD ["python", "spondApi.py"]
